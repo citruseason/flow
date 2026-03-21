@@ -66,29 +66,10 @@ cp -r everything-claude-code/rules/golang/* .claude/rules/
 
 ### Step 2: Flow 설치
 
-**방법 A: 플러그인 설치 (권장)**
-
 ```bash
 # Flow 마켓플레이스 추가 및 설치
-/plugin marketplace add <your-username>/flow
+/plugin marketplace add citruseason/flow
 /plugin install flow@flow-marketplace
-```
-
-**방법 B: 수동 설치**
-
-```bash
-git clone <flow-repo-url>
-cd flow
-
-# agents 복사 (명시적 파일 경로 필수)
-cp agents/spec-reviewer.md ~/.claude/agents/
-cp agents/design-facilitator.md ~/.claude/agents/
-
-# commands 복사
-cp -r commands/ ~/.claude/commands/
-
-# skills 복사
-cp -r skills/brainstorming/ ~/.claude/skills/brainstorming/
 ```
 
 ### Step 3: 사용 시작
@@ -237,8 +218,6 @@ node --version
 ```bash
 /plugin list flow@flow-marketplace
 ```
-
-수동 설치의 경우 `commands/brainstorm.md`가 `~/.claude/commands/`에 복사되었는지 확인합니다.
 
 ---
 
