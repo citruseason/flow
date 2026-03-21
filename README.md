@@ -2,7 +2,7 @@
 
 **Brainstorming-first design workflow plugin for Claude Code.**
 
-ECC(Everything Claude Code)의 컴패니언 플러그인으로, 구현 전 아이디어 탐색과 설계 검증 단계를 담당합니다.
+ECC(Everything Claude Code)의 컴패니언 플러그인으로, 구현 전 아이디어 탐색과 설계 검증 단계를 담당합니다. React/Next.js 프론트엔드 스킬과 디자인 가이드라인도 포함합니다.
 
 ```
 /brainstorm (Flow)  -->  spec doc  -->  /plan (ECC)  -->  /tdd (ECC)  -->  /code-review (ECC)
@@ -101,16 +101,25 @@ flow/
 |   |-- brainstorm.md             # /brainstorm 슬래시 명령어
 |
 |-- skills/
-|   |-- brainstorming/
-|       |-- SKILL.md              # 핵심 브레인스토밍 스킬
-|       |-- visual-companion.md   # 브라우저 기반 시각적 동반자 가이드
-|       |-- ecc-handoff.md        # ECC 연계 핸드오프 프로토콜
-|       |-- scripts/
-|           |-- server.cjs        # Zero-dep WebSocket 서버
-|           |-- start-server.sh   # 서버 시작
-|           |-- stop-server.sh    # 서버 종료
-|           |-- helper.js         # 브라우저 클라이언트
-|           |-- frame-template.html  # CSS 프레임
+|   |-- brainstorming/            # 핵심 브레인스토밍 스킬
+|   |   |-- SKILL.md
+|   |   |-- visual-companion.md
+|   |   |-- ecc-handoff.md
+|   |   |-- scripts/              # Zero-dep WebSocket 서버
+|   |
+|   |-- composition-patterns/     # React 컴포지션 패턴 (Vercel)
+|   |   |-- SKILL.md
+|   |   |-- references/AGENTS.md  # 전체 규칙 (946줄)
+|   |
+|   |-- react-best-practices/     # React/Next.js 성능 최적화 (Vercel)
+|   |   |-- SKILL.md
+|   |   |-- references/AGENTS.md  # 64개 규칙 전체 (3373줄)
+|   |
+|   |-- web-design-guidelines/    # 웹 인터페이스 가이드라인 (Vercel)
+|   |   |-- SKILL.md
+|   |
+|   |-- impeccable/               # 디자인 어휘 및 polish/audit 명령어
+|       |-- SKILL.md
 |
 |-- hooks/
 |   |-- hooks.json                # 세션 시작 알림
@@ -153,6 +162,19 @@ skills/brainstorming/scripts/start-server.sh --project-dir /path/to/project
 # 종료
 skills/brainstorming/scripts/stop-server.sh $SCREEN_DIR
 ```
+
+### Frontend Skills
+
+Flow는 브레인스토밍 외에 프론트엔드 개발을 위한 스킬도 제공합니다:
+
+| 스킬 | 소스 | 내용 |
+|------|------|------|
+| **composition-patterns** | Vercel Labs | React 컴포지션 패턴 - compound components, context, state lifting |
+| **react-best-practices** | Vercel Labs | 64개 React/Next.js 성능 최적화 규칙 (8개 카테고리) |
+| **web-design-guidelines** | Vercel Labs | 웹 인터페이스 가이드라인 준수 검토 |
+| **impeccable** | impeccable.style | 디자인 어휘, /polish /audit /typeset 명령어 |
+
+이 스킬들은 ECC의 코드 리뷰/TDD와 겹치지 않으며, 설계 및 프론트엔드 품질에 집중합니다.
 
 ### ECC Integration
 
@@ -223,9 +245,10 @@ node --version
 
 ## Credits
 
-Core brainstorming methodology adapted from [Superpowers](https://github.com/obra/superpowers) by Jesse Vincent.
-
-Designed to work alongside [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) by Affaan Mustafa.
+- Brainstorming methodology adapted from [Superpowers](https://github.com/obra/superpowers) by Jesse Vincent
+- React/Next.js skills from [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) by Vercel
+- Design skill from [Impeccable](https://impeccable.style/) by Paul Bakaus
+- Designed to work alongside [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) by Affaan Mustafa
 
 ## License
 
