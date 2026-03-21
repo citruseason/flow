@@ -6,8 +6,8 @@
         "matcher": "",
         "hooks": [
           {
-            "type": "notification",
-            "message": "[Flow] Brainstorming plugin loaded. Use /brainstorm to start a design session before /plan."
+            "type": "command",
+            "command": "echo '[Flow] Brainstorming plugin loaded. Use /brainstorm to start a design session before /plan.'"
           }
         ],
         "description": "Notify user that Flow plugin is available alongside ECC"
