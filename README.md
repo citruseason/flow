@@ -8,8 +8,8 @@
 /brainstorm           → spec 문서 생성
 /plan <spec-path>     → 구현 계획서 생성
 /tdd                  → TDD 구현 (RED → GREEN → REFACTOR)
+/amend                → 수정 (스펙 → 플랜 → TDD 오케스트레이션)
 /code-review          → 코드 리뷰
-/tdd-workflow         → 수정사항 TDD로 반영
 ```
 
 ---
@@ -54,8 +54,8 @@
 # 4. 코드 리뷰
 /code-review
 
-# 5. 수정사항 있으면 TDD로 반영
-/tdd-workflow
+# 5. 수정사항 있으면
+/amend "에러 메시지를 토스트로 변경해줘"
 ```
 
 ---
@@ -75,12 +75,13 @@ flow/
 |   |-- plan-reviewer.md          # 계획 검증 (Sonnet)
 |   |-- tdd-guide.md              # TDD 가이드 (Sonnet)
 |   |-- code-reviewer.md          # 코드 리뷰 (Sonnet)
+|   |-- amender.md                # 수정 오케스트레이터 (Opus)
 |
 |-- commands/
 |   |-- brainstorm.md             # /brainstorm
 |   |-- plan.md                   # /plan
 |   |-- tdd.md                    # /tdd
-|   |-- tdd-workflow.md           # /tdd-workflow
+|   |-- amend.md                  # /amend
 |   |-- code-review.md            # /code-review
 |
 |-- skills/
@@ -92,9 +93,6 @@ flow/
 |   |-- planning/                 # 구현 계획 스킬
 |   |   |-- SKILL.md
 |   |
-|   |-- tdd-workflow/             # TDD 워크플로우 스킬
-|       |-- SKILL.md
-|
 |-- hooks/
 |   |-- hooks.json                # 세션 시작 알림
 |
@@ -137,12 +135,13 @@ flow/
 - MEDIUM: 성능 (비효율 알고리즘, 불필요한 리렌더)
 - LOW: 베스트 프랙티스 (명명, 매직 넘버)
 
-### 5. /tdd-workflow — TDD 패턴 레퍼런스
+### 5. /amend — 수정 오케스트레이터
 
-- Unit/Integration/E2E 테스트 패턴
-- 외부 서비스 목킹 (Supabase, Redis, OpenAI)
-- 커버리지 검증 및 임계값
-- 테스팅 안티패턴
+- 자연어로 수정 요청 (파일 경로 불필요)
+- 변경 규모 자동 판단 (경미 vs 스펙 변경)
+- 경미한 변경: 바로 TDD 구현
+- 스펙 변경: design-facilitator → planner → tdd-guide 순차 위임
+- 각 단계에서 사용자 확인 필수
 
 ---
 
