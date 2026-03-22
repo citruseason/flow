@@ -16,7 +16,7 @@ Core spec design methodology is adapted from [Superpowers](https://github.com/ob
 /code-review       → quality & security review
 ```
 
-Each step is invoked manually. No automatic chaining.
+Each step is invoked manually. Some skills offer optional chaining prompts (e.g., /spec → /worktree-create, /code-review → /pr-create) with user confirmation.
 
 ## Architecture
 
