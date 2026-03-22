@@ -10,6 +10,13 @@
 /tdd               → TDD 구현 (RED → GREEN → REFACTOR)
 /amend             → 수정 (스펙 → 플랜 → TDD 오케스트레이션)
 /code-review       → 코드 리뷰
+/worktree-create   → worktree 생성 + 포트 할당
+/worktree-remove   → worktree 정리 + 포트 해제
+/worktree-status   → worktree 현황 조회
+/port-assign       → 포트 블록 할당
+/port-release      → 포트 블록 해제
+/port-status       → 포트 현황 조회
+/pr-create         → PR 생성 (템플릿 기반)
 ```
 
 ---
@@ -93,6 +100,27 @@ flow/
 |   |   |-- SKILL.md
 |   |
 |   |-- code-review/            # /code-review (코드 리뷰)
+|   |   |-- SKILL.md
+|   |
+|   |-- worktree-create/       # /worktree-create
+|   |   |-- SKILL.md
+|   |
+|   |-- worktree-remove/       # /worktree-remove
+|   |   |-- SKILL.md
+|   |
+|   |-- worktree-status/       # /worktree-status
+|   |   |-- SKILL.md
+|   |
+|   |-- port-assign/           # /port-assign
+|   |   |-- SKILL.md
+|   |
+|   |-- port-release/          # /port-release
+|   |   |-- SKILL.md
+|   |
+|   |-- port-status/           # /port-status
+|   |   |-- SKILL.md
+|   |
+|   |-- pr-create/             # /pr-create
 |       |-- SKILL.md
 |   |
 |-- hooks/
@@ -144,6 +172,58 @@ flow/
 - 경미한 변경: 바로 TDD 구현
 - 스펙 변경: design-facilitator → planner → tdd-guide 순차 위임
 - 각 단계에서 사용자 확인 필수
+
+---
+
+## Parallel Development
+
+여러 spec을 동시에 개발할 때 git worktree와 포트 자동 관리를 사용합니다.
+
+### Setup
+
+프로젝트 루트에 `.flow/config.json`을 생성하여 포트를 정의합니다:
+
+```json
+{
+  "ports": {
+    "FRONTEND_PORT": 3000,
+    "API_PORT": 8080,
+    "DB_PORT": 5432
+  }
+}
+```
+
+### Workflow
+
+각 터미널에서 독립적으로 하나의 기능을 개발합니다:
+
+```
+Terminal 1:                         Terminal 2:
+/spec "인증 기능"                    /spec "결제 기능"
+  -> worktree 생성 + 포트 할당        -> worktree 생성 + 포트 할당
+  -> 새 세션에서 /plan → /tdd         -> 새 세션에서 /plan → /tdd
+  -> /code-review → /pr-create       -> /code-review → /pr-create
+  -> /worktree-remove                -> /worktree-remove
+```
+
+### Port Block Allocation
+
+- 범위: 10000~20000, 블록 단위 100
+- worktree-1: `FRONTEND_PORT=10000, API_PORT=10001, DB_PORT=10002`
+- worktree-2: `FRONTEND_PORT=10100, API_PORT=10101, DB_PORT=10102`
+- 각 포트는 할당 전에 충돌 여부를 자동 검증
+
+### Commands
+
+| 명령어 | 설명 |
+|--------|------|
+| `/worktree-create` | worktree 생성 + 포트 할당 |
+| `/worktree-remove` | worktree 정리 + 포트 해제 |
+| `/worktree-status` | 전체 worktree 현황 조회 |
+| `/port-assign` | 포트 블록 할당 |
+| `/port-release` | 포트 블록 해제 |
+| `/port-status` | 포트 할당 현황 조회 |
+| `/pr-create` | PR 생성 (템플릿 기반) |
 
 ---
 
