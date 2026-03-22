@@ -21,7 +21,8 @@
     "./agents/planner.md",
     "./agents/plan-reviewer.md",
     "./agents/tdd-guide.md",
-    "./agents/code-reviewer.md"
+    "./agents/code-reviewer.md",
+    "./agents/amender.md"
   ],
   "commands": [
     "./commands/"
