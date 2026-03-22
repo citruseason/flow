@@ -1,21 +1,27 @@
 {
   "name": "flow",
-  "version": "0.4.0",
-  "description": "Brainstorming-first design workflow plugin. Companion to ECC — adds structured ideation, spec review, and visual companion before ECC's /plan, /tdd, and /code-review pipeline.",
+  "version": "1.0.0",
+  "description": "Complete development workflow plugin — brainstorming, planning, TDD, and code review. Structured ideation to implementation with manual step-by-step control.",
   "author": {
     "name": "user"
   },
   "license": "MIT",
   "keywords": [
     "brainstorming",
+    "planning",
+    "tdd",
+    "code-review",
     "design",
     "spec",
-    "workflow",
-    "ecc-companion"
+    "workflow"
   ],
   "agents": [
     "./agents/spec-reviewer.md",
-    "./agents/design-facilitator.md"
+    "./agents/design-facilitator.md",
+    "./agents/planner.md",
+    "./agents/plan-reviewer.md",
+    "./agents/tdd-guide.md",
+    "./agents/code-reviewer.md"
   ],
   "commands": [
     "./commands/"

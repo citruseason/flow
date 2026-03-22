@@ -2,34 +2,55 @@
 
 ## Project Overview
 
-**Flow** is a Claude Code plugin that provides a structured brainstorming and design workflow. It is designed as a **companion to ECC (Everything Claude Code)** — covering the ideation and spec design phase that precedes ECC's `/plan` -> `/tdd` -> `/code-review` pipeline.
+**Flow** is a Claude Code plugin that provides a complete development workflow — from brainstorming through planning, TDD implementation, and code review. Each step is invoked manually by the user, giving full control over the development process.
 
-Core brainstorming methodology is adapted from [Superpowers](https://github.com/obra/superpowers) by Jesse Vincent.
+Core brainstorming methodology is adapted from [Superpowers](https://github.com/obra/superpowers) by Jesse Vincent. TDD and code review patterns are adapted from [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) by Affaan Mustafa.
+
+## Workflow
+
+```
+/brainstorm           → spec document (docs/specs/)
+/plan <spec-path>     → plan document (docs/plans/)
+/tdd                  → TDD implementation (RED → GREEN → REFACTOR)
+/code-review          → quality & security review
+/tdd-workflow         → apply fixes via TDD
+```
+
+Each step is invoked manually. No automatic chaining.
 
 ## Architecture
 
-```
-flow (this plugin)              ECC (companion plugin)
-========================        ========================
-/brainstorm                     /plan
-  -> design-facilitator agent     -> planner agent
-  -> spec-reviewer agent          -> code-reviewer agent
-  -> visual companion             -> tdd-guide agent
-  -> spec doc output        --->  (input to /plan)
-```
+### Agents (6)
 
-### Components
+| Agent | Model | Role |
+|-------|-------|------|
+| design-facilitator | Opus | Brainstorming session facilitator |
+| spec-reviewer | Sonnet | Spec document validation |
+| planner | Opus | Implementation plan creation |
+| plan-reviewer | Sonnet | Plan document validation |
+| tdd-guide | Sonnet | TDD cycle enforcement |
+| code-reviewer | Sonnet | Security & quality review |
 
-- **agents/** - `spec-reviewer.md` (spec validation), `design-facilitator.md` (brainstorming guide)
+### Skills (3)
+
 - **skills/brainstorming/** - Core brainstorming skill with visual companion and server scripts
-- **commands/** - `/brainstorm` slash command
-- **hooks/** - Session start hint, post-brainstorm ECC handoff
+- **skills/planning/** - Spec-to-plan conversion with phased implementation steps
+- **skills/tdd-workflow/** - TDD patterns, mocking, coverage verification
 
-### ECC Integration Points
+### Commands (5)
 
-- After brainstorming completes, Flow suggests invoking ECC's `/plan` command
-- Spec documents are saved to `docs/specs/` which ECC's planner agent can read
-- Flow does NOT duplicate any ECC functionality (no TDD, no code review, no build-fix)
+- `/brainstorm` - Start brainstorming session
+- `/plan <spec-path>` - Create implementation plan from spec
+- `/tdd` - Interactive TDD session
+- `/code-review` - Code quality review
+- `/tdd-workflow` - Full TDD reference and workflow
+
+### Document Flow
+
+```
+docs/specs/YYYY-MM-DD-<topic>-design.md    ← /brainstorm output
+docs/plans/YYYY-MM-DD-<topic>-plan.md      ← /plan output
+```
 
 ## Running the Visual Companion Server
 
@@ -40,9 +61,3 @@ skills/brainstorming/scripts/start-server.sh --project-dir /path/to/project
 # Stop
 skills/brainstorming/scripts/stop-server.sh $SCREEN_DIR
 ```
-
-## Key Design Decisions
-
-- Flow is intentionally small — it covers ONE phase (ideation/design) well
-- All implementation-phase workflows are delegated to ECC
-- No overlapping agents, commands, or hooks with ECC
