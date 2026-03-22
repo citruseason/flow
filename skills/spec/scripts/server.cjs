@@ -73,11 +73,11 @@ function decodeFrame(buffer) {
 
 // ========== Configuration ==========
 
-const PORT = process.env.BRAINSTORM_PORT || (49152 + Math.floor(Math.random() * 16383));
-const HOST = process.env.BRAINSTORM_HOST || '127.0.0.1';
-const URL_HOST = process.env.BRAINSTORM_URL_HOST || (HOST === '127.0.0.1' ? 'localhost' : HOST);
-const SCREEN_DIR = process.env.BRAINSTORM_DIR || '/tmp/brainstorm';
-const OWNER_PID = process.env.BRAINSTORM_OWNER_PID ? Number(process.env.BRAINSTORM_OWNER_PID) : null;
+const PORT = process.env.SPEC_PORT || (49152 + Math.floor(Math.random() * 16383));
+const HOST = process.env.SPEC_HOST || '127.0.0.1';
+const URL_HOST = process.env.SPEC_URL_HOST || (HOST === '127.0.0.1' ? 'localhost' : HOST);
+const SCREEN_DIR = process.env.SPEC_DIR || '/tmp/spec';
+const OWNER_PID = process.env.SPEC_OWNER_PID ? Number(process.env.SPEC_OWNER_PID) : null;
 
 const MIME_TYPES = {
   '.html': 'text/html', '.css': 'text/css', '.js': 'application/javascript',
