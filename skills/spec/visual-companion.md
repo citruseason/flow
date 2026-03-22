@@ -1,6 +1,6 @@
 # Visual Companion Guide
 
-Browser-based visual brainstorming companion for showing mockups, diagrams, and options.
+Browser-based visual spec design companion for showing mockups, diagrams, and options.
 
 ## When to Use
 

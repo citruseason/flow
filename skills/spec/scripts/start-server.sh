@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Start the brainstorm server and output connection info
+# Start the spec companion server and output connection info
 # Usage: start-server.sh [--project-dir <path>] [--host <bind-host>] [--url-host <display-host>] [--foreground] [--background]
 #
 # Starts server on a random high port, outputs JSON with URL.

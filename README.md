@@ -210,7 +210,7 @@ node --version  # >= 18 필요
 
 ## Credits
 
-- Brainstorming methodology adapted from [Superpowers](https://github.com/obra/superpowers) by Jesse Vincent
+- Spec design methodology adapted from [Superpowers](https://github.com/obra/superpowers) by Jesse Vincent
 - TDD and code review patterns adapted from [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) by Affaan Mustafa
 
 ## License

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Stop the brainstorm server and clean up
+# Stop the spec companion server and clean up
 # Usage: stop-server.sh <screen_dir>
 #
 # Kills the server process. Only deletes session directory if it's
