@@ -1,1 +1,0 @@
-Node.js로 간단한 Todo CLI 앱을 만들어줘. 기능: 할일 추가, 삭제, 목록 보기, 완료 처리. 데이터는 JSON 파일에 저장. commander.js 사용.
