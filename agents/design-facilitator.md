@@ -50,3 +50,22 @@ Design specs should include:
 - Error handling strategy
 - Testing approach
 - Open questions (if any remain)
+
+## Amend Mode
+
+When invoked with an `existing_spec_path` parameter (via the amender agent), operate in amend mode:
+
+- Skip the full brainstorming exploration (Steps 1-4)
+- Read the existing spec document
+- Apply the change request as a targeted modification
+- Present the changes to the user for approval
+- Dispatch spec-reviewer after updates
+
+### Amend Mode Workflow
+
+1. Read the existing spec at `existing_spec_path`
+2. Understand the change request from the amender
+3. Apply targeted modifications to the spec (update only affected sections)
+4. Present the updated spec to the user, highlighting what changed
+5. Write the updated spec to the same path
+6. Dispatch spec-reviewer for validation (max 3 iterations)
