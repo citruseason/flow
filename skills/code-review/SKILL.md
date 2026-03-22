@@ -1,0 +1,54 @@
+---
+name: code-review
+description: "Comprehensive security and quality review of code changes. Dispatches code-reviewer agent and presents findings with severity-based blocking. Invoke after writing or modifying code."
+---
+
+## Overview
+
+Security and quality review process for code changes. This skill owns the process flow — gathering diffs, dispatching the review agent, and enforcing blocking rules based on severity. The detailed review checklist and assessment logic live in the `code-reviewer` agent.
+
+## When to Use
+
+- After writing or modifying code
+- Before commits and merges
+- After TDD implementation (Red-Green-Refactor complete)
+
+## Process Flow
+
+### 1. Gather Changed Files
+
+Get the scope of changes to review:
+
+```bash
+# Check staged and unstaged changes
+git diff --staged
+git diff
+
+# If no diff output, check recent commits
+git log --oneline -5
+```
+
+### 2. Dispatch Review Agent
+
+Send the changed files to the `code-reviewer` agent. The agent performs the full review — security audit, code quality checks, framework-specific patterns, performance analysis, and best practices.
+
+### 3. Present Review Report
+
+Display the agent's findings organized by severity with the summary table and verdict.
+
+## Blocking Rules
+
+| Verdict | Condition | Action |
+|---------|-----------|--------|
+| **Block** | CRITICAL issues found | Must fix before merge |
+| **Warning** | HIGH issues only (no CRITICAL) | Can merge with caution |
+| **Approve** | No CRITICAL or HIGH issues | Safe to merge |
+
+## What the Agent Handles
+
+The `code-reviewer` agent owns all review content and assessment logic:
+
+- **Review checklist** — Security, code quality, React/Next.js, Node.js/Backend, performance, best practices
+- **Severity assessment** — Classifying findings as CRITICAL, HIGH, MEDIUM, or LOW
+- **Confidence-based filtering** — Only reporting issues with >80% confidence; consolidating similar findings
+- **Output format** — Structured findings with file locations, descriptions, and suggested fixes
