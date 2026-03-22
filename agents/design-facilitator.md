@@ -27,7 +27,7 @@ Design specs should include:
 
 When invoked with an `existing_spec_path` parameter (via the amender agent), operate in amend mode:
 
-- Skip the full brainstorming exploration (Steps 1-4)
+- Skip the full design exploration (Steps 1-4)
 - Read the existing spec document
 - Apply the change request as a targeted modification
 - Present the changes to the user for approval
