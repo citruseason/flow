@@ -29,7 +29,7 @@ You MUST create a task for each of these items and complete them in order:
 6. **Write design doc** -- save to `docs/specs/YYYY-MM-DD-<topic>-design.md` and commit
 7. **Spec review loop** -- dispatch spec-reviewer agent; fix issues and re-dispatch until approved (max 3 iterations, then surface to human)
 8. **User reviews written spec** -- ask user to review the spec file before proceeding
-9. **Transition to implementation** -- suggest user run `/plan` with the spec path
+9. **Worktree prompt** -- ask if user wants worktree-based development; if yes call /worktree-create, if no suggest /plan
 
 ## Process Flow
 
@@ -46,6 +46,8 @@ digraph spec {
     "Spec review loop" [shape=box];
     "Spec review passed?" [shape=diamond];
     "User reviews spec?" [shape=diamond];
+    "Worktree prompt" [shape=diamond];
+    "Call /worktree-create" [shape=box];
     "Suggest /plan" [shape=doublecircle];
 
     "Explore project context" -> "Visual questions ahead?";
@@ -62,11 +64,13 @@ digraph spec {
     "Spec review passed?" -> "Spec review loop" [label="issues found,\nfix and re-dispatch"];
     "Spec review passed?" -> "User reviews spec?" [label="approved"];
     "User reviews spec?" -> "Write design doc" [label="changes requested"];
-    "User reviews spec?" -> "Suggest /plan" [label="approved"];
+    "User reviews spec?" -> "Worktree prompt" [label="approved"];
+    "Worktree prompt" -> "Call /worktree-create" [label="yes"];
+    "Worktree prompt" -> "Suggest /plan" [label="no"];
 }
 ```
 
-**The terminal state is user approval of the spec, then suggest `/plan`.** Do NOT jump to implementation directly.
+**After user approves the spec, ask about worktree.** If yes, call `/worktree-create` (passing the spec path). If no, suggest `/plan`. Do NOT jump to implementation directly.
 
 ## The Process
 
@@ -156,6 +160,18 @@ A question about a UI topic is not automatically a visual question. "What does p
 
 If they agree to the companion, read the detailed guide before proceeding:
 `skills/spec/visual-companion.md`
+
+## Worktree Prompt
+
+After the user approves the spec and before suggesting `/plan`:
+
+1. Ask the user:
+   > "Would you like to work on this in an isolated worktree? This enables parallel development with automatic port management. (Y/n)"
+
+2. **If yes:** Invoke `/worktree-create` with `spec=<spec-file-path>`. The worktree-create skill will guide the user to start a new session.
+
+3. **If no:** Suggest `/plan` as before:
+   > "Run `/plan <spec-path>` to create the implementation plan."
 
 ## Amend Mode
 
