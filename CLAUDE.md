@@ -22,10 +22,6 @@ flow (this plugin)              ECC (companion plugin)
 
 - **agents/** - `spec-reviewer.md` (spec validation), `design-facilitator.md` (brainstorming guide)
 - **skills/brainstorming/** - Core brainstorming skill with visual companion and server scripts
-- **skills/composition-patterns/** - React composition patterns (compound components, context, state lifting)
-- **skills/react-best-practices/** - 64 React/Next.js performance rules from Vercel Engineering
-- **skills/web-design-guidelines/** - UI compliance review against Web Interface Guidelines
-- **skills/impeccable/** - Design vocabulary and polish/audit/typeset commands
 - **commands/** - `/brainstorm` slash command
 - **hooks/** - Session start hint, post-brainstorm ECC handoff
 
