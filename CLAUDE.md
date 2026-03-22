@@ -2,18 +2,18 @@
 
 ## Project Overview
 
-**Flow** is a Claude Code plugin that provides a complete development workflow — from brainstorming through planning, TDD implementation, and code review. Each step is invoked manually by the user, giving full control over the development process.
+**Flow** is a Claude Code plugin that provides a complete development workflow — from brainstorming through planning, TDD implementation, and code review. Each step is invoked manually via skill slash commands, giving full control over the development process.
 
 Core brainstorming methodology is adapted from [Superpowers](https://github.com/obra/superpowers) by Jesse Vincent. TDD and code review patterns are adapted from [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) by Affaan Mustafa.
 
 ## Workflow
 
 ```
-/brainstorm           → spec document (docs/specs/)
-/plan <spec-path>     → plan document (docs/plans/)
-/tdd                  → TDD implementation (RED → GREEN → REFACTOR)
-/amend                → revision orchestrator (spec → plan → TDD)
-/code-review          → quality & security review
+/spec              → spec document (docs/specs/)
+/plan <spec-path>  → plan document (docs/plans/)
+/tdd               → TDD implementation (RED → GREEN → REFACTOR)
+/amend             → revision orchestrator (spec → plan → TDD)
+/code-review       → quality & security review
 ```
 
 Each step is invoked manually. No automatic chaining.
@@ -32,23 +32,18 @@ Each step is invoked manually. No automatic chaining.
 | code-reviewer | Sonnet | Security & quality review |
 | amender | Opus | Revision orchestrator |
 
-### Skills (2)
+### Skills (5)
 
-- **skills/brainstorming/** - Core brainstorming skill with visual companion and server scripts
-- **skills/planning/** - Spec-to-plan conversion with phased implementation steps
-
-### Commands (5)
-
-- `/brainstorm` - Start brainstorming session
-- `/plan <spec-path>` - Create implementation plan from spec
-- `/tdd` - Interactive TDD session
-- `/amend` - Revision orchestrator (amend spec/plan/implementation)
-- `/code-review` - Code quality review
+- **skills/spec/** - Design spec creation with visual companion
+- **skills/plan/** - Spec-to-plan conversion with phased implementation
+- **skills/tdd/** - TDD workflow with mocking patterns and coverage
+- **skills/amend/** - Revision orchestrator (spec → plan → TDD)
+- **skills/code-review/** - Security and quality review
 
 ### Document Flow
 
 ```
-docs/specs/YYYY-MM-DD-<topic>-design.md    ← /brainstorm output
+docs/specs/YYYY-MM-DD-<topic>-design.md    ← /spec output
 docs/plans/YYYY-MM-DD-<topic>-plan.md      ← /plan output
 ```
 
@@ -56,8 +51,8 @@ docs/plans/YYYY-MM-DD-<topic>-plan.md      ← /plan output
 
 ```bash
 # Start (requires Node.js, zero dependencies)
-skills/brainstorming/scripts/start-server.sh --project-dir /path/to/project
+skills/spec/scripts/start-server.sh --project-dir /path/to/project
 
 # Stop
-skills/brainstorming/scripts/stop-server.sh $SCREEN_DIR
+skills/spec/scripts/stop-server.sh $SCREEN_DIR
 ```
