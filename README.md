@@ -104,7 +104,6 @@ flow/
 |   |-- brainstorming/            # 핵심 브레인스토밍 스킬
 |       |-- SKILL.md
 |       |-- visual-companion.md
-|       |-- ecc-handoff.md
 |       |-- scripts/              # Zero-dep WebSocket 서버
 |
 |-- hooks/

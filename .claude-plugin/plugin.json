@@ -1,6 +1,6 @@
 {
   "name": "flow",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Brainstorming-first design workflow plugin. Companion to ECC — adds structured ideation, spec review, and visual companion before ECC's /plan, /tdd, and /code-review pipeline.",
   "author": {
     "name": "user"
