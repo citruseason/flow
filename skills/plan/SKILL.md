@@ -1,16 +1,17 @@
 ---
-name: planning
+name: plan
 description: "Use this skill to create a detailed implementation plan from an approved spec document. Requires a spec file path as input. Breaks down the spec into phased, actionable implementation steps with file paths, dependencies, risks, and testing strategy. Saves plan to docs/plans/."
-origin: flow
 ---
 
 # Implementation Planning
+
+## Overview
 
 Turn an approved spec document into a detailed, actionable implementation plan.
 
 ## When to Activate
 
-- After a spec document has been approved via `/brainstorm`
+- After a spec document has been approved via `/spec`
 - When a user has a design document and needs a concrete implementation plan
 - Before starting any multi-step implementation work
 
@@ -19,7 +20,7 @@ Turn an approved spec document into a detailed, actionable implementation plan.
 A spec document path is required. The planner reads the spec and the existing codebase to produce a plan.
 
 ```
-/plan docs/specs/2026-03-22-trip-sharing-design.md
+/plan docs/specs/2026-03-22-auth-design.md
 ```
 
 ## Planning Process
@@ -94,13 +95,6 @@ Create detailed steps with:
 - [ ] Criterion 1
 - [ ] Criterion 2
 ```
-
-## After Writing the Plan
-
-1. Save to `docs/plans/YYYY-MM-DD-<topic>-plan.md`
-2. Commit the plan document to git
-3. Dispatch plan-reviewer agent to validate the plan (max 3 iterations)
-4. Ask the user to review the plan before proceeding
 
 ## Best Practices
 
@@ -215,4 +209,29 @@ Each phase should be mergeable independently. Avoid plans that require all phase
 - Steps without clear file paths
 - Phases that cannot be delivered independently
 
-**Remember**: A great plan is specific, actionable, and considers both the happy path and edge cases. The best plans enable confident, incremental implementation.
+## After Writing the Plan
+
+1. Save to `docs/plans/YYYY-MM-DD-<topic>-plan.md`
+2. Commit the plan document to git
+3. Dispatch plan-reviewer agent to validate the plan (max 3 iterations)
+4. Ask the user to review the plan before proceeding
+
+## Amend Mode
+
+When invoked with an `existing_plan_path` parameter (via `/amend`), operate in amend mode:
+
+- Read the existing plan document
+- Understand the change request and updated spec
+- Update only the affected phases/steps
+- Present the changes to the user for approval
+- Dispatch plan-reviewer after updates
+
+### Amend Mode Workflow
+
+1. Read the existing plan at `existing_plan_path`
+2. Read the updated spec document (path provided by amend skill)
+3. Identify which phases/steps are affected by the change
+4. Update only the affected sections of the plan
+5. Present the updated plan to the user, highlighting what changed
+6. Write the updated plan to the same path
+7. Dispatch plan-reviewer for validation (max 3 iterations)
