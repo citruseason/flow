@@ -1,7 +1,6 @@
 ---
-name: brainstorming
+name: spec
 description: "You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation."
-origin: flow
 ---
 
 # Brainstorming Ideas Into Designs
@@ -30,6 +29,7 @@ You MUST create a task for each of these items and complete them in order:
 6. **Write design doc** -- save to `docs/specs/YYYY-MM-DD-<topic>-design.md` and commit
 7. **Spec review loop** -- dispatch spec-reviewer agent; fix issues and re-dispatch until approved (max 3 iterations, then surface to human)
 8. **User reviews written spec** -- ask user to review the spec file before proceeding
+9. **Transition to implementation** -- suggest user run `/plan` with the spec path
 
 ## Process Flow
 
@@ -46,7 +46,7 @@ digraph brainstorming {
     "Spec review loop" [shape=box];
     "Spec review passed?" [shape=diamond];
     "User reviews spec?" [shape=diamond];
-    "Done" [shape=doublecircle];
+    "Suggest /plan" [shape=doublecircle];
 
     "Explore project context" -> "Visual questions ahead?";
     "Visual questions ahead?" -> "Offer Visual Companion\n(own message, no other content)" [label="yes"];
@@ -62,11 +62,11 @@ digraph brainstorming {
     "Spec review passed?" -> "Spec review loop" [label="issues found,\nfix and re-dispatch"];
     "Spec review passed?" -> "User reviews spec?" [label="approved"];
     "User reviews spec?" -> "Write design doc" [label="changes requested"];
-    "User reviews spec?" -> "Done" [label="approved"];
+    "User reviews spec?" -> "Suggest /plan" [label="approved"];
 }
 ```
 
-**The terminal state is user approval of the spec.** Do NOT jump to implementation. The design phase ends here.
+**The terminal state is user approval of the spec, then suggest `/plan`.** Do NOT jump to implementation directly.
 
 ## The Process
 
@@ -155,7 +155,26 @@ A browser-based companion for showing mockups, diagrams, and visual options duri
 A question about a UI topic is not automatically a visual question. "What does personality mean in this context?" is a conceptual question -- use the terminal. "Which wizard layout works better?" is a visual question -- use the browser.
 
 If they agree to the companion, read the detailed guide before proceeding:
-`skills/brainstorming/visual-companion.md`
+`skills/spec/visual-companion.md`
+
+## Amend Mode
+
+When invoked with an `existing_spec_path` parameter (via `/amend`), operate in amend mode:
+
+- Skip the full exploration (Steps 1-4)
+- Read the existing spec document
+- Apply the change request as a targeted modification
+- Present the changes to the user for approval
+- Dispatch spec-reviewer after updates
+
+### Amend Mode Workflow
+
+1. Read the existing spec at `existing_spec_path`
+2. Understand the change request
+3. Apply targeted modifications to the spec (update only affected sections)
+4. Present the updated spec to the user, highlighting what changed
+5. Write the updated spec to the same path
+6. Dispatch spec-reviewer for validation (max 3 iterations)
 
 ---
 
