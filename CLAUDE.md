@@ -12,15 +12,15 @@ Core brainstorming methodology is adapted from [Superpowers](https://github.com/
 /brainstorm           → spec document (docs/specs/)
 /plan <spec-path>     → plan document (docs/plans/)
 /tdd                  → TDD implementation (RED → GREEN → REFACTOR)
+/amend                → revision orchestrator (spec → plan → TDD)
 /code-review          → quality & security review
-/tdd-workflow         → apply fixes via TDD
 ```
 
 Each step is invoked manually. No automatic chaining.
 
 ## Architecture
 
-### Agents (6)
+### Agents (7)
 
 | Agent | Model | Role |
 |-------|-------|------|
@@ -30,20 +30,20 @@ Each step is invoked manually. No automatic chaining.
 | plan-reviewer | Sonnet | Plan document validation |
 | tdd-guide | Sonnet | TDD cycle enforcement |
 | code-reviewer | Sonnet | Security & quality review |
+| amender | Opus | Revision orchestrator |
 
-### Skills (3)
+### Skills (2)
 
 - **skills/brainstorming/** - Core brainstorming skill with visual companion and server scripts
 - **skills/planning/** - Spec-to-plan conversion with phased implementation steps
-- **skills/tdd-workflow/** - TDD patterns, mocking, coverage verification
 
 ### Commands (5)
 
 - `/brainstorm` - Start brainstorming session
 - `/plan <spec-path>` - Create implementation plan from spec
 - `/tdd` - Interactive TDD session
+- `/amend` - Revision orchestrator (amend spec/plan/implementation)
 - `/code-review` - Code quality review
-- `/tdd-workflow` - Full TDD reference and workflow
 
 ### Document Flow
 
