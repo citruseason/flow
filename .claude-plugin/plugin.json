@@ -24,9 +24,6 @@
     "./agents/code-reviewer.md",
     "./agents/amender.md"
   ],
-  "commands": [
-    "./commands/"
-  ],
   "skills": [
     "./skills/"
   ]
