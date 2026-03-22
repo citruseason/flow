@@ -52,3 +52,37 @@ The `code-reviewer` agent owns all review content and assessment logic:
 - **Severity assessment** — Classifying findings as CRITICAL, HIGH, MEDIUM, or LOW
 - **Confidence-based filtering** — Only reporting issues with >80% confidence; consolidating similar findings
 - **Output format** — Structured findings with file locations, descriptions, and suggested fixes
+
+## Save Review Results
+
+After presenting the review report, save the results to `.flow/review-result.md`:
+
+```bash
+mkdir -p .flow
+```
+
+Write the review verdict and findings summary to `.flow/review-result.md`. This file is used by `/pr-create` to populate the PR template.
+
+Format:
+```markdown
+# Code Review Result
+**Date:** YYYY-MM-DD
+**Verdict:** Approve / Warning / Block
+
+## Findings
+<copy of the review findings table>
+
+## Summary
+<1-2 sentence summary>
+```
+
+## PR Creation Prompt
+
+After saving the review results:
+
+1. Ask the user:
+   > "Would you like to create a PR? (Y/n)"
+
+2. **If yes:** Invoke `/pr-create`. The pr-create skill will gather all artifacts and create the PR.
+
+3. **If no:** End the review process. The user can run `/pr-create` later or continue with `/amend` for modifications.
