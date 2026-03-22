@@ -178,10 +178,10 @@ skills/spec/scripts/stop-server.sh $SCREEN_DIR
 
 ### Visual Companion Storage
 
-Visual Companion의 목업 파일은 `.superpowers/brainstorm/` 디렉토리에 저장됩니다. `.gitignore`에 추가하는 것을 권장합니다:
+Visual Companion의 목업 파일은 `.flow/brainstorm/` 디렉토리에 저장됩니다. `.gitignore`에 추가하는 것을 권장합니다:
 
 ```
-.superpowers/
+.flow/
 ```
 
 ---
