@@ -71,3 +71,12 @@ skills/spec/scripts/stop-server.sh $SCREEN_DIR
 
 Port configuration: `.flow/config.json`
 Worktree state: `.flow/worktrees.json` (auto-managed)
+
+## Versioning
+
+버전 변경 시 반드시 두 파일을 함께 수정:
+
+- `.claude-plugin/plugin.json` → `"version"` 필드
+- `.claude-plugin/marketplace.json` → `plugins[0].version` 필드
+
+1.0.0 이전까지 패치 버전만 올린다 (0.0.1 → 0.0.2 → ...).
