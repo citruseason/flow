@@ -8,7 +8,7 @@
     {
       "name": "flow",
       "description": "Complete development workflow plugin — spec design, planning, TDD, and code review. Structured ideation to implementation with manual step-by-step control.",
-      "version": "1.0.0",
+      "version": "0.0.4",
       "source": "./"
     }
   ]
