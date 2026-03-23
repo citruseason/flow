@@ -168,7 +168,7 @@ After the user approves the spec and before suggesting `/plan`:
 1. Ask the user:
    > "Would you like to work on this in an isolated worktree? This enables parallel development with automatic port management. (Y/n)"
 
-2. **If yes:** Invoke `/worktree-create` with `spec=<spec-file-path>`. The session's working directory switches to the worktree. Then suggest `/plan` as normal:
+2. **If yes:** Invoke `/worktree-create` with `spec=<spec-file-path>`. After worktree setup completes (project setup + baseline verification), the session is inside the worktree. Then suggest `/plan`:
    > "Run `/plan <spec-path>` to create the implementation plan."
 
 3. **If no:** Suggest `/plan` as before:

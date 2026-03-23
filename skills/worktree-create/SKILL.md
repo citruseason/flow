@@ -1,6 +1,6 @@
 ---
 name: worktree-create
-description: "Create an isolated git worktree for parallel development. Allocates a port block if .flow/config.json exists. Called after /spec completion or directly. Creates branch, worktree directory, and switches working context to the worktree."
+description: "Create an isolated git worktree for parallel development. Allocates a port block if .flow/config.json exists. Called after /spec completion or directly. Creates branch, worktree directory, runs project setup, and verifies clean baseline before handing off."
 ---
 
 # Worktree Create
@@ -28,29 +28,66 @@ Create an isolated git worktree for parallel feature development with automatic 
 
 **Branch:** if not provided, default to `feature/<name>`.
 
-### 2. Validate
+### 2. Safety Verification
+
+Verify `.worktrees/` is gitignored before proceeding:
+
+```bash
+git check-ignore -q .worktrees 2>/dev/null
+```
+
+If NOT ignored, add to `.gitignore` and commit before proceeding:
+
+```bash
+echo ".worktrees/" >> .gitignore
+git add .gitignore && git commit -m "chore: add .worktrees/ to gitignore"
+```
+
+Also ensure `.flow/worktrees.json` and `.flow/review-result.md` are ignored.
+
+### 3. Validate
 
 - Check the branch doesn't already exist: `git branch --list <branch>`
 - Check `.worktrees/<name>` directory doesn't already exist
 - If either exists, inform the user and ask for a different name
 
-### 3. Create Worktree
+### 4. Create Worktree
 
 ```bash
 git worktree add .worktrees/<name> -b <branch>
+cd .worktrees/<name>
 ```
 
-### 4. Initialize .flow Directory
+From this point, all work happens inside the worktree.
 
-Ensure `.flow/` directory exists in the project root (not in the worktree):
+### 5. Run Project Setup
+
+Auto-detect and run appropriate setup:
 
 ```bash
-mkdir -p .flow
+# Node.js
+if [ -f package.json ]; then npm install; fi
+
+# Python
+if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+if [ -f pyproject.toml ]; then poetry install; fi
+
+# Go
+if [ -f go.mod ]; then go mod download; fi
+
+# Rust
+if [ -f Cargo.toml ]; then cargo build; fi
+```
+
+### 6. Initialize .flow State
+
+Ensure `.flow/` directory exists in the **project root** (not in the worktree):
+
+```bash
+mkdir -p <project-root>/.flow
 ```
 
 If `.flow/worktrees.json` doesn't exist, create it with `{}`.
-
-### 5. Update worktrees.json
 
 Add the new worktree entry:
 
@@ -63,54 +100,43 @@ Add the new worktree entry:
 }
 ```
 
-### 6. Port Assignment (conditional)
+### 7. Port Assignment (conditional)
 
 If `.flow/config.json` exists, invoke the `/port-assign` skill with `worktree=<name>`.
 
 If `.flow/config.json` does not exist, skip port assignment and inform:
 > "No .flow/config.json found — skipping port management. Create one to enable automatic port allocation."
 
-### 7. Spec File Access
+### 8. Verify Clean Baseline
 
-> **Spec override:** The spec (step 5 of /worktree-create) says "spec 파일을 worktree 디렉토리의 동일 경로에 복사". This is unnecessary because git worktrees share the full git history — committed files (including the spec) are already accessible at the same path in the worktree. No copy needed.
-
-If `spec` argument was provided, confirm the spec file is accessible in the worktree and note the path for the user.
-
-### 8. Update .gitignore
-
-Check if `.worktrees/` and `.flow/worktrees.json` are in `.gitignore`. If not, offer to add:
-
-```
-# Flow parallel development
-.worktrees/
-.flow/worktrees.json
-.flow/review-result.md
-```
-
-### 9. Switch Working Directory
-
-Change the current session's working directory to the worktree:
+Run tests to confirm worktree starts clean:
 
 ```bash
-cd <absolute-path-to-.worktrees/name>
+# Use project-appropriate test command
+npm test || pytest || go test ./... || cargo test
 ```
 
-All subsequent commands in this session (including `/plan`, `/tdd`, etc.) will now operate within the worktree.
+**If tests fail:** Report failures, ask whether to proceed or investigate.
 
-### 10. Output
+**If tests pass:** Report ready.
 
-Display creation summary:
+**If no test runner found:** Skip and proceed.
+
+### 9. Report Ready
 
 ```
-Worktree created:
-  Name:   <name>
-  Path:   <absolute-path>
+Worktree ready at <full-path>
   Branch: <branch>
-  Ports:  FRONTEND_PORT=10000, API_PORT=10001, DB_PORT=10002  (or "none — no config.json")
+  Ports:  FRONTEND_PORT=10000, API_PORT=10001, DB_PORT=10002  (or "none")
+  Tests:  passing (N tests) / skipped (no test runner)
 
-Working directory switched to worktree. Ready for /plan.
+Ready for /plan.
 ```
+
+The session is now working inside the worktree. All subsequent skills (`/plan`, `/tdd`, `/code-review`, `/pr-create`) operate on worktree files automatically.
 
 ## Chaining
 
-This skill is called by `/spec` when the user agrees to worktree-based development. After worktree creation, the session continues in the worktree context — `/plan` and subsequent skills automatically work within the worktree. Can also be called directly via `/worktree-create`.
+This skill is called by `/spec` when the user agrees to worktree-based development. Can also be called directly via `/worktree-create`.
+
+After this skill completes, the session is inside the worktree — `/plan` and all subsequent skills work there without any extra configuration.
