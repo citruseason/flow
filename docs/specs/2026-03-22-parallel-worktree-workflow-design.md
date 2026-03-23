@@ -32,9 +32,7 @@ Terminal 1:                              Terminal 2:
   -> "worktree에서 작업?" -> Y              -> "worktree에서 작업?" -> Y
   -> /worktree-create 호출                  -> /worktree-create 호출
     -> /port-assign 호출                      -> /port-assign 호출
-  -> 사용자에게 worktree 경로 안내           -> 사용자에게 worktree 경로 안내
-  -> 사용자가 새 터미널에서 해당 경로로       -> 사용자가 새 터미널에서 해당 경로로
-     Claude Code 세션 시작                      Claude Code 세션 시작
+    -> 작업 디렉토리 자동 전환                  -> 작업 디렉토리 자동 전환
   -> /plan                                 -> /plan
   -> /tdd                                  -> /tdd
   -> /code-review                          -> /code-review
@@ -145,17 +143,9 @@ worktree 생성 + 포트 할당.
 2. `git worktree add .worktrees/<name> -b <branch>` 실행
 3. `/port-assign` 스킬 호출 (`.flow/config.json` 존재 시)
 4. `.flow/worktrees.json` 업데이트
-5. spec 파일을 worktree 디렉토리의 동일 경로에 복사
-6. 사용자에게 worktree 경로 안내 및 Claude Code 실행 명령어 제시:
-   ```
-   worktree 생성 완료:
-     경로: /project/.worktrees/auth
-     브랜치: feature/auth
-     포트: FRONTEND_PORT=10000, API_PORT=10001, DB_PORT=10002
-
-   해당 경로에서 새 Claude Code 세션을 시작하세요:
-     cd /project/.worktrees/auth && claude
-   ```
+5. spec 파일은 git worktree가 히스토리를 공유하므로 별도 복사 불필요
+6. 현재 세션의 작업 디렉토리를 worktree로 전환 (`cd .worktrees/<name>`)
+7. 이후 `/plan`, `/tdd` 등 모든 스킬이 worktree 컨텍스트에서 동작
 
 **호출 방식:** `/spec` 완료 후 사용자 동의 시 자동 호출, 또는 직접 호출.
 
@@ -385,4 +375,4 @@ user-project/
 - 네이밍: 리소스-액션 패턴 (worktree-create, port-assign, pr-create)
 - 포트 범위: 10000~20000, 블록 단위 100, 최대 재시도 10회
 - merge는 사용자가 직접 수행
-- CWD 전환 불가 — worktree 생성 후 경로를 안내하고 사용자가 새 세션 시작
+- worktree 생성 후 현재 세션의 작업 디렉토리를 자동 전환 — 별도 세션 불필요

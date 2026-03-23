@@ -1,6 +1,6 @@
 ---
 name: worktree-create
-description: "Create an isolated git worktree for parallel development. Allocates a port block if .flow/config.json exists. Called after /spec completion or directly. Creates branch, worktree directory, and guides the user to start a new Claude Code session."
+description: "Create an isolated git worktree for parallel development. Allocates a port block if .flow/config.json exists. Called after /spec completion or directly. Creates branch, worktree directory, and switches working context to the worktree."
 ---
 
 # Worktree Create
@@ -87,9 +87,19 @@ Check if `.worktrees/` and `.flow/worktrees.json` are in `.gitignore`. If not, o
 .flow/review-result.md
 ```
 
-### 9. Output
+### 9. Switch Working Directory
 
-Display creation summary and next steps:
+Change the current session's working directory to the worktree:
+
+```bash
+cd <absolute-path-to-.worktrees/name>
+```
+
+All subsequent commands in this session (including `/plan`, `/tdd`, etc.) will now operate within the worktree.
+
+### 10. Output
+
+Display creation summary:
 
 ```
 Worktree created:
@@ -98,12 +108,9 @@ Worktree created:
   Branch: <branch>
   Ports:  FRONTEND_PORT=10000, API_PORT=10001, DB_PORT=10002  (or "none — no config.json")
 
-Next: open a new terminal and start a Claude Code session:
-  cd <absolute-path> && claude
-
-Then run /plan to create the implementation plan.
+Working directory switched to worktree. Ready for /plan.
 ```
 
 ## Chaining
 
-This skill is called by `/spec` when the user agrees to worktree-based development. It can also be called directly via `/worktree-create`.
+This skill is called by `/spec` when the user agrees to worktree-based development. After worktree creation, the session continues in the worktree context — `/plan` and subsequent skills automatically work within the worktree. Can also be called directly via `/worktree-create`.
