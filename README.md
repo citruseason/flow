@@ -10,13 +10,11 @@
 /tdd               → TDD 구현 (RED → GREEN → REFACTOR)
 /amend             → 수정 (스펙 → 플랜 → TDD 오케스트레이션)
 /code-review       → 코드 리뷰
+/branch-finish     → 브랜치 마무리 (merge/PR/keep/discard)
 /worktree-create   → worktree 생성 + 포트 할당
-/worktree-remove   → worktree 정리 + 포트 해제
-/worktree-status   → worktree 현황 조회
 /port-assign       → 포트 블록 할당
 /port-release      → 포트 블록 해제
 /port-status       → 포트 현황 조회
-/pr-create         → PR 생성 (템플릿 기반)
 ```
 
 ---
@@ -105,10 +103,7 @@ flow/
 |   |-- worktree-create/       # /worktree-create
 |   |   |-- SKILL.md
 |   |
-|   |-- worktree-remove/       # /worktree-remove
-|   |   |-- SKILL.md
-|   |
-|   |-- worktree-status/       # /worktree-status
+|   |-- branch-finish/         # /branch-finish
 |   |   |-- SKILL.md
 |   |
 |   |-- port-assign/           # /port-assign
@@ -118,9 +113,6 @@ flow/
 |   |   |-- SKILL.md
 |   |
 |   |-- port-status/           # /port-status
-|   |   |-- SKILL.md
-|   |
-|   |-- pr-create/             # /pr-create
 |       |-- SKILL.md
 |   |
 |-- hooks/
@@ -201,9 +193,8 @@ flow/
 Terminal 1:                         Terminal 2:
 /spec "인증 기능"                    /spec "결제 기능"
   -> worktree 생성 + 포트 할당        -> worktree 생성 + 포트 할당
-  -> 새 세션에서 /plan → /tdd         -> 새 세션에서 /plan → /tdd
-  -> /code-review → /pr-create       -> /code-review → /pr-create
-  -> /worktree-remove                -> /worktree-remove
+  -> /plan → /tdd                    -> /plan → /tdd
+  -> /code-review → /branch-finish   -> /code-review → /branch-finish
 ```
 
 ### Port Block Allocation
@@ -218,12 +209,8 @@ Terminal 1:                         Terminal 2:
 | 명령어 | 설명 |
 |--------|------|
 | `/worktree-create` | worktree 생성 + 포트 할당 |
-| `/worktree-remove` | worktree 정리 + 포트 해제 |
-| `/worktree-status` | 전체 worktree 현황 조회 |
-| `/port-assign` | 포트 블록 할당 |
-| `/port-release` | 포트 블록 해제 |
+| `/branch-finish` | 브랜치 마무리 (merge/PR/keep/discard + 포트 해제 + worktree 정리) |
 | `/port-status` | 포트 할당 현황 조회 |
-| `/pr-create` | PR 생성 (템플릿 기반) |
 
 ---
 

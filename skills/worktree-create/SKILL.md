@@ -23,7 +23,7 @@ Create an isolated git worktree for parallel feature development with automatic 
 - Pattern: `YYYY-MM-DD-<name>-design.md`
 - Example: `2026-03-22-user-auth-design.md` → `user-auth`
 
-**If neither is provided:** ask the user:
+**If neither is provided:** use AskUserQuestion:
 > "What name would you like for this worktree? (This will be used for the branch name and directory)"
 
 **Branch:** if not provided, default to `feature/<name>`.
@@ -49,7 +49,7 @@ Also ensure `.flow/worktrees.json` and `.flow/review-result.md` are ignored.
 
 - Check the branch doesn't already exist: `git branch --list <branch>`
 - Check `.worktrees/<name>` directory doesn't already exist
-- If either exists, inform the user and ask for a different name
+- If either exists, use AskUserQuestion to inform and ask for a different name
 
 ### 4. Create Worktree
 
@@ -116,7 +116,7 @@ Run tests to confirm worktree starts clean:
 npm test || pytest || go test ./... || cargo test
 ```
 
-**If tests fail:** Report failures, ask whether to proceed or investigate.
+**If tests fail:** Use AskUserQuestion to report failures and ask whether to proceed or investigate.
 
 **If tests pass:** Report ready.
 
@@ -133,7 +133,7 @@ Worktree ready at <full-path>
 Ready for /plan.
 ```
 
-The session is now working inside the worktree. All subsequent skills (`/plan`, `/tdd`, `/code-review`, `/pr-create`) operate on worktree files automatically.
+The session is now working inside the worktree. All subsequent skills (`/plan`, `/tdd`, `/code-review`, `/branch-finish`) operate on worktree files automatically.
 
 ## Chaining
 

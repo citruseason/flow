@@ -61,7 +61,7 @@ After presenting the review report, save the results to `.flow/review-result.md`
 mkdir -p .flow
 ```
 
-Write the review verdict and findings summary to `.flow/review-result.md`. This file is used by `/pr-create` to populate the PR template.
+Write the review verdict and findings summary to `.flow/review-result.md`. This file is used by `/branch-finish` to populate the PR template.
 
 Format:
 ```markdown
@@ -76,13 +76,12 @@ Format:
 <1-2 sentence summary>
 ```
 
-## PR Creation Prompt
+## Branch Finish Prompt
 
-After saving the review results:
+After saving the review results, use AskUserQuestion:
 
-1. Ask the user:
-   > "Would you like to create a PR? (Y/n)"
+> "Would you like to finish this branch? (merge, PR, keep, or discard)"
 
-2. **If yes:** Invoke `/pr-create`. The pr-create skill will gather all artifacts and create the PR.
+**If yes:** Invoke `/branch-finish`. The branch-finish skill will present 4 structured options and handle PR creation, merge, or cleanup.
 
-3. **If no:** End the review process. The user can run `/pr-create` later or continue with `/amend` for modifications.
+**If no:** End the review process. The user can run `/branch-finish` later or continue with `/amend` for modifications.

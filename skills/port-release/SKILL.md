@@ -1,6 +1,6 @@
 ---
 name: port-release
-description: "Release a port block for a worktree. Checks for running processes on allocated ports, removes .env.flow, and cleans up worktrees.json. Called by /worktree-remove or directly."
+description: "Release a port block for a worktree. Checks for running processes on allocated ports, removes .env.flow, and cleans up worktrees.json. Called by /branch-finish or directly."
 ---
 
 # Port Release
@@ -27,7 +27,7 @@ For each allocated port, check if a process is using it:
 lsof -i :<port> -t 2>/dev/null
 ```
 
-If any port has a running process, warn the user:
+If any port has a running process, use AskUserQuestion:
 
 > "The following ports are still in use:"
 > ```
@@ -35,7 +35,7 @@ If any port has a running process, warn the user:
 > 10000   12345   node
 > 10001   12346   python
 > ```
-> "Do you want to terminate these processes before releasing?"
+> "Terminate these processes before releasing? (Y/n)"
 
 If the user agrees, kill the processes:
 

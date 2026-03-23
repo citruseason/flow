@@ -14,9 +14,10 @@ Core spec design methodology is adapted from [Superpowers](https://github.com/ob
 /tdd               → TDD implementation (RED → GREEN → REFACTOR)
 /amend             → revision orchestrator (spec → plan → TDD)
 /code-review       → quality & security review
+/branch-finish     → merge, PR, keep, or discard
 ```
 
-Each step is invoked manually. Some skills offer optional chaining prompts (e.g., /spec → /worktree-create, /code-review → /pr-create) with user confirmation.
+Some skills offer optional chaining prompts (e.g., /spec → /worktree-create, /code-review → /branch-finish) with user confirmation via AskUserQuestion.
 
 ## Architecture
 
@@ -32,20 +33,18 @@ Each step is invoked manually. Some skills offer optional chaining prompts (e.g.
 | code-reviewer | Sonnet | Security & quality review |
 | amender | Opus | Revision orchestrator |
 
-### Skills (12)
+### Skills (9)
 
 - **skills/spec/** - Design spec creation with visual companion
 - **skills/plan/** - Spec-to-plan conversion with phased implementation
 - **skills/tdd/** - TDD workflow with mocking patterns and coverage
 - **skills/amend/** - Revision orchestrator (spec → plan → TDD)
-- **skills/code-review/** - Security and quality review + PR prompt
+- **skills/code-review/** - Security and quality review + branch finish prompt
 - **skills/worktree-create/** - Git worktree creation with port allocation
-- **skills/worktree-remove/** - Worktree cleanup with port release
-- **skills/worktree-status/** - Worktree overview and validation
+- **skills/branch-finish/** - Branch completion (merge/PR/keep/discard) with port release and worktree cleanup
 - **skills/port-assign/** - Port block allocation (10000-20000)
 - **skills/port-release/** - Port block deallocation
 - **skills/port-status/** - Port allocation status with live detection
-- **skills/pr-create/** - PR creation with structured template
 
 ### Document Flow
 
@@ -67,7 +66,7 @@ skills/spec/scripts/stop-server.sh $SCREEN_DIR
 ## Parallel Development with Worktrees
 
 ```
-/spec "feature" → worktree prompt → /worktree-create → new session → /plan → /tdd → /code-review → /pr-create
+/spec "feature" → worktree prompt → /worktree-create → /plan → /tdd → /code-review → /branch-finish
 ```
 
 Port configuration: `.flow/config.json`

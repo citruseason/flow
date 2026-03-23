@@ -165,7 +165,7 @@ If they agree to the companion, read the detailed guide before proceeding:
 
 After the user approves the spec and before suggesting `/plan`:
 
-1. Ask the user:
+1. Use AskUserQuestion:
    > "Would you like to work on this in an isolated worktree? This enables parallel development with automatic port management. (Y/n)"
 
 2. **If yes:** Invoke `/worktree-create` with `spec=<spec-file-path>`. After worktree setup completes (project setup + baseline verification), the session is inside the worktree. Then suggest `/plan`:
