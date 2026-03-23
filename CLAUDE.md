@@ -17,7 +17,7 @@ Core spec design methodology is adapted from [Superpowers](https://github.com/ob
 /branch-finish     → merge, PR, keep, or discard
 ```
 
-Some skills offer optional chaining prompts (e.g., /spec → /worktree-create, /code-review → /branch-finish) with user confirmation via AskUserQuestion.
+Some skills offer optional chaining prompts (e.g., /spec → /using-worktree, /code-review → /branch-finish) with user confirmation via AskUserQuestion.
 
 ## Architecture
 
@@ -40,7 +40,7 @@ Some skills offer optional chaining prompts (e.g., /spec → /worktree-create, /
 - **skills/tdd/** - TDD workflow with mocking patterns and coverage
 - **skills/amend/** - Revision orchestrator (spec → plan → TDD)
 - **skills/code-review/** - Security and quality review + branch finish prompt
-- **skills/worktree-create/** - Git worktree creation with port allocation
+- **skills/using-worktree/** - Worktree setup + working context for isolated development
 - **skills/branch-finish/** - Branch completion (merge/PR/keep/discard) with port release and worktree cleanup
 - **skills/port-assign/** - Port block allocation (10000-20000)
 - **skills/port-release/** - Port block deallocation
@@ -66,7 +66,7 @@ skills/spec/scripts/stop-server.sh $SCREEN_DIR
 ## Parallel Development with Worktrees
 
 ```
-/spec "feature" → worktree prompt → /worktree-create → /plan → /tdd → /code-review → /branch-finish
+/spec "feature" → worktree prompt → /using-worktree → /plan → /tdd → /code-review → /branch-finish
 ```
 
 Port configuration: `.flow/config.json`

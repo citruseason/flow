@@ -1,6 +1,6 @@
 ---
 name: port-assign
-description: "Allocate a port block for a worktree. Reads .flow/config.json for port definitions, finds the next available block in 10000-20000 range, verifies no collisions, and writes .env.flow. Called by /worktree-create or directly."
+description: "Allocate a port block for a worktree. Reads .flow/config.json for port definitions, finds the next available block in 10000-20000 range, verifies no collisions, and writes .env.flow. Called by /using-worktree or directly."
 ---
 
 # Port Assign

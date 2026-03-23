@@ -13,7 +13,7 @@ Display current port allocation status across all worktrees with live process de
 
 Read `.flow/worktrees.json`. If file doesn't exist or is empty:
 
-> "No worktrees with port allocations found. Use /worktree-create to create a worktree with port management."
+> "No worktrees with port allocations found. Use /using-worktree to create a worktree with port management."
 
 ### 2. Check Each Port
 

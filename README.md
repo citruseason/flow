@@ -11,7 +11,7 @@
 /amend             → 수정 (스펙 → 플랜 → TDD 오케스트레이션)
 /code-review       → 코드 리뷰
 /branch-finish     → 브랜치 마무리 (merge/PR/keep/discard)
-/worktree-create   → worktree 생성 + 포트 할당
+/using-worktree    → worktree 셋업 + 작업 컨텍스트 전환
 /port-assign       → 포트 블록 할당
 /port-release      → 포트 블록 해제
 /port-status       → 포트 현황 조회
@@ -100,7 +100,7 @@ flow/
 |   |-- code-review/            # /code-review (코드 리뷰)
 |   |   |-- SKILL.md
 |   |
-|   |-- worktree-create/       # /worktree-create
+|   |-- using-worktree/        # /using-worktree
 |   |   |-- SKILL.md
 |   |
 |   |-- branch-finish/         # /branch-finish
@@ -208,7 +208,7 @@ Terminal 1:                         Terminal 2:
 
 | 명령어 | 설명 |
 |--------|------|
-| `/worktree-create` | worktree 생성 + 포트 할당 |
+| `/using-worktree` | worktree 셋업 + 작업 컨텍스트 전환 |
 | `/branch-finish` | 브랜치 마무리 (merge/PR/keep/discard + 포트 해제 + worktree 정리) |
 | `/port-status` | 포트 할당 현황 조회 |
 
