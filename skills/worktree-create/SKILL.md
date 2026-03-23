@@ -135,8 +135,18 @@ Ready for /plan.
 
 The session is now working inside the worktree. All subsequent skills (`/plan`, `/tdd`, `/code-review`, `/branch-finish`) operate on worktree files automatically.
 
+## Mid-Workflow Transition Guide
+
+This skill can be invoked at any point, not only after `/spec`. When called mid-workflow (e.g., during `/plan` or after `/tdd` has started), assess the current state and act accordingly:
+
+- **No uncommitted changes on main:** Proceed normally. Committed documents (spec, plan) are accessible in the worktree via shared git history.
+- **Uncommitted changes on main:** Stash them before creating the worktree, then apply the stash inside the worktree. Inform the user what was stashed.
+- **Commits on main that should have been on a feature branch:** Create the worktree, then cherry-pick or rebase those commits onto the new branch. Use AskUserQuestion to confirm which commits to move.
+
+The goal is a seamless transition regardless of when the user decides to isolate their work.
+
 ## Chaining
 
-This skill is called by `/spec` when the user agrees to worktree-based development. Can also be called directly via `/worktree-create`.
+This skill is called by `/spec` when the user agrees to worktree-based development. Can also be called directly via `/worktree-create` at any point in the workflow.
 
-After this skill completes, the session is inside the worktree — `/plan` and all subsequent skills work there without any extra configuration.
+After this skill completes, the session is inside the worktree — all subsequent skills work there without any extra configuration.
