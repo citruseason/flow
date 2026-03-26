@@ -1,6 +1,6 @@
 ---
 name: using-worktree
-description: "Set up and work in an isolated git worktree. Handles creation, project setup, port allocation, and establishes the worktree as the working context for all subsequent skills. Other skills (/plan, /tdd, /code-review, /branch-finish) should recognize when they are inside a worktree and operate accordingly."
+description: "Set up and work in an isolated git worktree. Handles creation, project setup, port allocation, and establishes the worktree as the working context for all subsequent skills. Other skills (/plan, /tdd, /code-review) should recognize when they are inside a worktree and operate accordingly."
 ---
 
 # Using Worktree
@@ -169,14 +169,9 @@ source .env.flow 2>/dev/null
 | `/tdd` | Writes code and tests in the worktree. Runs tests in the worktree. |
 | `/code-review` | Reviews worktree's diff against base branch. Saves `review-result.md` in worktree's `.flow/`. |
 | `/amend` | Modifies spec/plan in the worktree. |
-| `/branch-finish` | Operates on the worktree's branch — merge/PR/keep/discard. |
-
 ### Returning to Main
 
-When the work is done, `/branch-finish` handles the transition back:
-- **Merge/Discard:** Worktree is removed, session returns to project root.
-- **PR:** Worktree is kept for review feedback.
-- **Keep:** Worktree is preserved.
+When the work is done, use standard git operations (merge, PR, etc.) to complete the branch. Use `/port-release` to clean up port allocations.
 
 Do NOT manually `cd` back to the project root during active worktree work.
 
@@ -206,10 +201,7 @@ The goal is: regardless of when the user decides to use a worktree, the transiti
 
 **Consumed by:**
 - `/plan`, `/tdd`, `/code-review`, `/amend` — these skills operate in the worktree context
-- `/branch-finish` — handles the exit from worktree
-
-**Pairs with:**
-- `/branch-finish` — entry/exit lifecycle of worktree-based development
+- `/port-release` — clean up port allocations when done
 
 ## Red Flags
 

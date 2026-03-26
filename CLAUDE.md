@@ -14,10 +14,9 @@ Core spec design methodology is adapted from [Superpowers](https://github.com/ob
 /tdd               → TDD implementation (RED → GREEN → REFACTOR)
 /amend             → revision orchestrator (spec → plan → TDD)
 /code-review       → quality & security review
-/branch-finish     → merge, PR, keep, or discard
 ```
 
-Some skills offer optional chaining prompts (e.g., /spec → /using-worktree, /code-review → /branch-finish) with user confirmation via AskUserQuestion.
+Some skills offer optional chaining prompts (e.g., /code-review → suggest next steps) with user confirmation via AskUserQuestion.
 
 ## Architecture
 
@@ -33,15 +32,14 @@ Some skills offer optional chaining prompts (e.g., /spec → /using-worktree, /c
 | code-reviewer | Sonnet | Security & quality review |
 | amender | Opus | Revision orchestrator |
 
-### Skills (9)
+### Skills (8)
 
 - **skills/spec/** - Design spec creation with visual companion
 - **skills/plan/** - Spec-to-plan conversion with phased implementation
 - **skills/tdd/** - TDD workflow with mocking patterns and coverage
 - **skills/amend/** - Revision orchestrator (spec → plan → TDD)
-- **skills/code-review/** - Security and quality review + branch finish prompt
+- **skills/code-review/** - Security and quality review
 - **skills/using-worktree/** - Worktree setup + working context for isolated development
-- **skills/branch-finish/** - Branch completion (merge/PR/keep/discard) with port release and worktree cleanup
 - **skills/port-assign/** - Port block allocation (10000-20000)
 - **skills/port-release/** - Port block deallocation
 - **skills/port-status/** - Port allocation status with live detection
@@ -66,7 +64,7 @@ skills/spec/scripts/stop-server.sh $SCREEN_DIR
 ## Parallel Development with Worktrees
 
 ```
-/spec "feature" → worktree prompt → /using-worktree → /plan → /tdd → /code-review → /branch-finish
+/spec "feature" → /using-worktree → /plan → /tdd → /code-review
 ```
 
 Port configuration: `.flow/config.json`

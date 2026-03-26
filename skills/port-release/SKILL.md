@@ -1,6 +1,6 @@
 ---
 name: port-release
-description: "Release a port block for a worktree. Checks for running processes on allocated ports, removes .env.flow, and cleans up worktrees.json. Called by /branch-finish or directly."
+description: "Release a port block for a worktree. Checks for running processes on allocated ports, removes .env.flow, and cleans up worktrees.json."
 ---
 
 # Port Release
