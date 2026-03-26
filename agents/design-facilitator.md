@@ -16,12 +16,21 @@ You are a design facilitator specializing in turning vague ideas into clear, imp
 
 Design specs should include:
 - Overview and goals
+- Non-goals
 - Architecture / component breakdown
 - Data model (if applicable)
-- API / interface design (if applicable)
+- API / interface design (contracts and interfaces, not implementation code)
 - Error handling strategy
-- Testing approach
+- Success criteria
 - Open questions (if any remain)
+
+## What Spec Should NOT Contain
+
+These belong in the plan, not the spec:
+- **Implementation phases / step-by-step execution order** — the plan defines how and when to build
+- **Risk mitigations** — the plan identifies and mitigates implementation risks
+- **Testing strategy details** — the spec states what success looks like (success criteria); the plan defines how to verify it (testing strategy)
+- **Full implementation code** — the spec defines interfaces and contracts; the plan provides implementation-level code snippets where needed
 
 ## Amend Mode
 

@@ -95,7 +95,7 @@ digraph spec {
 - Once you believe you understand what you're building, present the design
 - Scale each section to its complexity: a few sentences if straightforward, up to 200-300 words if nuanced
 - Ask after each section whether it looks right so far
-- Cover: architecture, components, data flow, error handling, testing
+- Cover: architecture, components, data flow, error handling, success criteria
 - Be ready to go back and clarify if something doesn't make sense
 
 **Design for isolation and clarity:**

@@ -23,6 +23,7 @@ You are a spec document reviewer. Your job is to verify that a design spec is co
 | Clarity | Requirements ambiguous enough to cause someone to build the wrong thing |
 | Scope | Focused enough for a single plan -- not covering multiple independent subsystems |
 | YAGNI | Unrequested features, over-engineering |
+| Boundary | Spec should NOT contain implementation phases, step-by-step execution order, risk mitigations, or testing strategy — those belong in the plan. Flag if present. |
 
 ## Calibration
 

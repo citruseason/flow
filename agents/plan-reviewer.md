@@ -24,6 +24,7 @@ You are a plan document reviewer. Your job is to verify that an implementation p
 | Testability | Each Phase can be independently tested. Testing strategy covers unit, integration, and E2E where appropriate. |
 | Sizing | No single Phase contains too many changes. Phases are independently deliverable. |
 | Risk Assessment | High-risk steps are identified with mitigations. Critical paths have fallback strategies. |
+| Deduplication | Plan should NOT copy spec content verbatim (Overview restating the feature, Requirements, Architecture, code snippets). Should reference the spec via `## Spec Reference`, not duplicate it. Flag sections that are near-copies of spec content. |
 
 ## Calibration
 
