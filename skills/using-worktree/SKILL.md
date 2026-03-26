@@ -1,6 +1,6 @@
 ---
 name: using-worktree
-description: "Set up and work in an isolated git worktree. Handles creation, project setup, port allocation, and establishes the worktree as the working context for all subsequent skills. Other skills (/plan, /tdd, /code-review) should recognize when they are inside a worktree and operate accordingly."
+description: "Set up and work in an isolated git worktree. Handles creation, project setup, and establishes the worktree as the working context for all subsequent skills. Other skills (/plan, /tdd, /code-review) should recognize when they are inside a worktree and operate accordingly."
 ---
 
 # Using Worktree
@@ -53,7 +53,7 @@ echo ".worktrees/" >> .gitignore
 git add .gitignore && git commit -m "chore: add .worktrees/ to gitignore"
 ```
 
-Also ensure `.flow/worktrees.json` and `.flow/review-result.md` are ignored.
+Also ensure `.flow/review-result.md` is ignored.
 
 ### 3. Validate
 
@@ -80,32 +80,7 @@ if [ -f go.mod ]; then go mod download; fi
 if [ -f Cargo.toml ]; then cargo build; fi
 ```
 
-### 6. Initialize .flow State
-
-In the **project root** (not the worktree):
-
-```bash
-mkdir -p <project-root>/.flow
-```
-
-Create/update `.flow/worktrees.json`:
-
-```json
-{
-  "<name>": {
-    "branch": "<branch>",
-    "path": "<absolute-path-to-.worktrees/name>"
-  }
-}
-```
-
-### 7. Port Assignment (conditional)
-
-If `.flow/config.json` exists → invoke `/port-assign` with `worktree=<name>`.
-
-If not → skip and inform user.
-
-### 8. Verify Clean Baseline
+### 6. Verify Clean Baseline
 
 ```bash
 npm test || pytest || go test ./... || cargo test
@@ -117,12 +92,11 @@ npm test || pytest || go test ./... || cargo test
 
 **If no test runner:** Skip.
 
-### 9. Report Ready
+### 7. Report Ready
 
 ```
 Worktree ready at <full-path>
   Branch: <branch>
-  Ports:  FRONTEND_PORT=10000, API_PORT=10001, DB_PORT=10002  (or "none")
   Tests:  passing (N tests) / skipped
 
 All subsequent work happens in this worktree.
@@ -153,12 +127,6 @@ git rev-parse --git-common-dir 2>/dev/null
 
 **Document paths:** `docs/specs/`, `docs/plans/` resolve relative to the worktree root, not the original project root.
 
-**Port-aware commands:** If `.env.flow` exists in the worktree root, source it or reference it when starting dev servers:
-```bash
-# Load port assignments
-source .env.flow 2>/dev/null
-```
-
 **Test commands:** Run tests from the worktree root. They test the worktree's code, not main.
 
 ### What Each Skill Should Know
@@ -171,7 +139,7 @@ source .env.flow 2>/dev/null
 | `/amend` | Modifies spec/plan in the worktree. |
 ### Returning to Main
 
-When the work is done, use standard git operations (merge, PR, etc.) to complete the branch. Use `/port-release` to clean up port allocations.
+When the work is done, use standard git operations (merge, PR, etc.) to complete the branch.
 
 Do NOT manually `cd` back to the project root during active worktree work.
 
@@ -201,7 +169,6 @@ The goal is: regardless of when the user decides to use a worktree, the transiti
 
 **Consumed by:**
 - `/plan`, `/tdd`, `/code-review`, `/amend` — these skills operate in the worktree context
-- `/port-release` — clean up port allocations when done
 
 ## Red Flags
 

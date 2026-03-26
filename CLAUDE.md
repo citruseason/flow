@@ -32,7 +32,7 @@ Some skills offer optional chaining prompts (e.g., /code-review → suggest next
 | code-reviewer | Sonnet | Security & quality review |
 | amender | Opus | Revision orchestrator |
 
-### Skills (8)
+### Skills (6)
 
 - **skills/spec/** - Design spec creation with visual companion
 - **skills/plan/** - Spec-to-plan conversion with phased implementation
@@ -40,9 +40,6 @@ Some skills offer optional chaining prompts (e.g., /code-review → suggest next
 - **skills/amend/** - Revision orchestrator (spec → plan → TDD)
 - **skills/code-review/** - Security and quality review
 - **skills/using-worktree/** - Worktree setup + working context for isolated development
-- **skills/port-assign/** - Port block allocation (10000-20000)
-- **skills/port-release/** - Port block deallocation
-- **skills/port-status/** - Port allocation status with live detection
 
 ### Document Flow
 
@@ -66,9 +63,6 @@ skills/spec/scripts/stop-server.sh $SCREEN_DIR
 ```
 /spec "feature" → /using-worktree → /plan → /tdd → /code-review
 ```
-
-Port configuration: `.flow/config.json`
-Worktree state: `.flow/worktrees.json` (auto-managed)
 
 ## Versioning
 
