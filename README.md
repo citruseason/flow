@@ -2,19 +2,21 @@
 
 **Complete development workflow plugin for Claude Code.**
 
-스펙 작성부터 구현 계획, TDD, 코드 리뷰까지 — 사용자가 직접 각 단계를 스킬 슬래시 커맨드로 호출하는 수동 워크플로우 플러그인입니다.
+스펙 작성부터 구현 계획, 자동 구현, 코드 리뷰까지 — 각 단계를 스킬 슬래시 커맨드로 호출하는 개발 워크플로우 플러그인입니다.
 
 ```
 /spec              → spec 문서 생성
 /plan <spec-path>  → 구현 계획서 생성
-/tdd               → TDD 구현 (RED → GREEN → REFACTOR)
-/amend             → 수정 (스펙 → 플랜 → TDD 오케스트레이션)
+/implement <plan>  → 자동 구현 (SDD + TDD)
 /code-review       → 코드 리뷰
-/branch-finish     → 브랜치 마무리 (merge/PR/keep/discard)
+/amend             → 수정 오케스트레이터 (스펙 → 플랜)
+```
+
+독립 사용 가능한 스킬:
+```
+/tdd               → 수동 TDD 가이드 (RED → GREEN → REFACTOR)
+/sdd               → 서브에이전트 기반 실행 패턴
 /using-worktree    → worktree 셋업 + 작업 컨텍스트 전환
-/port-assign       → 포트 블록 할당
-/port-release      → 포트 블록 해제
-/port-status       → 포트 현황 조회
 ```
 
 ---
@@ -23,9 +25,9 @@
 
 - 아이디어를 설계 문서로 구체화하는 구조화된 대화 프로세스
 - spec 문서를 기반으로 Phase별 구현 계획서 생성
-- TDD (테스트 우선 개발) 강제
-- 보안 + 코드 품질 리뷰
-- 각 단계를 스킬 슬래시 커맨드로 직접 호출 — 자동 체이닝 없음
+- SDD (서브에이전트 디스패치) + TDD (테스트 우선 개발)로 자동 구현
+- 2단계 리뷰 게이트 (스펙 준수 → 코드 품질)
+- 각 단계를 슬래시 커맨드로 직접 호출 — 필요한 스킬만 독립 사용 가능
 
 ---
 
@@ -53,8 +55,8 @@
 # 2. spec 기반 구현 계획
 /plan docs/specs/2026-03-22-auth-design.md
 
-# 3. TDD 구현
-/tdd
+# 3. 자동 구현 (SDD + TDD)
+/implement docs/plans/2026-03-22-auth-plan.md
 
 # 4. 코드 리뷰
 /code-review
@@ -74,47 +76,44 @@ flow/
 |   |-- marketplace.json          # 마켓플레이스 등록 정보
 |
 |-- agents/
-|   |-- design-facilitator.md     # 브레인스토밍 진행 (Opus)
+|   |-- spec-facilitator.md       # 스펙 설계 진행 (Opus)
 |   |-- spec-reviewer.md          # 스펙 검증 (Sonnet)
-|   |-- planner.md                # 구현 계획 수립 (Opus)
+|   |-- plan-writer.md            # 구현 계획 수립 (Opus)
 |   |-- plan-reviewer.md          # 계획 검증 (Sonnet)
-|   |-- tdd-guide.md              # TDD 가이드 (Sonnet)
 |   |-- code-reviewer.md          # 코드 리뷰 (Sonnet)
-|   |-- amender.md                # 수정 오케스트레이터 (Opus)
+|   |-- amend-orchestrator.md     # 수정 오케스트레이터 (Opus)
 |
 |-- skills/
-|   |-- spec/                   # /spec (스펙 작성)
+|   |-- spec/                     # /spec
 |   |   |-- SKILL.md
 |   |   |-- visual-companion.md
 |   |   |-- scripts/
 |   |
-|   |-- plan/                   # /plan (구현 계획)
+|   |-- plan/                     # /plan
+|   |   |-- SKILL.md
+|   |   |-- references/
+|   |
+|   |-- implement/                # /implement
 |   |   |-- SKILL.md
 |   |
-|   |-- tdd/                    # /tdd (TDD 구현)
+|   |-- sdd/                      # /sdd
+|   |   |-- SKILL.md
+|   |   |-- references/
+|   |
+|   |-- tdd/                      # /tdd
+|   |   |-- SKILL.md
+|   |   |-- references/
+|   |
+|   |-- code-review/              # /code-review
+|   |   |-- SKILL.md
+|   |   |-- references/
+|   |
+|   |-- amend/                    # /amend
 |   |   |-- SKILL.md
 |   |
-|   |-- amend/                  # /amend (수정)
-|   |   |-- SKILL.md
-|   |
-|   |-- code-review/            # /code-review (코드 리뷰)
-|   |   |-- SKILL.md
-|   |
-|   |-- using-worktree/        # /using-worktree
-|   |   |-- SKILL.md
-|   |
-|   |-- branch-finish/         # /branch-finish
-|   |   |-- SKILL.md
-|   |
-|   |-- port-assign/           # /port-assign
-|   |   |-- SKILL.md
-|   |
-|   |-- port-release/          # /port-release
-|   |   |-- SKILL.md
-|   |
-|   |-- port-status/           # /port-status
+|   |-- using-worktree/           # /using-worktree
 |       |-- SKILL.md
-|   |
+|
 |-- hooks/
 |   |-- hooks.json                # 세션 시작 알림
 |
@@ -143,12 +142,13 @@ flow/
 - plan-reviewer 에이전트가 검증 (최대 3회)
 - 결과: `docs/plans/YYYY-MM-DD-<topic>-plan.md`
 
-### 3. /tdd — TDD 구현
+### 3. /implement — 구현 계획 → 자동 구현
 
-- RED: 실패하는 테스트 작성
-- GREEN: 테스트 통과하는 최소 코드 작성
-- REFACTOR: 코드 개선 (테스트 유지)
-- 80%+ 커버리지 달성
+- plan 문서 경로를 인자로 받음
+- SDD 패턴으로 Step별 서브에이전트 디스패치
+- 각 worker가 TDD 방식으로 구현 (테스트 먼저 → 최소 구현 → 리팩터)
+- 2단계 리뷰 게이트: 스펙 준수 검증 → 코드 품질 검증
+- Phase 경계에서 자동 검증 커맨드 실행
 
 ### 4. /code-review — 코드 리뷰
 
@@ -162,55 +162,38 @@ flow/
 - 자연어로 수정 요청 (파일 경로 불필요)
 - 변경 규모 자동 판단 (경미 vs 스펙 변경)
 - 경미한 변경: 바로 TDD 구현
-- 스펙 변경: design-facilitator → planner → tdd-guide 순차 위임
+- 스펙 변경: spec-facilitator → plan-writer 순차 위임
 - 각 단계에서 사용자 확인 필수
+
+### 6. /sdd — 서브에이전트 기반 실행 (독립 사용)
+
+- task 목록을 받아 서브에이전트로 순차 실행
+- Fresh subagent per task (컨텍스트 격리)
+- 4가지 상태 핸들링 (DONE / CONCERNS / NEEDS_CONTEXT / BLOCKED)
+- 2단계 리뷰 게이트 (compliance → quality)
+- /implement 없이도 독립적으로 사용 가능
+
+### 7. /tdd — TDD 가이드 (독립 사용)
+
+- RED: 실패하는 테스트 작성
+- GREEN: 테스트 통과하는 최소 코드 작성
+- REFACTOR: 코드 개선 (테스트 유지)
+- 80%+ 커버리지 달성
+- 수동 개발 시 독립적으로 사용 가능
 
 ---
 
 ## Parallel Development
 
-여러 spec을 동시에 개발할 때 git worktree와 포트 자동 관리를 사용합니다.
-
-### Setup
-
-프로젝트 루트에 `.flow/config.json`을 생성하여 포트를 정의합니다:
-
-```json
-{
-  "ports": {
-    "FRONTEND_PORT": 3000,
-    "API_PORT": 8080,
-    "DB_PORT": 5432
-  }
-}
-```
-
-### Workflow
-
-각 터미널에서 독립적으로 하나의 기능을 개발합니다:
+여러 spec을 동시에 개발할 때 git worktree를 사용합니다.
 
 ```
 Terminal 1:                         Terminal 2:
 /spec "인증 기능"                    /spec "결제 기능"
-  -> worktree 생성 + 포트 할당        -> worktree 생성 + 포트 할당
-  -> /plan → /tdd                    -> /plan → /tdd
-  -> /code-review → /branch-finish   -> /code-review → /branch-finish
+  -> /using-worktree                  -> /using-worktree
+  -> /plan → /implement              -> /plan → /implement
+  -> /code-review                     -> /code-review
 ```
-
-### Port Block Allocation
-
-- 범위: 10000~20000, 블록 단위 100
-- worktree-1: `FRONTEND_PORT=10000, API_PORT=10001, DB_PORT=10002`
-- worktree-2: `FRONTEND_PORT=10100, API_PORT=10101, DB_PORT=10102`
-- 각 포트는 할당 전에 충돌 여부를 자동 검증
-
-### Commands
-
-| 명령어 | 설명 |
-|--------|------|
-| `/using-worktree` | worktree 셋업 + 작업 컨텍스트 전환 |
-| `/branch-finish` | 브랜치 마무리 (merge/PR/keep/discard + 포트 해제 + worktree 정리) |
-| `/port-status` | 포트 할당 현황 조회 |
 
 ---
 
@@ -278,6 +261,7 @@ node --version  # >= 18 필요
 ## Credits
 
 - Spec design methodology adapted from [Superpowers](https://github.com/obra/superpowers) by Jesse Vincent
+- SDD (Subagent-Driven Development) pattern adapted from [Superpowers](https://github.com/obra/superpowers) by Jesse Vincent
 - TDD and code review patterns adapted from [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) by Affaan Mustafa
 
 ## License
