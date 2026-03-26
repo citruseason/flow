@@ -1,6 +1,6 @@
 ---
-name: design-facilitator
-description: Design spec facilitator dispatched by the /spec skill. Assists with structured design exploration and spec writing.
+name: spec-facilitator
+description: Spec design facilitator dispatched by the /spec skill. Assists with structured design exploration and spec writing.
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 model: opus
 ---
@@ -34,7 +34,7 @@ These belong in the plan, not the spec:
 
 ## Amend Mode
 
-When invoked with an `existing_spec_path` parameter (via the amender agent), operate in amend mode:
+When invoked with an `existing_spec_path` parameter (via the amend-orchestrator agent), operate in amend mode:
 
 - Skip the full design exploration (Steps 1-4)
 - Read the existing spec document
@@ -45,7 +45,7 @@ When invoked with an `existing_spec_path` parameter (via the amender agent), ope
 ### Amend Mode Workflow
 
 1. Read the existing spec at `existing_spec_path`
-2. Understand the change request from the amender
+2. Understand the change request from the amend-orchestrator
 3. Apply targeted modifications to the spec (update only affected sections)
 4. Present the updated spec to the user, highlighting what changed
 5. Write the updated spec to the same path

@@ -11,34 +11,40 @@ Core spec design methodology is adapted from [Superpowers](https://github.com/ob
 ```
 /spec              → spec document (docs/specs/)
 /plan <spec-path>  → plan document (docs/plans/)
-/tdd               → TDD implementation (RED → GREEN → REFACTOR)
-/amend             → revision orchestrator (spec → plan → TDD)
+/implement <plan>  → automated execution (SDD + TDD)
 /code-review       → quality & security review
+/amend             → revision orchestrator (spec → plan)
 ```
 
-Some skills offer optional chaining prompts (e.g., /code-review → suggest next steps) with user confirmation via AskUserQuestion.
+Standalone skills:
+```
+/tdd               → manual TDD guide (RED → GREEN → REFACTOR)
+/sdd               → subagent-driven execution (independent of /implement)
+/using-worktree    → isolated worktree workspace
+```
 
 ## Architecture
 
-### Agents (7)
+### Agents (6)
 
 | Agent | Model | Role |
 |-------|-------|------|
-| design-facilitator | Opus | Spec design session facilitator |
+| spec-facilitator | Opus | Spec design session facilitator |
 | spec-reviewer | Sonnet | Spec document validation |
-| planner | Opus | Implementation plan creation |
+| plan-writer | Opus | Implementation plan creation |
 | plan-reviewer | Sonnet | Plan document validation |
-| tdd-guide | Sonnet | TDD cycle enforcement |
 | code-reviewer | Sonnet | Security & quality review |
-| amender | Opus | Revision orchestrator |
+| amend-orchestrator | Opus | Revision orchestrator |
 
-### Skills (6)
+### Skills (8)
 
 - **skills/spec/** - Design spec creation with visual companion
 - **skills/plan/** - Spec-to-plan conversion with phased implementation
-- **skills/tdd/** - TDD workflow with mocking patterns and coverage
-- **skills/amend/** - Revision orchestrator (spec → plan → TDD)
+- **skills/implement/** - Plan execution using SDD + TDD
+- **skills/sdd/** - Subagent-driven development pattern (dispatch + review gates)
+- **skills/tdd/** - TDD methodology (RED → GREEN → REFACTOR)
 - **skills/code-review/** - Security and quality review
+- **skills/amend/** - Revision orchestrator (spec → plan)
 - **skills/using-worktree/** - Worktree setup + working context for isolated development
 
 ### Document Flow
@@ -61,7 +67,7 @@ skills/spec/scripts/stop-server.sh $SCREEN_DIR
 ## Parallel Development with Worktrees
 
 ```
-/spec "feature" → /using-worktree → /plan → /tdd → /code-review
+/spec "feature" → /using-worktree → /plan → /implement → /code-review
 ```
 
 ## Versioning

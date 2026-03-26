@@ -17,7 +17,7 @@ Turn an approved spec document into a detailed, actionable implementation plan.
 
 ## Input
 
-A spec document path is required. The planner reads the spec and the existing codebase to produce a plan.
+A spec document path is required. The plan-writer reads the spec and the existing codebase to produce a plan.
 
 ```
 /plan docs/specs/2026-03-22-auth-design.md

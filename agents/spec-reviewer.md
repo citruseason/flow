@@ -65,4 +65,4 @@ Output: Status: Approved, no issues, maybe 1-2 minor recommendations
 
 ### Example: Issues Found
 Input: Spec with a "TBD" in the data model section
-Output: Status: Issues Found, issue: "Data Model section contains TBD for user schema — planner won't know what fields to implement"
+Output: Status: Issues Found, issue: "Data Model section contains TBD for user schema — plan-writer won't know what fields to implement"

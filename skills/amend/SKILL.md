@@ -28,7 +28,7 @@ Locate relevant documents using this algorithm:
 - **No spec exists:** Inform the user and suggest running `/spec` first
 - **No plan exists:** Inform the user and suggest running `/plan` first
 - **Multiple matching specs/plans:** Present candidates and ask the user to confirm which one to amend
-- **Spec exists but no corresponding plan:** After updating the spec, delegate to planner in create mode (normal `/plan` behavior)
+- **Spec exists but no corresponding plan:** After updating the spec, delegate to plan-writer in create mode (normal `/plan` behavior)
 
 ## Routing Logic
 
@@ -44,7 +44,7 @@ Criteria (ALL must be true):
 - Existing spec/plan still accurately describes the system after the change
 
 Flow:
-1. Dispatch `tdd-guide` agent with the specific change to implement
+1. Dispatch `tdd` agent with the specific change to implement
 
 ### Path 2: Spec-level Change
 
@@ -56,17 +56,17 @@ Criteria (ANY triggers Path 2):
 - Existing spec/plan no longer accurately describes the desired system
 
 Flow:
-1. Dispatch `design-facilitator` agent with `existing_spec_path` and change description
+1. Dispatch `spec-facilitator` agent with `existing_spec_path` and change description
 2. **User confirmation gate** -- show updated spec diff, ask "스펙 변경사항이 맞나요?"
    - Approve: proceed to step 3
-   - Request changes: re-run design-facilitator with additional instructions
+   - Request changes: re-run spec-facilitator with additional instructions
    - Abort: stop the entire amend flow
-3. Dispatch `planner` agent with `existing_plan_path` and change description
+3. Dispatch `plan-writer` agent with `existing_plan_path` and change description
 4. **User confirmation gate** -- show updated plan diff, ask "플랜 변경사항이 맞나요?"
    - Approve: proceed to step 5
-   - Request changes: re-run planner with additional instructions
+   - Request changes: re-run plan-writer with additional instructions
    - Abort: stop the entire amend flow
-5. Dispatch `tdd-guide` agent with the specific changes to implement
+5. Dispatch `tdd` agent with the specific changes to implement
 
 ## User Confirmation Gates
 
@@ -93,22 +93,22 @@ User: /amend <change request>
   v
 [Assess Scope]
   |
-  +--> Path 1 (minor) --> tdd-guide --> done
+  +--> Path 1 (minor) --> tdd --> done
   |
-  +--> Path 2 (spec-level) --> design-facilitator --> user confirms
-                                --> planner --> user confirms
-                                --> tdd-guide --> done
+  +--> Path 2 (spec-level) --> spec-facilitator --> user confirms
+                                --> plan-writer --> user confirms
+                                --> tdd --> done
 ```
 
 ## Agent Dispatch
 
 This skill dispatches agents directly (NOT other skills):
 
-- **Path 1:** dispatch `tdd-guide` agent
-- **Path 2:** dispatch `design-facilitator` agent (with `existing_spec_path`) -> `planner` agent (with `existing_plan_path`) -> `tdd-guide` agent
+- **Path 1:** dispatch `tdd` agent
+- **Path 2:** dispatch `spec-facilitator` agent (with `existing_spec_path`) -> `plan-writer` agent (with `existing_plan_path`)
 
 ## What This Skill Does NOT Do
 
-- Write spec or plan content itself (delegates to design-facilitator and planner)
-- Implement code itself (delegates to tdd-guide)
+- Write spec or plan content itself (delegates to spec-facilitator and plan-writer)
+- Implement code itself (delegates to tdd)
 - Skip user confirmation gates

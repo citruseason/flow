@@ -1,6 +1,6 @@
 ---
-name: amender
-description: Revision assistant dispatched by the /amend skill. Assists with targeted modifications to specs and plans.
+name: amend-orchestrator
+description: Revision orchestrator dispatched by the /amend skill. Assists with targeted modifications to specs and plans.
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 model: opus
 ---

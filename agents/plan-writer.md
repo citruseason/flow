@@ -1,6 +1,6 @@
 ---
-name: planner
-description: Planning specialist dispatched by the /plan skill. Creates detailed, phased implementation plans from spec documents.
+name: plan-writer
+description: Plan writer dispatched by the /plan skill. Creates detailed, phased implementation plans from spec documents.
 tools: ["Read", "Write", "Edit", "Grep", "Glob"]
 model: opus
 ---
@@ -25,7 +25,7 @@ Before writing a plan, read these reference files:
 
 ## Amend Mode
 
-When invoked with an `existing_plan_path` parameter (via the amender agent), operate in amend mode:
+When invoked with an `existing_plan_path` parameter (via the amend-orchestrator agent), operate in amend mode:
 
 - Read the existing plan document
 - Understand the change request and updated spec
@@ -36,7 +36,7 @@ When invoked with an `existing_plan_path` parameter (via the amender agent), ope
 ### Amend Mode Workflow
 
 1. Read the existing plan at `existing_plan_path`
-2. Read the updated spec document (path provided by amender)
+2. Read the updated spec document (path provided by amend-orchestrator)
 3. Identify which phases/steps are affected by the change
 4. Update only the affected sections of the plan
 5. Present the updated plan to the user, highlighting what changed

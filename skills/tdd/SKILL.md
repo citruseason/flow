@@ -79,7 +79,3 @@ npm run test:coverage
 
 - **Mock patterns** for external services (Supabase, Redis, OpenAI): read `skills/tdd/references/mock-patterns.md`
 - **Common testing mistakes**, file organization, coverage thresholds: read `skills/tdd/references/testing-mistakes.md`
-
-## Agent Dispatch
-
-The `tdd-guide` agent is dispatched for interactive TDD cycle enforcement. It guides developers through the RED-GREEN-REFACTOR loop in real time, ensuring tests are written before implementation and that coverage thresholds are met before moving on.

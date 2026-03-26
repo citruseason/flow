@@ -16,13 +16,12 @@
     "workflow"
   ],
   "agents": [
+    "./agents/spec-facilitator.md",
     "./agents/spec-reviewer.md",
-    "./agents/design-facilitator.md",
-    "./agents/planner.md",
+    "./agents/plan-writer.md",
     "./agents/plan-reviewer.md",
-    "./agents/tdd-guide.md",
     "./agents/code-reviewer.md",
-    "./agents/amender.md"
+    "./agents/amend-orchestrator.md"
   ],
   "skills": [
     "./skills/"
