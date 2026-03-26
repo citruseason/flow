@@ -51,6 +51,29 @@ Create detailed steps with:
 - Minimize context switching
 - Enable incremental testing
 
+## Execution Strategy Determination
+
+When writing a plan, determine the execution strategy based on the spec's scope and include it in the plan document.
+
+| Condition | Strategy | Reason |
+|-----------|----------|--------|
+| Single plan | `direct` | Branch only, no phase branches |
+| Multiple plans (2+) | `worktree` | Isolation needed, per-phase branches + PRs |
+| Spec explicitly mentions parallel work | `worktree` | Isolation required |
+
+**Rules:**
+- Direct mode always means a single plan. If multiple plans are generated, it automatically becomes worktree mode.
+- Multi-plan file naming: `<date>-<topic>-phase<N>-plan.md`
+- The user can override the strategy (direct ↔ worktree).
+
+Add this section at the end of every plan:
+
+```markdown
+## Execution Strategy
+- type: direct | worktree
+- branch_prefix: feature/<topic>
+```
+
 ## Deduplication Rule
 
 The plan builds ON TOP OF the spec — it does not repeat it.

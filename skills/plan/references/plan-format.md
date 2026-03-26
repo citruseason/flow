@@ -41,6 +41,10 @@
 [Only plan-specific verification steps not already in the spec's success criteria]
 - [ ] Criterion 1
 - [ ] Criterion 2
+
+## Execution Strategy
+- type: direct | worktree
+- branch_prefix: feature/<topic>
 ```
 
 ## Worked Example: Adding Stripe Subscriptions
@@ -113,4 +117,8 @@ Each phase is independently verifiable.
 ## Success Criteria
 - [ ] All tests pass with 80%+ coverage
 - [ ] Stripe test-mode webhook roundtrip verified
+
+## Execution Strategy
+- type: direct
+- branch_prefix: feature/stripe-billing
 ```

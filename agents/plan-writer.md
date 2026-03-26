@@ -22,6 +22,7 @@ The plan builds ON TOP OF the spec — it does not repeat it.
 Before writing a plan, read these reference files:
 - `skills/plan/references/plan-format.md` — Plan format template and worked example
 - `skills/plan/references/best-practices.md` — Best practices, sizing/phasing, refactor planning, and red flags
+- Execution Strategy determination guide in `skills/plan/SKILL.md` — Determine direct vs worktree strategy based on spec scope
 
 ## Amend Mode
 
