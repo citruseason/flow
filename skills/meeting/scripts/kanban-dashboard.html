@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kanban Dashboard</title>
+<style>
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #0f0f23;
+    color: #e0e0e0;
+    min-width: 800px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header */
+  .header {
+    background: #1a1a2e;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #2a2a4a;
+    flex-shrink: 0;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .header-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: -0.3px;
+  }
+
+  .header-phase {
+    font-size: 13px;
+    font-weight: 500;
+    color: #a0a0c0;
+    background: #2a2a4a;
+    padding: 4px 12px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .connection-label {
+    font-size: 12px;
+    color: #808090;
+  }
+
+  .connection-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ef4444;
+    transition: background-color 0.3s ease;
+  }
+
+  .connection-dot.connected {
+    background: #22c55e;
+    box-shadow: 0 0 6px rgba(34, 197, 94, 0.5);
+  }
+
+  .connection-dot.disconnected {
+    background: #ef4444;
+    box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+  }
+
+  .connection-dot.reconnecting {
+    background: #eab308;
+    box-shadow: 0 0 6px rgba(234, 179, 8, 0.4);
+    animation: pulse-yellow 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse-yellow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* Board */
+  .board {
+    flex: 1;
+    display: flex;
+    gap: 16px;
+    padding: 20px 24px;
+    overflow-x: auto;
+  }
+
+  .column {
+    flex: 1;
+    min-width: 240px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .column-header {
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .column-count {
+    font-size: 12px;
+    font-weight: 500;
+    background: rgba(0, 0, 0, 0.15);
+    padding: 2px 8px;
+    border-radius: 10px;
+    min-width: 24px;
+    text-align: center;
+  }
+
+  .column-body {
+    flex: 1;
+    padding: 8px 10px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+  }
+
+  /* Backlog column */
+  .column-backlog .column-header {
+    background: #2a2a3a;
+    color: #b0b0c0;
+  }
+  .column-backlog .column-body {
+    background: #1e1e2e;
+  }
+
+  /* In Progress column */
+  .column-in-progress .column-header {
+    background: #1a2a4a;
+    color: #60a5fa;
+  }
+  .column-in-progress .column-body {
+    background: #161e33;
+  }
+
+  /* Done column */
+  .column-done .column-header {
+    background: #1a3a2a;
+    color: #4ade80;
+  }
+  .column-done .column-body {
+    background: #162218;
+  }
+
+  /* Cards */
+  .card {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 12px 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+  }
+
+  .card-id {
+    font-size: 11px;
+    font-weight: 600;
+    color: #8080a0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .card-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a1a2e;
+    line-height: 1.35;
+  }
+
+  /* In-progress card glow */
+  .card-active {
+    border: 2px solid #3b82f6;
+    animation: glow-border 2s ease-in-out infinite;
+    position: relative;
+  }
+
+  @keyframes glow-border {
+    0%, 100% {
+      border-color: #3b82f6;
+      box-shadow: 0 0 6px rgba(59, 130, 246, 0.3), 0 1px 3px rgba(0, 0, 0, 0.25);
+    }
+    50% {
+      border-color: #60a5fa;
+      box-shadow: 0 0 14px rgba(59, 130, 246, 0.5), 0 1px 3px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  .card-active .card-id {
+    color: #3b82f6;
+  }
+
+  /* Done card styling */
+  .card-done {
+    opacity: 0.75;
+  }
+
+  .card-done .card-name {
+    text-decoration: line-through;
+    text-decoration-color: #a0a0b0;
+  }
+
+  /* Empty column placeholder */
+  .column-empty {
+    font-size: 13px;
+    color: #505068;
+    text-align: center;
+    padding: 24px 12px;
+    font-style: italic;
+  }
+
+  /* Flow arrows between columns */
+  .board-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    flex: 1;
+    padding: 20px 24px;
+    overflow-x: auto;
+  }
+
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    flex-shrink: 0;
+    color: #3a3a5a;
+    font-size: 18px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="header-title" id="topic-name">Kanban Board</div>
+    <div class="header-phase" id="phase-badge">--</div>
+  </div>
+  <div class="header-right">
+    <span class="connection-label" id="connection-label">Disconnected</span>
+    <div class="connection-dot disconnected" id="connection-dot"></div>
+  </div>
+</div>
+
+<div class="board">
+  <div class="column column-backlog">
+    <div class="column-header">
+      <span>Backlog</span>
+      <span class="column-count" id="count-backlog">0</span>
+    </div>
+    <div class="column-body" id="col-backlog"></div>
+  </div>
+
+  <div class="flow-arrow">&#8594;</div>
+
+  <div class="column column-in-progress">
+    <div class="column-header">
+      <span>In Progress</span>
+      <span class="column-count" id="count-in-progress">0</span>
+    </div>
+    <div class="column-body" id="col-in-progress"></div>
+  </div>
+
+  <div class="flow-arrow">&#8594;</div>
+
+  <div class="column column-done">
+    <div class="column-header">
+      <span>Done</span>
+      <span class="column-count" id="count-done">0</span>
+    </div>
+    <div class="column-body" id="col-done"></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  "use strict";
+
+  // DOM references
+  var topicEl = document.getElementById("topic-name");
+  var phaseEl = document.getElementById("phase-badge");
+  var dotEl = document.getElementById("connection-dot");
+  var labelEl = document.getElementById("connection-label");
+  var colBacklog = document.getElementById("col-backlog");
+  var colInProgress = document.getElementById("col-in-progress");
+  var colDone = document.getElementById("col-done");
+  var countBacklog = document.getElementById("count-backlog");
+  var countInProgress = document.getElementById("count-in-progress");
+  var countDone = document.getElementById("count-done");
+
+  // Connection state
+  var ws = null;
+  var reconnectDelay = 1000;
+  var reconnectTimer = null;
+  var INITIAL_DELAY = 1000;
+  var MAX_DELAY = 30000;
+  var BACKOFF_FACTOR = 2;
+
+  // --- Rendering ---
+
+  function createCard(item, extraClass) {
+    var card = document.createElement("div");
+    card.className = "card" + (extraClass ? " " + extraClass : "");
+
+    var idEl = document.createElement("div");
+    idEl.className = "card-id";
+    idEl.textContent = item.id;
+
+    var nameEl = document.createElement("div");
+    nameEl.className = "card-name";
+    nameEl.textContent = item.name;
+
+    card.appendChild(idEl);
+    card.appendChild(nameEl);
+    return card;
+  }
+
+  function renderColumn(container, items, cardClass) {
+    container.innerHTML = "";
+    if (!items || items.length === 0) {
+      var empty = document.createElement("div");
+      empty.className = "column-empty";
+      empty.textContent = "No items";
+      container.appendChild(empty);
+      return;
+    }
+    for (var i = 0; i < items.length; i++) {
+      container.appendChild(createCard(items[i], cardClass));
+    }
+  }
+
+  function updateBoard(state) {
+    // Header
+    topicEl.textContent = state.topic || "Kanban Board";
+    phaseEl.textContent = state.phase || "--";
+
+    var steps = state.steps || {};
+    var backlog = steps.backlog || [];
+    var inProgress = steps.in_progress || [];
+    var done = steps.done || [];
+
+    // Counts
+    countBacklog.textContent = backlog.length;
+    countInProgress.textContent = inProgress.length;
+    countDone.textContent = done.length;
+
+    // Render columns
+    renderColumn(colBacklog, backlog, "");
+    renderColumn(colInProgress, inProgress, "card-active");
+    renderColumn(colDone, done, "card-done");
+  }
+
+  // --- Connection indicator ---
+
+  function setConnectionStatus(status) {
+    dotEl.className = "connection-dot " + status;
+    if (status === "connected") {
+      labelEl.textContent = "Connected";
+    } else if (status === "reconnecting") {
+      labelEl.textContent = "Reconnecting\u2026";
+    } else {
+      labelEl.textContent = "Disconnected";
+    }
+  }
+
+  // --- WebSocket ---
+
+  function connect() {
+    if (ws) {
+      try { ws.close(); } catch(e) { /* ignore */ }
+    }
+
+    var protocol = "ws://";
+    var host = window.location.host;
+    var url = protocol + host + "/ws";
+
+    ws = new WebSocket(url);
+
+    ws.onopen = function() {
+      reconnectDelay = INITIAL_DELAY;
+      if (reconnectTimer) {
+        clearTimeout(reconnectTimer);
+        reconnectTimer = null;
+      }
+      setConnectionStatus("connected");
+    };
+
+    ws.onmessage = function(event) {
+      var data;
+      try {
+        data = JSON.parse(event.data);
+      } catch(e) {
+        return;
+      }
+      if (data.type === "kanban-state") {
+        updateBoard(data);
+      }
+    };
+
+    ws.onclose = function() {
+      ws = null;
+      scheduleReconnect();
+    };
+
+    ws.onerror = function() {
+      if (ws) {
+        try { ws.close(); } catch(e) { /* ignore */ }
+      }
+    };
+  }
+
+  function scheduleReconnect() {
+    setConnectionStatus("reconnecting");
+    if (reconnectTimer) {
+      clearTimeout(reconnectTimer);
+    }
+    reconnectTimer = setTimeout(function() {
+      reconnectTimer = null;
+      connect();
+    }, reconnectDelay);
+
+    // Exponential backoff
+    reconnectDelay = Math.min(reconnectDelay * BACKOFF_FACTOR, MAX_DELAY);
+  }
+
+  // Start
+  setConnectionStatus("disconnected");
+  connect();
+})();
+</script>
+
+</body>
+</html>
