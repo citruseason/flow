@@ -61,18 +61,41 @@ harness/
 │       ├── meetings/
 │       │   ├── YYYY-MM-DD-initial.md
 │       │   └── YYYY-MM-DD-followup.md
-│       ├── cps.md
-│       ├── prd.md
-│       ├── spec.md
-│       ├── blueprint.md
-│       ├── architecture.md
-│       └── code-dev-plan.md
+│       ├── cps.md                        ← 최신 버전
+│       ├── prd.md                        ← 최신 버전
+│       ├── history/                      ← 이전 버전 보관 (최대 2개)
+│       │   ├── cps.v1.md
+│       │   ├── cps.v2.md
+│       │   ├── prd.v1.md
+│       │   ├── prd.v2.md
+│       │   ├── spec.v1.md                ← (예시: 모든 문서 최대 v2까지)
+│       │   ├── blueprint.v1.md
+│       │   ├── architecture.v1.md
+│       │   └── code-dev-plan.v1.md
+│       ├── spec.md                       ← 최신 버전
+│       ├── blueprint.md                  ← 최신 버전
+│       ├── architecture.md               ← 최신 버전
+│       └── code-dev-plan.md              ← 최신 버전
 ├── quality-score.md                  ← 도메인별 품질 점수
 ├── observability.md                  ← 로깅/메트릭/에러 형식 가이드
 ├── golden-rules.md                   ← 핵심 불변 규칙
 ├── tech-debt.md                      ← 기술 부채 추적
 └── references/                       ← 외부 참조 문서
 ```
+
+### 문서 히스토리 관리
+
+CPS/PRD 및 design-doc 문서(spec, blueprint, architecture, code-dev-plan)는 최신 버전을 루트에 유지하면서, 이전 버전을 `history/` 폴더에 최대 2개까지 보관한다.
+
+**히스토리 순환 정책:**
+- 문서 업데이트 시: 현재 버전 → `history/{name}.v{N}.md`로 이동 후 새 버전 작성
+- 히스토리가 2개를 초과하면 가장 오래된 버전 삭제 (v1 삭제 → v2가 v1으로, 새 버전이 v2로). v2가 항상 가장 최근의 직전 버전이다
+- Meeting Log는 히스토리 대상이 아님 (날짜별로 이미 누적 관리)
+
+**활용 방식:**
+- `/meeting` 후속 실행 시: 현재 CPS/PRD와 직전 버전(`history/cps.v{latest}.md`)을 diff하여 변경 사항 추출, design-doc에 영향받는 부분만 업데이트 제안
+- `/design-doc` 업데이트 시: 현재 design-doc와 직전 버전을 diff하여 변경 사항 추출, `/implement`에서 변경된 부분만 대응
+- `/implement` 실행 시: design-doc 히스토리가 있으면 diff를 읽어 변경된 phase/영역만 재작업 (전체 재구현 방지)
 
 ### 칸반 관리
 
@@ -206,7 +229,7 @@ kanban.json 업데이트
     ↓
 새 Meeting Log 추가 (meetings/YYYY-MM-DD-<session>.md)
     ↓
-CPS, PRD 업데이트 (변경 사항 하이라이트)
+현재 CPS/PRD를 history/에 보관 후 업데이트 (변경 사항 하이라이트)
     ↓
 사용자 리뷰 → kanban.json 업데이트
 ```
@@ -255,8 +278,9 @@ CPS, PRD 업데이트 (변경 사항 하이라이트)
 ```
 토픽의 PRD 읽기 (harness/topics/<topic>/prd.md)
   + 미확인 사항 남아있으면 경고 후 진행 여부 확인
+  + 기존 design-doc 문서가 있으면 history/에 보관 후 업데이트 모드로 진행
     ↓
-[design-doc-writer] 4개 문서를 순차 생성, 각각 사용자 승인 후 다음으로
+[design-doc-writer] 4개 문서를 순차 생성 (또는 업데이트), 각각 사용자 승인 후 다음으로
     ↓
 ① spec.md — 기능 상세 명세, 인터페이스 정의, 데이터 모델
 ② blueprint.md — 시스템 구성도, 컴포넌트 간 관계, 데이터 흐름
@@ -275,7 +299,7 @@ CPS, PRD 업데이트 (변경 사항 하이라이트)
 ```
 /meeting <topic> (PRD 업데이트됨)
     ↓
-PRD diff 분석 → 영향받는 design-doc 문서 식별 → 해당 문서만 업데이트 제안 → 사용자 승인 후 반영
+PRD history/ diff 분석 → 영향받는 design-doc 문서 식별 → 해당 문서를 history/에 보관 후 업데이트 제안 → 사용자 승인 후 반영
 ```
 
 ### code-dev-plan.md 예시
@@ -314,6 +338,8 @@ backlog에 phase별 스텝 자동 등록 (첫 실행 시)
 in_progress 스텝부터 이어서 작업 (중단 복구)
     ↓
 각 phase 실행:
+  ├── design-doc history/가 존재하면 직전 버전과 diff하여 변경된 phase/영역 식별, 해당 부분만 재작업
+  ├── history가 없으면 (첫 실행) code-dev-plan 전체를 순차 실행
   ├── code-dev-plan의 방향/접근법 참조
   ├── spec, blueprint, architecture 문서 참조
   ├── SDD + TDD로 개발 (기존 SDD worker/reviewer 에이전트 패턴 활용)
@@ -344,7 +370,9 @@ in_progress 스텝부터 이어서 작업 (중단 복구)
   ├── 각 린트 스킬 순차 실행
   └── 스킬별 검증 결과 통합
     ↓
-통합 리포트 (요구사항 + 린트 결과)
+③ [doc-gardener] harness/ 문서 최신 상태 검증
+    ↓
+통합 리포트 (요구사항 + 린트 + doc-garden 결과)
     ↓
 결과: PASS / WARNING / FAIL
     ↓
