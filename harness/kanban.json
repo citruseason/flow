@@ -1,6 +1,10 @@
 {
   "topics": {
     "harness-gap-analysis": {
+      "phase": "done",
+      "last_updated": "2026-03-28"
+    },
+    "rules-extraction": {
       "phase": "meeting",
       "last_updated": "2026-03-28"
     }
