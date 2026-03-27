@@ -5,31 +5,36 @@
 하네스 기반 지식 관리, 미팅 기반 요구사항 정의, 설계 문서화, 자율 구현, 린트 검증까지 — 각 단계를 스킬 슬래시 커맨드로 호출하는 개발 워크플로우 플러그인입니다.
 
 ```
-/harness-init          → 프로젝트 분석 + 하네스 지식 베이스 생성
+/harness-init          → 프로젝트 분석 + CORE 지식 문서 생성 + CLAUDE.md 엔트리포인트
 /meeting "topic"       → Meeting Log → CPS → PRD 생성
-/design-doc <topic>    → Spec, Blueprint, Architecture, Code-Dev-Plan
+/design-doc <topic>    → Spec, Blueprint, Architecture, Code-Dev-Plan, Test-Cases
 /implement <topic>     → 자율 구현 (SDD + TDD → /lint 자동 실행)
 /lint <topic>          → 요구사항 검증 + lint-* 스킬 실행
 ```
 
 독립 사용 가능한 스킬:
 ```
+/lint-integrate        → 외부 스킬을 lint-* 래퍼로 추가/관리
+/core-update <topic>   → 머지 후 CORE 문서에 실현된 결정 반영
 /doc-garden            → 하네스 문서 최신 상태 검증
 /tdd                   → 수동 TDD 가이드 (RED → GREEN → REFACTOR)
 /sdd                   → 서브에이전트 기반 실행 패턴
 /using-worktree        → worktree 셋업 + 작업 컨텍스트 전환
+/update-plugin         → 수동 플러그인 업데이트
 ```
 
 ---
 
 ## Why Flow?
 
-- **하네스 지식 베이스** — 에이전트가 프로젝트를 이해하고 추론할 수 있는 구조화된 문서
+- **CORE 지식 레이어** — 프로젝트를 도메인별로 이해하는 구조화된 문서 (PRODUCT, SECURITY, FRONTEND, BACKEND 등)
+- **CLAUDE.md 에이전트 엔트리포인트** — 100줄 이내의 프로젝트 맵으로 점진적 컨텍스트 로딩
 - **미팅 기반 요구사항** — 대화를 통해 CPS(Context-Problem-Solution) → PRD 생성
-- **4단계 설계 문서** — Spec, Blueprint, Architecture, Code-Dev-Plan으로 체계적 설계
+- **5단계 설계 문서** — Spec, Blueprint, Architecture, Code-Dev-Plan, Test-Cases
 - **자율 구현** — implement부터 lint까지 사용자 개입 없이 자동 진행
-- **프로젝트별 린트 스킬** — 아키텍처, 컨벤션, 프레임워크별 규칙이 자동 생성되고 축적
-- **칸반 기반 진행 추적** — 토픽별 상태 관리로 세션 간 연속성 확보
+- **프로젝트별 린트 스킬** — CORE 문서에서 파생된 규칙, 자동 생성 및 축적
+- **머지 타임 지식 축적** — 토픽 머지 시 CORE 문서에 실현된 설계 결정 반영
+- **레퍼런스 자동 수집** — 의존성의 llms.txt 또는 공식 문서 기반 레퍼런스 관리
 
 ---
 
@@ -63,8 +68,8 @@
 # 3. 자율 구현 (implement → lint 자동 실행)
 /implement user-auth
 
-# 4. 수정사항 있으면 미팅 재실행
-/meeting user-auth
+# 4. 머지 후 CORE 문서 업데이트
+/core-update user-auth
 ```
 
 ---
@@ -77,8 +82,8 @@ flow/
 |   |-- plugin.json               # 플러그인 매니페스트
 |   |-- marketplace.json          # 마켓플레이스 등록 정보
 |
-|-- agents/
-|   |-- harness-initializer.md    # 코드베이스 분석 + 하네스 생성 (Opus)
+|-- agents/                        # 7개 에이전트
+|   |-- harness-initializer.md    # 코드베이스 분석 + CORE 문서 생성 (Opus)
 |   |-- meeting-facilitator.md    # 미팅 진행 + CPS/PRD 생성 (Opus)
 |   |-- meeting-reviewer.md       # CPS/PRD 검증 (Sonnet)
 |   |-- design-doc-writer.md      # 설계 문서 5종 작성 (Opus)
@@ -86,40 +91,21 @@ flow/
 |   |-- doc-gardener.md           # 문서 최신 상태 검증 (Sonnet)
 |   |-- lint-reviewer.md          # 린트 통합 + 품질 점수 (Sonnet)
 |
-|-- skills/
-|   |-- harness-init/             # /harness-init
-|   |   |-- SKILL.md
-|   |
-|   |-- meeting/                  # /meeting
-|   |   |-- SKILL.md
-|   |   |-- visual-companion.md
-|   |   |-- scripts/
-|   |
-|   |-- design-doc/               # /design-doc
-|   |   |-- SKILL.md
-|   |
-|   |-- implement/                # /implement
-|   |   |-- SKILL.md
-|   |
-|   |-- lint/                     # /lint
-|   |   |-- SKILL.md
-|   |
-|   |-- doc-garden/               # /doc-garden
-|   |   |-- SKILL.md
-|   |
-|   |-- sdd/                      # /sdd
-|   |   |-- SKILL.md
-|   |   |-- references/
-|   |
-|   |-- tdd/                      # /tdd
-|   |   |-- SKILL.md
-|   |   |-- references/
-|   |
-|   |-- using-worktree/           # /using-worktree
-|   |   |-- SKILL.md
-|   |
-|   |-- update-plugin/            # /update-plugin
-|       |-- SKILL.md
+|-- skills/                        # 14개 스킬
+|   |-- harness-init/             # /harness-init — CORE 문서 + CLAUDE.md + 레퍼런스
+|   |-- meeting/                  # /meeting — 미팅 진행 + Visual Companion
+|   |-- design-doc/               # /design-doc — 5개 설계 문서
+|   |-- implement/                # /implement — SDD + TDD 자율 구현
+|   |-- lint/                     # /lint — 요구사항 + 린트 검증
+|   |-- lint-manage/              # /lint-manage — 린트 스킬 생성/업데이트
+|   |-- lint-integrate/           # /lint-integrate — 외부 스킬 린트 래퍼
+|   |-- lint-validate/            # /lint-validate — 린트 스킬 건강 검증
+|   |-- core-update/              # /core-update — 머지 후 CORE 문서 업데이트
+|   |-- doc-garden/               # /doc-garden — 문서 최신 상태 검증
+|   |-- sdd/                      # /sdd — 서브에이전트 기반 실행
+|   |-- tdd/                      # /tdd — 테스트 주도 개발
+|   |-- using-worktree/           # /using-worktree — 격리 워크트리
+|   |-- update-plugin/            # /update-plugin — 플러그인 업데이트
 |
 |-- hooks/
 |   |-- hooks.json                # 세션 시작 알림
@@ -135,8 +121,11 @@ flow/
 ### 0. /harness-init — 프로젝트 하네스 세팅
 
 - 코드베이스 구조, 기술 스택, 아키텍처 패턴, 코드 컨벤션 자동 분석
-- `harness/` 지식 베이스 생성 (index, 품질 점수, 관측 가이드, 골든 룰, 기술 부채)
-- 프로젝트 `.claude/skills/`에 lint-* 스킬 자동 생성 (architecture, code-convention, framework별)
+- **CORE 도메인 문서 생성** — PRODUCT.md(항상), SECURITY.md(항상) + 프로젝트 특성에 따라 FRONTEND.md, BACKEND.md, DATA.md 등
+- **CLAUDE.md 하네스 섹션** — `<!-- harness:start/end -->` 마커로 100줄 이내 프로젝트 맵 삽입
+- **의존성 레퍼런스 수집** — llms.txt 우선, 없으면 공식 문서 기반 생성
+- 프로젝트 `.claude/skills/`에 lint-* 스킬 자동 생성 (CORE 문서 upstream 참조 포함)
+- 레거시 harness(index.md, golden-rules.md 등) 자동 마이그레이션 지원
 - 재실행 시 변경사항만 diff 기반 업데이트
 
 ### 1. /meeting — 대화 → Meeting Log → CPS → PRD
@@ -150,11 +139,12 @@ flow/
 
 ### 2. /design-doc — PRD → 5개 설계 문서
 
-- Spec: 기능 상세 명세, 인터페이스, 데이터 모델
-- Blueprint: 시스템 구성도, 컴포넌트 관계, 데이터 흐름
-- Architecture: 기술 스택, 레이어 구조, 의존성 방향
-- Code-Dev-Plan: 개발 방향/위치/접근법 (코드 아님)
-- Test-Cases: 모든 시나리오의 테스트 케이스 정의 (TDD에 활용)
+- Spec: 기능 목록, 인터페이스, 데이터 모델, 제약조건
+- Blueprint: 컴포넌트 목록, 계층 구조, 연결 관계
+- Architecture: 기술 스택, 패턴, 제약 (간결한 결정 문서)
+- Code-Dev-Plan: Phase별 What/Where/How/Verify (코드 아님)
+- Test-Cases: TDD용 테스트 시나리오 정의
+- design-doc-reviewer가 교차 문서 일관성 검증
 - PRD 변경 시 영향받는 문서만 자동 업데이트
 
 ### 3. /implement — 자율 구현
@@ -162,7 +152,7 @@ flow/
 - code-dev-plan의 Phase별 SDD 워커 디스패치
 - 각 워커가 TDD로 구현 (테스트 먼저 → 최소 구현 → 리팩터)
 - 2단계 리뷰 게이트 (스펙 준수 → 코드 품질)
-- 칸반으로 진행 추적, 세션 중단 후 이어서 가능
+- 칸반으로 진행 추적, 세션 중단 후 `--continue`로 이어서 가능
 - 완료 시 `/lint` 자동 실행
 
 ### 4. /lint — 검증
@@ -172,6 +162,13 @@ flow/
 - 문서 최신 상태 검증 (doc-gardener)
 - 품질 점수 산출 (100점 만점)
 - FAIL 시 자동 수정 → 재실행 (최대 2회)
+- lint-manage로 린트 스킬 자동 진화
+
+### 5. /core-update — 머지 후 CORE 업데이트
+
+- 토픽 브랜치 머지 후 실현된 설계 결정만 CORE 문서에 반영
+- 계획/미머지 내용은 절대 포함하지 않음
+- CLAUDE.md 하네스 섹션도 필요 시 자동 갱신
 
 ---
 
@@ -181,16 +178,21 @@ flow/
 
 ```
 harness/
-├── index.md              # 지식 베이스 목차
-├── kanban.json            # 전체 토픽 상태 조감도
-├── quality-score.md       # 도메인별 품질 점수
-├── observability.md       # 로깅/메트릭/에러 형식 가이드
-├── golden-rules.md        # 핵심 불변 규칙
-├── tech-debt.md           # 기술 부채 추적
-├── references/            # 외부 참조 문서
+├── PRODUCT.md            # 프로젝트 정의, 스택, 아키텍처, 컨벤션 (항상 생성)
+├── SECURITY.md           # 보안 원칙, 입력 검증, 비밀 관리 (항상 생성)
+├── FRONTEND.md           # 프론트엔드 패턴 (조건부)
+├── BACKEND.md            # 백엔드 패턴 (조건부)
+├── DATA.md               # 데이터/DB 패턴 (조건부)
+├── DESIGN.md             # UI/UX 디자인 패턴 (조건부)
+├── INFRA.md              # 인프라/배포 패턴 (조건부)
+├── BATCH.md              # 배치 처리 패턴 (조건부)
+├── kanban.json           # 전체 토픽 상태 조감도
+├── quality-score.md      # 도메인별 품질 점수
+├── tech-debt.md          # 기술 부채 추적
+├── references/           # 의존성 레퍼런스 (llms.txt 기반)
 └── topics/
     └── <topic>/
-        ├── kanban.json    # 토픽 진행 상태 (backlog/in_progress/done)
+        ├── kanban.json    # 토픽 진행 상태
         ├── meetings/      # 미팅 로그
         ├── cps.md         # Context-Problem-Solution
         ├── prd.md         # Product Requirements Document
@@ -198,6 +200,7 @@ harness/
         ├── blueprint.md   # 시스템 구성도
         ├── architecture.md # 아키텍처 결정
         ├── code-dev-plan.md # 개발 계획
+        ├── test-cases.md  # 테스트 케이스
         └── history/       # 문서 버전 이력 (최대 2개)
 ```
 
