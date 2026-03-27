@@ -191,6 +191,16 @@ Update the topic's `kanban.json`:
 - On WARNING: move lint step to `done`, add warning note
 - On FAIL (after retries exhausted): keep lint step in `in_progress`, add failure note
 
+### 13. Stop Kanban Dashboard (best-effort)
+
+If a kanban dashboard server is running (PID file exists at `harness/topics/<topic>/.kanban.pid`), stop it:
+
+```bash
+skills/meeting/scripts/stop-kanban.sh harness/topics/<topic>
+```
+
+If the script fails, log a warning and continue — do not block the final report.
+
 ## Execution Modes
 
 ### Autonomous Mode (called from /implement)

@@ -24,6 +24,21 @@ Execute a topic's code-dev-plan by combining SDD execution pattern with TDD deve
 git checkout -b feature/<topic>
 ```
 
+### Start Kanban Dashboard (best-effort)
+
+Start the real-time kanban dashboard server so the user can monitor progress in their browser:
+
+```bash
+skills/meeting/scripts/start-kanban.sh --kanban harness/topics/<topic>/kanban.json
+```
+
+If the script succeeds, display the dashboard URL to the user:
+> "Kanban dashboard: http://localhost:{port}"
+
+If the script fails, log a warning and continue — do not block the workflow.
+
+### Read Topic Documents
+
 Read all topic documents upfront:
 - `harness/topics/<topic>/code-dev-plan.md` — Phase list and execution direction
 - `harness/topics/<topic>/spec.md` — Interface definitions, data models
