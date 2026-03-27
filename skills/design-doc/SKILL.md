@@ -47,7 +47,7 @@ If any of `spec.md`, `blueprint.md`, `architecture.md`, `code-dev-plan.md` alrea
 2. If `history/<doc>.v1.md` exists, rename it to `history/<doc>.v2.md`
 3. Copy current `<doc>.md` to `history/<doc>.v1.md`
 
-This maintains a maximum of 2 historical versions (v2 = oldest, v1 = most recent prior).
+This maintains a maximum of 2 historical versions (v2 = most recent prior, v1 = older).
 
 ### 4. Dispatch design-doc-writer Agent
 

@@ -1,6 +1,6 @@
 ---
 name: meeting
-description: "You MUST use this before any creative work — conducts structured dialogue to define requirements via Meeting Log → CPS → PRD. This is the most important step in the workflow."
+description: "Conduct structured dialogue to define requirements via Meeting Log → CPS → PRD. TRIGGER when: user wants to build a feature, add functionality, start a new topic, define requirements, discuss an idea, or requests any creative/development work. This is the first step before /design-doc or /implement."
 ---
 
 # Meeting: Ideas Into Requirements
