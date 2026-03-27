@@ -7,10 +7,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '[Flow] Plugin loaded. Use /spec to start a design session before /plan.'"
+            "command": "echo '[Flow] Plugin loaded. Use /harness-init to set up your project, then /meeting to start.'"
           }
         ],
-        "description": "Notify user that Flow plugin is available alongside ECC"
+        "description": "Notify user that Flow plugin is available"
       }
     ]
   }

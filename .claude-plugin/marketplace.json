@@ -1,14 +1,14 @@
 {
   "name": "flow-marketplace",
-  "description": "Complete development workflow plugin — spec design, planning, TDD, and code review",
+  "description": "Complete development workflow plugin — harness setup, meeting-driven requirements, design docs, implementation, and lint review",
   "owner": {
     "name": "user"
   },
   "plugins": [
     {
       "name": "flow",
-      "description": "Complete development workflow plugin — spec design, planning, TDD, and code review. Structured ideation to implementation with manual step-by-step control.",
-      "version": "0.0.5",
+      "description": "Complete development workflow plugin — harness setup, meeting-driven requirements, design docs, implementation, and lint review. Structured ideation to autonomous implementation.",
+      "version": "0.0.6",
       "source": "./"
     }
   ]

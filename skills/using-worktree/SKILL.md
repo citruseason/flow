@@ -1,6 +1,6 @@
 ---
 name: using-worktree
-description: "Set up and work in an isolated git worktree. Handles creation, project setup, and establishes the worktree as the working context for all subsequent skills. Other skills (/plan, /tdd, /code-review) should recognize when they are inside a worktree and operate accordingly."
+description: "Set up and work in an isolated git worktree. Handles creation, project setup, and establishes the worktree as the working context for all subsequent skills. Other skills (/design-doc, /tdd, /implement, /lint) should recognize when they are inside a worktree and operate accordingly."
 ---
 
 # Using Worktree
@@ -11,15 +11,15 @@ Set up an isolated git worktree and establish it as the working context for the 
 
 ## When This Applies
 
-- `/spec` 완료 후 사용자가 worktree 작업에 동의
+- `/meeting` 완료 후 사용자가 worktree 작업에 동의
 - 사용자가 직접 `/using-worktree` 호출
 - 작업 중 격리가 필요하다고 판단될 때 (mid-workflow transition)
 
 ## Input
 
-- `name` (optional): Worktree name. If omitted, extract from spec filename or use AskUserQuestion.
+- `name` (optional): Worktree name. If omitted, use topic name or AskUserQuestion.
 - `branch` (optional): Branch name. Defaults to `feature/<name>`.
-- `spec` (optional): Spec file path. Auto-passed when chained from `/spec`.
+- `topic` (optional): Topic name. Auto-passed when chained from `/meeting`.
 
 ---
 
@@ -29,9 +29,7 @@ Set up an isolated git worktree and establish it as the working context for the 
 
 **If `name` is provided:** use it directly.
 
-**If `spec` is provided but not `name`:** extract name from the spec filename:
-- Pattern: `YYYY-MM-DD-<name>-design.md`
-- Example: `2026-03-22-user-auth-design.md` → `user-auth`
+**If `topic` is provided but not `name`:** use the topic name directly.
 
 **If neither is provided:** use AskUserQuestion:
 > "What name would you like for this worktree?"
@@ -52,8 +50,6 @@ If NOT ignored, fix immediately:
 echo ".worktrees/" >> .gitignore
 git add .gitignore && git commit -m "chore: add .worktrees/ to gitignore"
 ```
-
-Also ensure `.flow/review-result.md` is ignored.
 
 ### 3. Validate
 
@@ -125,7 +121,7 @@ git rev-parse --git-common-dir 2>/dev/null
 
 **Git operations:** Commits go to the worktree's branch. `git status`, `git diff`, `git log` all reflect the worktree branch.
 
-**Document paths:** `docs/specs/`, `docs/plans/` resolve relative to the worktree root, not the original project root.
+**Document paths:** `harness/topics/` resolves relative to the worktree root, not the original project root.
 
 **Test commands:** Run tests from the worktree root. They test the worktree's code, not main.
 
@@ -133,10 +129,11 @@ git rev-parse --git-common-dir 2>/dev/null
 
 | Skill | Worktree Behavior |
 |-------|-------------------|
-| `/plan` | Creates plan in worktree's `docs/plans/`. Analyzes worktree's codebase. |
+| `/design-doc` | Creates design documents in worktree's `harness/topics/<topic>/`. |
+| `/implement` | Reads code-dev-plan from worktree's harness. Updates kanban in worktree. |
 | `/tdd` | Writes code and tests in the worktree. Runs tests in the worktree. |
-| `/code-review` | Reviews worktree's diff against base branch. Saves `review-result.md` in worktree's `.flow/`. |
-| `/amend` | Modifies spec/plan in the worktree. |
+| `/lint` | Runs lint-* skills against worktree codebase. Updates quality-score in worktree's harness. |
+
 ### Returning to Main
 
 When the work is done, use standard git operations (merge, PR, etc.) to complete the branch.
@@ -147,7 +144,7 @@ Do NOT manually `cd` back to the project root during active worktree work.
 
 ## Part 3: Mid-Workflow Transition
 
-This skill can be invoked at any point, not only after `/spec`.
+This skill can be invoked at any point, not only after `/meeting`.
 
 ### Assess Current State
 
@@ -164,11 +161,11 @@ The goal is: regardless of when the user decides to use a worktree, the transiti
 ## Integration
 
 **Called by:**
-- `/spec` (after spec approval, user agrees to worktree)
+- `/meeting` (after meeting completion, user agrees to worktree)
 - User directly (`/using-worktree`)
 
 **Consumed by:**
-- `/plan`, `/tdd`, `/code-review`, `/amend` — these skills operate in the worktree context
+- `/design-doc`, `/implement`, `/tdd`, `/lint` — these skills operate in the worktree context
 
 ## Red Flags
 

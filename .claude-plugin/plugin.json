@@ -1,27 +1,28 @@
 {
   "name": "flow",
-  "version": "0.0.5",
-  "description": "Complete development workflow plugin — spec design, planning, TDD, and code review. Structured ideation to implementation with manual step-by-step control.",
+  "version": "0.0.6",
+  "description": "Complete development workflow plugin — harness setup, meeting-driven requirements, design docs, implementation, and lint review. Structured ideation to autonomous implementation.",
   "author": {
     "name": "user"
   },
   "license": "MIT",
   "keywords": [
-    "spec",
-    "planning",
+    "harness",
+    "meeting",
+    "design-doc",
+    "implement",
+    "lint",
     "tdd",
-    "code-review",
-    "design",
-    "spec",
     "workflow"
   ],
   "agents": [
-    "./agents/spec-facilitator.md",
-    "./agents/spec-reviewer.md",
-    "./agents/plan-writer.md",
-    "./agents/plan-reviewer.md",
-    "./agents/code-reviewer.md",
-    "./agents/amend-orchestrator.md"
+    "./agents/harness-initializer.md",
+    "./agents/meeting-facilitator.md",
+    "./agents/meeting-reviewer.md",
+    "./agents/design-doc-writer.md",
+    "./agents/design-doc-reviewer.md",
+    "./agents/doc-gardener.md",
+    "./agents/lint-reviewer.md"
   ],
   "skills": [
     "./skills/"
