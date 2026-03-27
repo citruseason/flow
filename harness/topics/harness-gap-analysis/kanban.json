@@ -1,6 +1,6 @@
 {
   "topic": "harness-gap-analysis",
-  "phase": "implement",
+  "phase": "lint",
   "last_updated": "2026-03-28",
   "meetings": [
     {"date": "2026-03-28", "file": "meetings/2026-03-28-session-1.md"}
@@ -10,18 +10,17 @@
       {"id": "meeting", "name": "Meeting"},
       {"id": "cps", "name": "CPS"},
       {"id": "prd", "name": "PRD"},
-      {"id": "design-doc", "name": "Design Doc"}
-    ],
-    "in_progress": [
-      {"id": "impl-phase-1", "name": "ProjectDetector + CORE Document Generation"}
-    ],
-    "backlog": [
+      {"id": "design-doc", "name": "Design Doc"},
+      {"id": "impl-phase-1", "name": "ProjectDetector + CORE Document Generation"},
       {"id": "impl-phase-2", "name": "CLAUDE.md Harness Section"},
       {"id": "impl-phase-3", "name": "Legacy File Migration"},
       {"id": "impl-phase-4", "name": "CORE-Lint Traceability"},
       {"id": "impl-phase-5", "name": "Reference Management"},
-      {"id": "impl-phase-6", "name": "Merge-Time CORE Update Hook"},
+      {"id": "impl-phase-6", "name": "Merge-Time CORE Update Hook"}
+    ],
+    "in_progress": [
       {"id": "lint", "name": "Lint verification"}
-    ]
+    ],
+    "backlog": []
   }
 }
