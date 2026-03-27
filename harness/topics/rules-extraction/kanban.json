@@ -12,10 +12,17 @@
       {"id": "prd", "name": "PRD"},
       {"id": "design-doc", "name": "Design Doc"}
     ],
-    "in_progress": [],
+    "in_progress": [
+      {"id": "impl-phase-1", "name": "Create CORE Documents"}
+    ],
     "backlog": [
-      {"id": "implement", "name": "Implement"},
-      {"id": "lint", "name": "Lint"}
+      {"id": "impl-phase-2", "name": "Create Rules Files"},
+      {"id": "impl-phase-3", "name": "Reduce PRODUCT.md"},
+      {"id": "impl-phase-4", "name": "Update lint-* Upstream References"},
+      {"id": "impl-phase-5", "name": "Update lint-manage"},
+      {"id": "impl-phase-6", "name": "Update CLAUDE.md Harness Section"},
+      {"id": "impl-phase-7", "name": "Update harness-initializer Agent"},
+      {"id": "lint", "name": "Lint verification"}
     ]
   }
 }
