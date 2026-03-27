@@ -1,6 +1,6 @@
 {
   "topic": "realtime-kanban",
-  "phase": "implement",
+  "phase": "done",
   "last_updated": "2026-03-28",
   "meetings": [
     {"date": "2026-03-28", "file": "meetings/2026-03-28-session-1.md"}
@@ -10,12 +10,15 @@
       {"id": "meeting", "name": "Meeting"},
       {"id": "cps", "name": "CPS"},
       {"id": "prd", "name": "PRD"},
-      {"id": "design-doc", "name": "Design Doc"}
+      {"id": "design-doc", "name": "Design Doc"},
+      {"id": "impl-phase-1", "name": "WebSocket Server Core"},
+      {"id": "impl-phase-2", "name": "File Watcher and State Broadcast"},
+      {"id": "impl-phase-3", "name": "Dashboard HTML"},
+      {"id": "impl-phase-4", "name": "Lifecycle Scripts"},
+      {"id": "impl-phase-5", "name": "Skill Integration"},
+      {"id": "lint", "name": "Lint verification"}
     ],
     "in_progress": [],
-    "backlog": [
-      {"id": "implement", "name": "Implement"},
-      {"id": "lint", "name": "Lint"}
-    ]
+    "backlog": []
   }
 }
