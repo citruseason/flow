@@ -1,6 +1,6 @@
 {
   "topic": "rules-extraction",
-  "phase": "lint",
+  "phase": "done",
   "last_updated": "2026-03-28",
   "meetings": [
     {"date": "2026-03-28", "file": "meetings/2026-03-28-session-1.md"}
@@ -17,11 +17,10 @@
       {"id": "impl-phase-4", "name": "Update lint-* Upstream References"},
       {"id": "impl-phase-5", "name": "Update lint-manage"},
       {"id": "impl-phase-6", "name": "Update CLAUDE.md Harness Section"},
-      {"id": "impl-phase-7", "name": "Update harness-initializer Agent"}
-    ],
-    "in_progress": [
+      {"id": "impl-phase-7", "name": "Update harness-initializer Agent"},
       {"id": "lint", "name": "Lint verification"}
     ],
+    "in_progress": [],
     "backlog": []
   }
 }
