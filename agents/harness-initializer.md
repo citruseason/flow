@@ -517,6 +517,7 @@ description: "Check architecture compliance -- layer dependencies, module bounda
 - Instructions to read all files in `references/` before running checks
 - Scope: which directories and file patterns to check
 - The output contract (see Output Contract section below)
+- Each rule must include `- **Upstream:** harness/<CORE_DOC>.md#<section>` referencing the CORE document principle it enforces
 
 **references/** files:
 - `layer-dependencies.md` -- Rules about which layers can import from which. Extract from detected architecture.
@@ -527,6 +528,7 @@ Each rule file should contain:
 - A description of the rule category
 - Concrete rules extracted from the codebase
 - Examples of correct and incorrect patterns (using actual file paths from the project)
+- `upstream:` reference to the CORE document section that justifies the rule
 
 #### `lint-code-convention/`
 
@@ -554,6 +556,7 @@ description: "Check code convention compliance -- naming, formatting, error hand
 - Instructions to read all files in `references/` before running checks
 - Scope: which file types and directories to check
 - The output contract (see Output Contract section below)
+- Each rule must include `- **Upstream:** harness/<CORE_DOC>.md#<section>` referencing the CORE document principle it enforces
 
 **references/** files:
 - `naming-conventions.md` -- Naming rules for files, functions, classes, constants, variables, types

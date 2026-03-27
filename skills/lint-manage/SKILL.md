@@ -43,6 +43,14 @@ If invoked from `/lint`, read the first-pass lint results to identify:
 - Which areas had no coverage (no lint-* skill checked them)
 - Which checks passed trivially (may indicate stale rules)
 
+**1c. CORE document changes:**
+Check if any CORE documents (`harness/*.md` with UPPERCASE names) were modified in the current session:
+```bash
+git diff HEAD --name-only -- 'harness/[A-Z]*.md'
+git diff main...HEAD --name-only -- 'harness/[A-Z]*.md' 2>/dev/null
+```
+If CORE documents changed, identify which lint-* skills reference them via `upstream:` fields and mark those skills for review in Step 3.
+
 ### Step 2: Discover Existing lint-* Skills
 
 Scan the project for all lint skills:
