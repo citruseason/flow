@@ -102,6 +102,7 @@ For each skill marked for UPDATE:
 - Add new rule files to references/ for newly detected patterns
 - Update stale file references (renamed/moved files)
 - Update changed values (identifiers, config keys, type names)
+- **Add `upstream:` reference** — every new rule must include `- **Upstream:** harness/<CORE_DOC>.md#<section>` linking to the CORE document principle it enforces
 
 #### 5b. Create New Skills
 
@@ -130,6 +131,13 @@ description: "{one-line description of what this lint skill checks}"
 - Pass: {N} / Warning: {N} / Fail: {N}
 ```
 
+- Every rule in the new skill MUST include an `upstream:` field referencing a CORE document:
+```markdown
+### Rule N: {Rule Name}
+- **What:** {description}
+- **Upstream:** harness/{CORE_DOC}.md#{section}
+```
+
 - Create `references/` with rule files split by aspect
 - Each rule file must reference **real file paths** (verify with `ls`)
 - Include concrete detection patterns (grep/glob commands that work now)
@@ -141,6 +149,28 @@ description: "{one-line description of what this lint skill checks}"
 - Remove references to files confirmed deleted from the codebase
 - Remove rules that no longer apply (pattern completely removed)
 - Never remove an entire lint-* skill — only flag for user review if all rules are stale
+
+### Step 5d: CORE-Lint Alignment Check
+
+After all creates/updates, verify CORE-lint alignment across all lint skills:
+
+1. **Scan all lint skills:** Read every `.claude/skills/lint-*/SKILL.md` file
+2. **Extract rules:** Parse each `### Rule N:` block
+3. **Check for `upstream:` field:** Each rule must contain `- **Upstream:** harness/<CORE_DOC>.md#<section>`
+4. **Validate CORE doc exists:** Verify the referenced CORE document file exists at `harness/` root (UPPERCASE `.md` files)
+5. **Report misalignment:**
+
+```
+CORE-Lint Alignment:
+- Total rules scanned: N
+- Rules with upstream reference: X
+- Rules missing upstream reference: Y
+  - lint-{skill}/Rule N: {rule name} — no upstream reference
+- Invalid upstream references: Z
+  - lint-{skill}/Rule N: references harness/{DOC}.md — file not found
+```
+
+If any rules are missing `upstream:` references, add them by identifying the most relevant CORE document section for the rule's domain.
 
 ### Step 6: Report
 
@@ -175,6 +205,7 @@ All lint skills must have:
 - **At least 2-3 realistic exceptions** — patterns that look like violations but aren't
 - **Standard output contract** — Status/Findings/Summary format
 - **Rules split by aspect** in references/ — not one monolithic rules.md
+- **CORE document reference** — every rule has an `upstream:` reference to a CORE document (e.g., `harness/PRODUCT.md#architecture`)
 
 ## Important Constraints
 

@@ -1,3 +1,8 @@
 {
-  "topics": {}
+  "topics": {
+    "harness-gap-analysis": {
+      "phase": "meeting",
+      "last_updated": "2026-03-28"
+    }
+  }
 }

@@ -142,7 +142,11 @@ Implementation + Lint complete:
   Tests:   passing
   Lint:    PASS
   Score:   XX/100
+
+  Next: merge feature/<topic> → main, then run /core-update <topic>
 ```
+
+After the user merges the topic branch, suggest running `/core-update <topic>` to propagate realized design decisions to CORE domain documents.
 
 ## Context Curation
 
