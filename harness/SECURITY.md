@@ -1,49 +1,51 @@
-# Security
+# 보안
 
-## Authentication & Authorization
+## 인증 및 인가
 
-No auth patterns detected. The WebSocket server (`skills/meeting/scripts/server.cjs`) binds to `127.0.0.1` by default, restricting access to the local machine. No authentication layer exists on the HTTP/WebSocket endpoints.
+인증 패턴이 감지되지 않았다. WebSocket 서버(`skills/meeting/scripts/server.cjs`)는 기본적으로 `127.0.0.1`에 바인딩하여 로컬 머신으로 접근을 제한한다. HTTP/WebSocket 엔드포인트에 인증 계층이 존재하지 않는다.
 
-- Server is intended for local development use only
-- Binding to `0.0.0.0` (via `--host` flag) exposes the server without authentication -- use only in trusted environments
+- 서버는 로컬 개발 용도로만 사용한다
+- `--host` 플래그를 통해 `0.0.0.0`에 바인딩하면 인증 없이 서버가 노출된다 -- 신뢰할 수 있는 환경에서만 사용할 것
 
-## Secrets Management
+## 시크릿 관리
 
-- No credentials or API keys are managed by the plugin
-- Environment variables used only for server configuration (`SPEC_PORT`, `SPEC_HOST`, `SPEC_DIR`, `SPEC_OWNER_PID`) -- none contain secrets
-- `.gitignore` excludes `.claude/` (which may contain local settings)
-- `.flow/` directory (runtime session data) is gitignored
+- 플러그인이 관리하는 자격 증명이나 API 키가 없다
+- 환경 변수는 서버 설정 용도로만 사용한다 (`SPEC_PORT`, `SPEC_HOST`, `SPEC_DIR`, `SPEC_OWNER_PID`) -- 시크릿을 포함하지 않는다
+- `.gitignore`에서 `.claude/` 제외 (로컬 설정 포함 가능)
+- `.flow/` 디렉토리 (런타임 세션 데이터) gitignore 처리
+- `.worktrees/` 디렉토리 gitignore 처리 (워크트리 격리 환경)
 
-## Input Validation
+## 입력 검증
 
-- **WebSocket frames:** Client frames are validated per RFC 6455 -- unmasked frames are rejected with an error
-- **WebSocket messages:** JSON parse failures are caught and logged, not propagated
-- **HTTP paths:** File serving is restricted to `SCREEN_DIR` using `path.basename()` to prevent directory traversal
-- **Shell arguments:** Unknown arguments produce JSON error output and `exit 1`
+- **WebSocket 프레임:** 클라이언트 프레임은 RFC 6455에 따라 검증한다 -- 마스킹되지 않은 프레임은 에러와 함께 거부한다
+- **WebSocket 메시지:** JSON 파싱 실패는 캐치하여 기록하며 전파하지 않는다
+- **HTTP 경로:** 파일 서빙은 `path.basename()`을 사용하여 `SCREEN_DIR`로 제한하고 디렉토리 트래버설을 방지한다
+- **셸 인자:** 알 수 없는 인자는 JSON 에러 출력 후 `exit 1`로 처리한다
 
-## Dependencies
+## 의존성
 
-- **Zero runtime dependencies:** The WebSocket server uses only Node.js built-ins (`crypto`, `http`, `fs`, `path`)
-- **No package.json / no node_modules:** No third-party packages to audit
-- **No lock files needed:** No dependency tree to lock
+- **런타임 의존성 제로:** WebSocket 서버는 Node.js 내장 모듈만 사용한다 (`crypto`, `http`, `fs`, `path`)
+- **package.json / node_modules 없음:** 감사할 서드파티 패키지가 없다
+- **잠금 파일 불필요:** 잠글 의존성 트리가 없다
 
-## Sensitive Data
+## 민감한 데이터
 
-- No PII is collected or logged
-- User interaction events (clicks, selections) are logged with choice identifiers only
-- Session files are stored in `/tmp` (ephemeral) or project-local `.flow/` (gitignored)
-- `.events` files contain user interaction data and are cleared on each new screen
+- PII를 수집하거나 기록하지 않는다
+- 사용자 상호작용 이벤트 (클릭, 선택)는 선택 식별자만 기록한다
+- 세션 파일은 `/tmp` (임시) 또는 프로젝트 로컬 `.flow/` (gitignore 처리)에 저장한다
+- `.events` 파일은 사용자 상호작용 데이터를 포함하며 새 스크린마다 초기화된다
 
-## Process Isolation
+## 프로세스 격리
 
-- Server runs as a background process with `nohup` and `disown`
-- Owner process monitoring: server exits if the spawning Claude Code session dies
-- Idle timeout: server auto-shuts down after 30 minutes of inactivity
-- Graceful shutdown with SIGTERM, escalation to SIGKILL after 2 seconds
+- 서버는 `nohup`과 `disown`을 사용하여 백그라운드 프로세스로 실행한다
+- 소유자 프로세스 모니터링: 생성한 Claude Code 세션이 종료되면 서버도 종료한다
+- 유휴 타임아웃: 30분 동안 비활동 시 서버가 자동으로 종료한다
+- SIGTERM으로 정상 종료하고, 2초 후 SIGKILL로 에스컬레이션한다
+- 워크트리 격리: `/using-worktree`로 생성된 워크트리는 `.worktrees/` 디렉토리에서 독립적으로 운영되며, 메인 작업 디렉토리와 분리된 환경을 제공한다
 
-## Additional Rules
+## 추가 규칙
 
-- **Path traversal prevention:** HTTP file serving uses `path.basename()` to strip directory components from requested filenames
-- **Ephemeral session cleanup:** `/tmp` session directories are removed on server stop; persistent `.flow/` directories are preserved for review
-- **No hardcoded secrets:** No API keys, tokens, or credentials anywhere in the codebase
-- **Plugin manifest integrity:** `plugin.json` and `marketplace.json` versions must match -- prevents deployment of mismatched plugin states
+- **경로 트래버설 방지:** HTTP 파일 서빙은 `path.basename()`을 사용하여 요청된 파일명에서 디렉토리 경로를 제거한다
+- **임시 세션 정리:** 서버 종료 시 `/tmp` 세션 디렉토리를 제거한다; 영구 `.flow/` 디렉토리는 검토를 위해 보존한다
+- **하드코딩된 시크릿 없음:** 코드베이스 어디에도 API 키, 토큰, 자격 증명이 없다
+- **플러그인 매니페스트 무결성:** `plugin.json`과 `marketplace.json` 버전이 반드시 일치해야 한다 -- 불일치된 플러그인 상태의 배포를 방지한다

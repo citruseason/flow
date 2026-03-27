@@ -24,27 +24,24 @@ You NEVER modify:
 
 Work through each item below. For every item, read the document, compare against the current codebase, and report findings.
 
-### 1. `harness/index.md` -- Table of Contents
+### 1. `harness/PRODUCT.md` -- Product Definition
 
-- Glob for all files and directories under `harness/`
-- Compare the actual contents against what `index.md` lists
-- **Fix**: Add missing entries, remove entries for files that no longer exist, update descriptions that are inaccurate
-
-### 2. `harness/architecture.md` -- Architecture Rules
-
-- Read the architecture rules (layer dependencies, module boundaries, naming conventions)
-- Grep the codebase to verify the described patterns still hold
+- Read `harness/PRODUCT.md` which contains: identity, stack, architecture (layers, agents, skills), pipeline, conventions, and observability
+- Verify the listed agents and skills match what exists in `agents/` and `skills/` directories
+- Verify architecture rules (layer dependencies, module boundaries, naming conventions) still hold
 - Check that referenced directories, modules, and entry points exist
-- **Fix**: Update rules that no longer match. If a rule is ambiguous (could be intentional refactor vs. drift), flag for human review instead of auto-fixing
+- Verify conventions (naming, formatting, imports, error handling, git) match current code
+- Verify observability section (logging format, error propagation) matches current code
+- **Fix**: Update rules, lists, or references that no longer match. If a rule is ambiguous (could be intentional refactor vs. drift), flag for human review instead of auto-fixing
 
-### 3. `harness/golden-rules.md` -- Invariant Rules
+### 2. `harness/SECURITY.md` -- Security Principles
 
-- Read each golden rule
+- Read each security rule and constraint
 - Verify the rule's referenced files, patterns, or constraints exist in the codebase
 - Check that the rule is not contradicted by current code
 - **Fix**: Update file paths or pattern references that have changed. Flag rules that may be obsolete for human review
 
-### 4. `harness/quality-score.md` -- Staleness Check Only
+### 3. `harness/quality-score.md` -- Staleness Check Only
 
 - Read the quality score document
 - Check the "last evaluated" dates
@@ -52,20 +49,13 @@ Work through each item below. For every item, read the document, compare against
 - **Do NOT recompute scores** -- that is the lint-reviewer agent's responsibility
 - **Fix**: Only flag staleness. Do not change scores or rationale
 
-### 5. `harness/tech-debt.md` -- Resolved Items
+### 4. `harness/tech-debt.md` -- Resolved Items
 
 - Read the tech debt registry
 - For each item listed, check if the referenced code/issue still exists
 - **Fix**: Mark items as resolved if the underlying code has been fixed. Add a note with the evidence (e.g., "file deleted", "pattern no longer present as of YYYY-MM-DD")
 
-### 6. `harness/observability.md` -- Logging and Error Patterns
-
-- Read the documented logging format, metric names, and error handling patterns
-- Grep the codebase for actual logging calls, error classes, and metric emissions
-- Compare documented patterns against actual usage
-- **Fix**: Update documented patterns to match current code. If new patterns have emerged that are not documented, add them
-
-### 7. `.claude/skills/lint-*/references/*.md` -- Lint Rule Files
+### 5. `.claude/skills/lint-*/references/*.md` -- Lint Rule Files
 
 - For each lint-* skill, read all files in its `references/` directory
 - For each rule file, verify:

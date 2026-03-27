@@ -98,33 +98,47 @@ skills/meeting/scripts/stop-server.sh $SCREEN_DIR
 <!-- harness:start -->
 ## Harness
 
-**Flow** -- Complete development workflow plugin for Claude Code
+**Flow** -- Claude Code용 완전한 개발 워크플로우 플러그인
 
-### Stack
-Markdown (prompts) / JavaScript-CJS (server) / Bash (scripts) / JSON (config)
+### Language
+한국어
 
-### Architecture
-Layered plugin -- Skills (orchestration) -> Agents (execution) -> Infrastructure (scripts)
+### 기술 스택
+Markdown (프롬프트) / JavaScript-CJS (서버) / Bash (스크립트) / JSON (설정)
 
-### CORE Documents
-| Document | Purpose |
-|----------|---------|
-| [PRODUCT.md](harness/PRODUCT.md) | Product definition, stack, architecture, conventions, observability |
-| [SECURITY.md](harness/SECURITY.md) | Security principles, input validation, process isolation |
+### 아키텍처
+계층형 플러그인 -- Skills (오케스트레이션) -> Agents (실행) -> Infrastructure (스크립트)
 
-### Operational Docs
-| Document | Purpose |
-|----------|---------|
-| [quality-score.md](harness/quality-score.md) | Quality scoring rubric and domain scores |
-| [tech-debt.md](harness/tech-debt.md) | Tech debt inventory |
-| [kanban.json](harness/kanban.json) | Topic tracking |
+### CORE 문서
+| 문서 | 목적 |
+|------|------|
+| [PRODUCT.md](harness/PRODUCT.md) | 제품 정의, 기술 스택, 아키텍처, 규칙, 관찰 가능성 |
+| [SECURITY.md](harness/SECURITY.md) | 보안 원칙, 입력 검증, 프로세스 격리 |
 
-### References
-See `harness/references/` for dependency reference docs.
+### 운영 문서
+| 문서 | 목적 |
+|------|------|
+| [quality-score.md](harness/quality-score.md) | 품질 평가 기준 및 도메인 점수 |
+| [tech-debt.md](harness/tech-debt.md) | 기술 부채 목록 |
+| [kanban.json](harness/kanban.json) | 토픽 추적 |
 
-### Lint Skills
-- **lint-architecture** -- Agent-skill separation, dependency direction, model assignment
-- **lint-code-convention** -- File naming, frontmatter format, JS/shell style, output language
-- **lint-plugin-structure** -- Manifest consistency, tool declarations, output contracts, schemas
-- **lint-workflow-integrity** -- Pipeline completeness, writer-reviewer pairing, history rotation
+### 문서 흐름
+```
+harness/
+├── PRODUCT.md, SECURITY.md, kanban.json, quality-score.md, tech-debt.md
+└── topics/<topic>/
+    ├── meetings/, cps.md, prd.md
+    ├── spec.md, blueprint.md, architecture.md, code-dev-plan.md, test-cases.md
+    ├── history/                        <- 버전 추적 (최대 2개)
+    └── kanban.json                     <- 토픽 진행 추적
+```
+
+### 참조 문서
+`harness/references/`에서 의존성 참조 문서를 확인할 수 있다.
+
+### 린트 스킬
+- **lint-architecture** -- 에이전트-스킬 분리, 의존성 방향, 모델 할당
+- **lint-code-convention** -- 파일 네이밍, 프론트매터 형식, JS/셸 스타일, 출력 언어
+- **lint-plugin-structure** -- 매니페스트 일관성, 도구 선언, 출력 계약, 스키마
+- **lint-workflow-integrity** -- 파이프라인 완전성, 작성자-검토자 페어링, 이력 순환
 <!-- harness:end -->

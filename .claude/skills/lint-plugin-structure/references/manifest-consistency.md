@@ -11,8 +11,8 @@ The Flow plugin has two manifest files that must stay in sync. Version drift bet
 The version string in `.claude-plugin/plugin.json` at path `$.version` must exactly equal the version string in `.claude-plugin/marketplace.json` at path `$.plugins[0].version`.
 
 **Current state:**
-- `plugin.json` version: `"0.0.10"`
-- `marketplace.json` plugins[0].version: `"0.0.10"`
+- `plugin.json` version: `"0.0.12"`
+- `marketplace.json` plugins[0].version: `"0.0.12"`
 
 **Detection:**
 ```bash

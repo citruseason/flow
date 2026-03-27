@@ -18,12 +18,10 @@ Documentation freshness validation skill. Dispatches the `doc-gardener` agent to
 
 Dispatch the `doc-gardener` agent. The agent validates:
 
-- `harness/index.md` -- table of contents vs actual harness/ contents
-- `harness/architecture.md` -- architecture rules vs current code patterns
-- `harness/golden-rules.md` -- invariant rules vs current codebase
+- `harness/PRODUCT.md` -- product definition, architecture, conventions, observability vs current code patterns
+- `harness/SECURITY.md` -- security rules and constraints vs current codebase
 - `harness/quality-score.md` -- staleness flags only (no score recomputation)
 - `harness/tech-debt.md` -- resolved items still listed
-- `harness/observability.md` -- logging/error patterns vs current code
 - `.claude/skills/lint-*/references/*.md` -- rule file references vs existing files/patterns
 
 The agent updates stale documents (harness/ and lint references only, never source code) and flags ambiguous cases for human review.
