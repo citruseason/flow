@@ -1,13 +1,13 @@
 ---
 name: design-doc
-description: "Create design documents (Spec, Blueprint, Architecture, Code-Dev-Plan) from an approved PRD. Use after /meeting completes."
+description: "Create design documents (Spec, Blueprint, Architecture, Code-Dev-Plan, Test-Cases) from an approved PRD. Use after /meeting completes."
 ---
 
 # Design Document Creation
 
 ## Overview
 
-Turn an approved PRD into four interconnected design documents: spec.md, blueprint.md, architecture.md, and code-dev-plan.md. These documents bridge the gap between product requirements and implementation.
+Turn an approved PRD into five interconnected design documents: spec.md, blueprint.md, architecture.md, and code-dev-plan.md. These documents bridge the gap between product requirements and implementation.
 
 ## When to Activate
 

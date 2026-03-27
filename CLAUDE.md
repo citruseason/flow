@@ -34,12 +34,12 @@ Standalone skills:
 | harness-initializer | Opus | Codebase analysis, harness/ scaffolding, lint-* skill generation |
 | meeting-facilitator | Opus | Meeting dialogue, Meeting Log/CPS/PRD generation |
 | meeting-reviewer | Sonnet | CPS/PRD validation |
-| design-doc-writer | Opus | PRD-based design document creation (4 docs) |
+| design-doc-writer | Opus | PRD-based design document creation (5 docs) |
 | design-doc-reviewer | Sonnet | Cross-document consistency, PRD coverage validation |
 | doc-gardener | Sonnet | Documentation/rule freshness verification |
 | lint-reviewer | Sonnet | lint-* skill aggregation, quality score computation |
 
-### Skills (11)
+### Skills (12)
 
 - **skills/harness-init/** - Codebase analysis and harness knowledge base scaffolding
 - **skills/meeting/** - Meeting-driven requirements with visual companion
@@ -52,6 +52,7 @@ Standalone skills:
 - **skills/sdd/** - Subagent-driven development pattern (dispatch + review gates)
 - **skills/tdd/** - TDD methodology (RED → GREEN → REFACTOR)
 - **skills/using-worktree/** - Worktree setup + working context for isolated development
+- **skills/update-plugin/** - Manual plugin update
 
 ### Document Flow
 

@@ -179,11 +179,11 @@ For each unresolved item:
 Before modifying `cps.md` or `prd.md`:
 
 1. Archive current versions to `history/` directory
-2. Use FIFO rotation with max 2 archived versions:
-   - If no archive exists: current becomes `v1`
-   - If `v1` exists but no `v2`: current becomes `v2`
-   - If both `v1` and `v2` exist: delete `v1`, rename `v2` to `v1`, current becomes `v2`
-3. Example: `history/cps.v1.md`, `history/cps.v2.md`
+2. Use FIFO rotation with max 2 archived versions (v1 = most recent prior, v2 = older):
+   - If `history/<doc>.v2.md` exists, delete it
+   - If `history/<doc>.v1.md` exists, rename it to `history/<doc>.v2.md`
+   - Copy current `<doc>.md` to `history/<doc>.v1.md`
+3. Example: `history/cps.v1.md` (most recent prior), `history/cps.v2.md` (older)
 
 ### Step 4: Continue dialogue
 

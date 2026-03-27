@@ -41,10 +41,10 @@ When invoked with an existing topic:
 2. **Review unresolved items** -- present unresolved items from previous meetings; check if later decisions invalidated any (auto-remove with reason); re-confirm still-valid ones with user
 3. **Continue dialogue** -- dispatch meeting-facilitator in follow-up mode; user should not need to repeat previously captured information
 4. **Archive CPS/PRD** -- before updating, archive current versions to `history/` using FIFO rotation:
-   - Max 2 archived versions per document
-   - If no archive exists: current becomes `v1`
-   - If `v1` exists but no `v2`: current becomes `v2`
-   - If both `v1` and `v2` exist: delete `v1`, rename `v2` to `v1`, current becomes `v2`
+   - Max 2 archived versions per document (v1 = most recent prior, v2 = older)
+   - If `history/<doc>.v2.md` exists, delete it
+   - If `history/<doc>.v1.md` exists, rename it to `history/<doc>.v2.md`
+   - Copy current `<doc>.md` to `history/<doc>.v1.md`
 5. **Update CPS/PRD** -- write updated documents with changes highlighted
 6. **Re-run meeting-reviewer** -- validate updated documents (max 3 iterations)
 7. **User review** -- present updated CPS then PRD for approval

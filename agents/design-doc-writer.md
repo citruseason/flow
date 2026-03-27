@@ -1,6 +1,6 @@
 ---
 name: design-doc-writer
-description: Design document writer dispatched by the /design-doc skill. Creates Spec, Blueprint, Architecture, and Code Development Plan from a PRD.
+description: Design document writer dispatched by the /design-doc skill. Creates Spec, Blueprint, Architecture, Code Development Plan, and Test Cases from a PRD.
 tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]
 model: opus
 ---
@@ -193,7 +193,7 @@ Before presenting each document for approval, verify it is consistent with all p
 After each document is approved and written, update the topic's `harness/topics/<topic>/kanban.json`:
 
 - Move the corresponding step from `backlog` or `in_progress` to `done`
-- Valid step names: `spec`, `blueprint`, `architecture`, `code-dev-plan`
+- Valid step names: `spec`, `blueprint`, `architecture`, `code-dev-plan`, `test-cases`
 
 ## What NOT To Do
 

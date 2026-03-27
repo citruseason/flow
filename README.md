@@ -81,7 +81,7 @@ flow/
 |   |-- harness-initializer.md    # 코드베이스 분석 + 하네스 생성 (Opus)
 |   |-- meeting-facilitator.md    # 미팅 진행 + CPS/PRD 생성 (Opus)
 |   |-- meeting-reviewer.md       # CPS/PRD 검증 (Sonnet)
-|   |-- design-doc-writer.md      # 설계 문서 4종 작성 (Opus)
+|   |-- design-doc-writer.md      # 설계 문서 5종 작성 (Opus)
 |   |-- design-doc-reviewer.md    # 설계 문서 검증 (Sonnet)
 |   |-- doc-gardener.md           # 문서 최신 상태 검증 (Sonnet)
 |   |-- lint-reviewer.md          # 린트 통합 + 품질 점수 (Sonnet)
@@ -148,12 +148,13 @@ flow/
 - meeting-reviewer가 CPS/PRD 검증 (최대 3회)
 - 반복 실행 시 기존 문서 보존 + history/ 관리
 
-### 2. /design-doc — PRD → 4개 설계 문서
+### 2. /design-doc — PRD → 5개 설계 문서
 
 - Spec: 기능 상세 명세, 인터페이스, 데이터 모델
 - Blueprint: 시스템 구성도, 컴포넌트 관계, 데이터 흐름
 - Architecture: 기술 스택, 레이어 구조, 의존성 방향
 - Code-Dev-Plan: 개발 방향/위치/접근법 (코드 아님)
+- Test-Cases: 모든 시나리오의 테스트 케이스 정의 (TDD에 활용)
 - PRD 변경 시 영향받는 문서만 자동 업데이트
 
 ### 3. /implement — 자율 구현

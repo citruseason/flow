@@ -128,7 +128,7 @@ Run the Phase's verification criteria from `code-dev-plan.md`, then update kanba
 After all implementation phases complete:
 1. Move `lint` step to `in_progress` in kanban
 2. Invoke `/lint <topic>` (autonomous, no user interaction)
-   - `/lint` internally runs: verify → lint-manage (evolve skills) → lint-validate (health check) → re-verify
+   - `/lint` internally runs: lint-requirements (inline) → lint-reviewer agent (lint-* skills + quality score) → doc-gardener agent → verdict → if FAIL: SDD fix + retry (max 2) → lint-manage (evolve skills) → lint-validate (health check) → second-pass re-verify if skills changed
 3. On lint PASS → report final results to user
 4. On lint FAIL → SDD worker fixes, re-lint (max 2 retries), then escalate
 
