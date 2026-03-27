@@ -1,6 +1,6 @@
 {
   "name": "flow",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Complete development workflow plugin — harness setup, meeting-driven requirements, design docs, implementation, and lint review. Structured ideation to autonomous implementation.",
   "author": {
     "name": "user"
