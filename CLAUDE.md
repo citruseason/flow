@@ -2,72 +2,81 @@
 
 ## Project Overview
 
-**Flow** is a Claude Code plugin that provides a complete development workflow — from spec design through planning, TDD implementation, and code review. Each step is invoked manually via skill slash commands, giving full control over the development process.
+**Flow** is a Claude Code plugin that provides a complete development workflow — from harness setup through meeting-driven requirements, design documentation, autonomous implementation, and lint verification. Each step is invoked via skill slash commands. Implementation through lint runs autonomously without user intervention.
 
-Core spec design methodology is adapted from [Superpowers](https://github.com/obra/superpowers) by Jesse Vincent. TDD and code review patterns are adapted from [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) by Affaan Mustafa.
+Core meeting/design methodology integrates patterns from [Harness Engineering](https://openai.com/index/harness-engineering/) (OpenAI). TDD patterns are adapted from [Everything Claude Code](https://github.com/affaan-m/everything-claude-code) by Affaan Mustafa.
 
 ## Workflow
 
 ```
-/spec              → spec document (docs/specs/)
-/plan <spec-path>  → plan document (docs/plans/)
-/implement <plan>  → automated execution (SDD + TDD)
-/code-review       → quality & security review
-/amend             → revision orchestrator (spec → plan)
+/harness-init          → harness/ knowledge base + lint-* skills
+/meeting "topic"       → Meeting Log → CPS → PRD (harness/topics/<topic>/)
+/design-doc <topic>    → Spec, Blueprint, Architecture, Code-Dev-Plan
+/implement <topic>     → autonomous execution (SDD + TDD → /lint)
+/lint <topic>          → requirements verification + lint-* skills
 ```
 
 Standalone skills:
 ```
-/tdd               → manual TDD guide (RED → GREEN → REFACTOR)
-/sdd               → subagent-driven execution (independent of /implement)
-/using-worktree    → isolated worktree workspace
+/doc-garden            → harness/ documentation freshness check
+/tdd                   → manual TDD guide (RED → GREEN → REFACTOR)
+/sdd                   → subagent-driven execution (independent of /implement)
+/using-worktree        → isolated worktree workspace
+/update-plugin         → manual plugin update
 ```
 
 ## Architecture
 
-### Agents (6)
+### Agents (7)
 
 | Agent | Model | Role |
 |-------|-------|------|
-| spec-facilitator | Opus | Spec design session facilitator |
-| spec-reviewer | Sonnet | Spec document validation |
-| plan-writer | Opus | Implementation plan creation |
-| plan-reviewer | Sonnet | Plan document validation |
-| code-reviewer | Sonnet | Security & quality review |
-| amend-orchestrator | Opus | Revision orchestrator |
+| harness-initializer | Opus | Codebase analysis, harness/ scaffolding, lint-* skill generation |
+| meeting-facilitator | Opus | Meeting dialogue, Meeting Log/CPS/PRD generation |
+| meeting-reviewer | Sonnet | CPS/PRD validation |
+| design-doc-writer | Opus | PRD-based design document creation (4 docs) |
+| design-doc-reviewer | Sonnet | Cross-document consistency, PRD coverage validation |
+| doc-gardener | Sonnet | Documentation/rule freshness verification |
+| lint-reviewer | Sonnet | lint-* skill aggregation, quality score computation |
 
-### Skills (8)
+### Skills (9)
 
-- **skills/spec/** - Design spec creation with visual companion
-- **skills/plan/** - Spec-to-plan conversion with phased implementation
-- **skills/implement/** - Plan execution using SDD + TDD
+- **skills/harness-init/** - Codebase analysis and harness knowledge base scaffolding
+- **skills/meeting/** - Meeting-driven requirements with visual companion
+- **skills/design-doc/** - PRD to design documents (Spec, Blueprint, Architecture, Code-Dev-Plan)
+- **skills/implement/** - Autonomous execution using SDD + TDD with kanban tracking
+- **skills/lint/** - Requirements verification + project lint-* skill invocation
+- **skills/doc-garden/** - Harness documentation freshness validation
 - **skills/sdd/** - Subagent-driven development pattern (dispatch + review gates)
 - **skills/tdd/** - TDD methodology (RED → GREEN → REFACTOR)
-- **skills/code-review/** - Security and quality review
-- **skills/amend/** - Revision orchestrator (spec → plan)
 - **skills/using-worktree/** - Worktree setup + working context for isolated development
 
 ### Document Flow
 
 ```
-docs/specs/YYYY-MM-DD-<topic>-design.md    ← /spec output
-docs/plans/YYYY-MM-DD-<topic>-plan.md      ← /plan output
+harness/
+├── index.md, kanban.json, quality-score.md, ...
+└── topics/<topic>/
+    ├── meetings/, cps.md, prd.md
+    ├── spec.md, blueprint.md, architecture.md, code-dev-plan.md
+    ├── history/                        ← version tracking (max 2)
+    └── kanban.json                     ← topic progress tracking
 ```
 
 ## Running the Visual Companion Server
 
 ```bash
 # Start (requires Node.js, zero dependencies)
-skills/spec/scripts/start-server.sh --project-dir /path/to/project
+skills/meeting/scripts/start-server.sh --project-dir /path/to/project
 
 # Stop
-skills/spec/scripts/stop-server.sh $SCREEN_DIR
+skills/meeting/scripts/stop-server.sh $SCREEN_DIR
 ```
 
 ## Parallel Development with Worktrees
 
 ```
-/spec "feature" → /using-worktree → /plan → /implement → /code-review
+/meeting "feature" → /using-worktree → /design-doc → /implement → /lint
 ```
 
 ## Versioning
