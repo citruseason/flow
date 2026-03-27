@@ -147,7 +147,84 @@ Security principles and invariants extracted from the codebase:
 
 Extract real security patterns from the codebase. Look at lint configs, CI checks, existing documentation, .gitignore patterns, and code patterns.
 
-### 2.3 Conditional CORE Documents
+### 2.3 `harness/ARCHITECTURE.md` (always generated)
+
+Architecture patterns and structural decisions:
+
+```markdown
+# Architecture
+
+## Pattern
+- **Style:** {detected pattern (e.g., "layered monolith", "microservices", "modular monorepo")}
+- **Module Organization:** {by feature, by layer, by domain}
+- **API Style:** {REST, GraphQL, RPC, event-driven}
+
+## Layering
+- **3-Layer Model:** {detected layers (e.g., "Skills (orchestration) -> Agents (execution) -> Infrastructure (scripts)")}
+- **Agent-Skill Separation:** {how agents and skills are separated}
+- **Dependency Direction:** {e.g., "dependencies flow inward", "skills depend on agents, not vice versa"}
+
+## Module Boundaries
+- **Self-Contained Skills:** {each skill is self-contained with its own references}
+- **Model Assignment:** {which models are assigned to which agent types}
+
+## Dependency Rules
+- {Concrete dependency rules extracted from the codebase}
+```
+
+### 2.4 `harness/PIPELINE.md` (always generated)
+
+Workflow pipeline and execution boundaries:
+
+```markdown
+# Pipeline
+
+## Sequential Workflow
+- {Detected workflow stages (e.g., "harness-init -> meeting -> design-doc -> implement -> lint")}
+- {Stage ordering constraints}
+
+## Autonomous Execution Boundary
+- {Which stages run autonomously without user intervention}
+- {Which stages require user confirmation/gates}
+
+## User Gates
+- {Points where user input is required}
+- {Confirmation prompts and their triggers}
+
+## Document History
+- **FIFO Policy:** {history rotation rules (e.g., "max 2 versions in history/")}
+- **Version Tracking:** {how document versions are managed}
+```
+
+### 2.5 `harness/OBSERVABILITY.md` (always generated)
+
+Logging, error handling, and metrics:
+
+```markdown
+# Observability
+
+## Logging Format
+- **Format:** {detected logging format (e.g., "structured JSON", "plain text", "prefix-based")}
+- **Library:** {logging library or built-in}
+
+## Log Levels
+- {Detected log level usage and conventions}
+
+## Logging Rules
+- {What to log and what not to log}
+- {Sensitive data handling in logs}
+
+## Error Propagation
+- {Error creation patterns}
+- {Error propagation chain}
+- {Error recovery strategies}
+
+## Metrics
+- {Instrumentation patterns or "Not detected"}
+- {Metric collection approach}
+```
+
+### 2.6 Conditional CORE Documents
 
 For each CORE document triggered by detection signals in Phase 1.5, generate the appropriate document. Each document follows the same principle: extract real patterns from the codebase, not generic advice.
 
@@ -304,7 +381,7 @@ For each CORE document triggered by detection signals in Phase 1.5, generate the
 - {Backup/restore patterns}
 ```
 
-### 2.4 `harness/kanban.json`
+### 2.7 `harness/kanban.json`
 
 Empty topics object for future tracking:
 
@@ -316,7 +393,7 @@ Empty topics object for future tracking:
 
 If re-running, never overwrite this file. Preserve the existing `language` field and all topic data.
 
-### 2.5 `harness/quality-score.md`
+### 2.8 `harness/quality-score.md`
 
 Initial quality scoring rubric with customizable weights:
 
@@ -345,7 +422,7 @@ Initial quality scoring rubric with customizable weights:
 {To be filled after first quality assessment}
 ```
 
-### 2.6 `harness/tech-debt.md`
+### 2.9 `harness/tech-debt.md`
 
 Initial tech debt inventory:
 
@@ -378,6 +455,43 @@ Look for tech debt signals:
 - Copy-pasted code blocks
 - Missing or incomplete tests
 - Deprecated API usage
+
+### 2.10 `harness/rules/`
+
+Generate a `harness/rules/` directory containing domain+stack rule files. Rule files capture concrete, actionable conventions extracted from the codebase analysis.
+
+**File naming convention:**
+- Stack-specific rules: `{domain}.{stack}.md` (e.g., `naming.javascript.md`, `error-handling.python.md`)
+- Common/universal rules: `{domain}.md` (e.g., `git.md`, `output-language.md`)
+
+**Always generated (regardless of stack):**
+- `git.md` -- commit message format, branch naming, PR conventions
+- `output-language.md` -- output language setting for generated content
+- `naming.common.md` -- file/directory naming conventions (universal across all stacks)
+
+**Generated per detected stack:**
+For each detected language/framework stack, generate:
+- `naming.{stack}.md` -- variable, function, class, constant naming for that stack
+- `formatting.{stack}.md` -- indentation, quotes, semicolons, line length for that stack
+- `imports.{stack}.md` -- import ordering, path aliases, barrel files for that stack
+- `error-handling.{stack}.md` -- error creation, propagation, recovery patterns for that stack
+
+**Rule file template:**
+```markdown
+# {Domain}: {Stack}
+
+## Rules
+
+### 1. {Rule name}
+- **What:** {concrete description}
+- **Example:** {correct pattern from the codebase}
+- **Counter-example:** {incorrect pattern}
+
+### 2. {Rule name}
+...
+```
+
+Each rule must reference real patterns found during codebase analysis. Do not generate generic advice.
 
 ## Phase 3: CLAUDE.md Harness Section
 
@@ -643,7 +757,7 @@ When `harness/` already exists at the project root, operate in update mode.
 
 Determine re-run type by checking for existing files:
 
-1. **CORE docs exist** (`harness/PRODUCT.md` exists): This is a CORE-era re-run. Proceed with diff-based update.
+1. **CORE docs exist** (`harness/PRODUCT.md` exists): This is a CORE-era re-run. Check for embedded legacy structure (6.2a), then proceed with diff-based update.
 2. **Legacy files exist** (`harness/index.md`, `harness/golden-rules.md`, or `harness/observability.md` exist): This is a legacy harness. Proceed with legacy migration first, then update.
 3. **Neither exists**: This is a fresh run. Proceed with Phases 1-5.
 
@@ -676,6 +790,41 @@ When legacy files are detected, migrate their content to CORE documents before p
    - `harness/kanban.json` -- never overwritten
 
 5. **Zero information loss:** Every rule, convention, and pattern from legacy files must appear in the migrated CORE docs. After migration, present a mapping summary showing where each piece of legacy content was placed.
+
+### 6.2a Legacy Detection: Rules in PRODUCT.md
+
+When `harness/PRODUCT.md` exists (CORE-era), check for embedded legacy structure:
+
+**Detection:** If `harness/PRODUCT.md` contains any of these section headers:
+- `## 규칙` or `## Rules`
+- `## 아키텍처` or `## Architecture`
+- `## 파이프라인` or `## Pipeline`
+- `## 관찰 가능성` or `## Observability`
+
+Then the legacy embedded structure is detected. Migrate as follows:
+
+1. **Extract rules to `harness/rules/`:**
+   - Parse `## 규칙` / `## Rules` section from PRODUCT.md
+   - Split rules into domain+stack rule files following the 2.10 naming convention
+   - Create `harness/rules/` directory and write individual rule files
+
+2. **Extract architecture to `harness/ARCHITECTURE.md`:**
+   - Parse `## 아키텍처` / `## Architecture` section from PRODUCT.md
+   - Generate `harness/ARCHITECTURE.md` using the 2.3 template, populated with extracted content
+
+3. **Extract pipeline to `harness/PIPELINE.md`:**
+   - Parse `## 파이프라인` / `## Pipeline` section from PRODUCT.md (if present)
+   - Generate `harness/PIPELINE.md` using the 2.4 template, populated with extracted content
+
+4. **Extract observability to `harness/OBSERVABILITY.md`:**
+   - Parse `## 관찰 가능성` / `## Observability` section from PRODUCT.md (if present)
+   - Generate `harness/OBSERVABILITY.md` using the 2.5 template, populated with extracted content
+
+5. **Clean PRODUCT.md:**
+   - Remove extracted sections from PRODUCT.md
+   - PRODUCT.md retains only: Identity, Stack, and any sections not migrated above
+
+6. **Zero information loss:** Every extracted rule, pattern, and convention must appear in the new files. Present a mapping summary.
 
 ### 6.3 Diff-based Update (CORE-era re-run)
 

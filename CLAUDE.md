@@ -112,8 +112,11 @@ Markdown (프롬프트) / JavaScript-CJS (서버) / Bash (스크립트) / JSON (
 ### CORE 문서
 | 문서 | 목적 |
 |------|------|
-| [PRODUCT.md](harness/PRODUCT.md) | 제품 정의, 기술 스택, 아키텍처, 규칙, 관찰 가능성 |
+| [PRODUCT.md](harness/PRODUCT.md) | 제품 정의, 기술 스택, 규칙 |
 | [SECURITY.md](harness/SECURITY.md) | 보안 원칙, 입력 검증, 프로세스 격리 |
+| [ARCHITECTURE.md](harness/ARCHITECTURE.md) | 아키텍처 패턴, 모듈 구성, 의존성 방향 |
+| [PIPELINE.md](harness/PIPELINE.md) | 워크플로우 순서, 자율 실행 경계, 사용자 게이트 |
+| [OBSERVABILITY.md](harness/OBSERVABILITY.md) | 로깅 형식, 로그 레벨, 에러 전파, 메트릭 |
 
 ### 운영 문서
 | 문서 | 목적 |
@@ -122,16 +125,8 @@ Markdown (프롬프트) / JavaScript-CJS (서버) / Bash (스크립트) / JSON (
 | [tech-debt.md](harness/tech-debt.md) | 기술 부채 목록 |
 | [kanban.json](harness/kanban.json) | 토픽 추적 |
 
-### 문서 흐름
-```
-harness/
-├── PRODUCT.md, SECURITY.md, kanban.json, quality-score.md, tech-debt.md
-└── topics/<topic>/
-    ├── meetings/, cps.md, prd.md
-    ├── spec.md, blueprint.md, architecture.md, code-dev-plan.md, test-cases.md
-    ├── history/                        <- 버전 추적 (최대 2개)
-    └── kanban.json                     <- 토픽 진행 추적
-```
+### 규칙
+`harness/rules/` 디렉토리에서 도메인+스택별 규칙 파일 관리
 
 ### 참조 문서
 `harness/references/`에서 의존성 참조 문서를 확인할 수 있다.

@@ -31,35 +31,35 @@ Check these directories and file patterns:
 
 ### Rule 1: File Naming
 - **What:** Agents use kebab-case.md. Skill directories use kebab-case/. Skill entry files are SKILL.md (uppercase). Reference files use kebab-case.md. Dated documents use YYYY-MM-DD-kebab-case.md.
-- **Upstream:** harness/PRODUCT.md#conventions
+- **Upstream:** harness/rules/naming.common.md
 - **Why:** Consistent naming makes files predictable and discoverable by both humans and agents.
 - **Detection:** Glob for all .md files in agents/ and skills/. Check each filename against the naming pattern for its location.
 - **Fix:** Rename files to match the convention.
 
 ### Rule 2: Frontmatter Format
 - **What:** Agent frontmatter requires: name, description, tools, model. Skill frontmatter requires: name, description. All frontmatter uses YAML between `---` delimiters.
-- **Upstream:** harness/PRODUCT.md#conventions
+- **Upstream:** harness/rules/formatting.markdown.md
 - **Why:** Claude Code parses frontmatter to discover and configure agents and skills. Missing fields cause silent failures.
 - **Detection:** Parse YAML frontmatter from each agent and skill file. Verify required fields are present.
 - **Fix:** Add missing frontmatter fields.
 
 ### Rule 3: JavaScript Style
 - **What:** 2-space indentation, single quotes, semicolons required, `const` by default (use `let` only when reassignment is needed), camelCase for functions and variables, SCREAMING_SNAKE_CASE for constants, CommonJS format (.cjs extension or `require`/`module.exports`).
-- **Upstream:** harness/PRODUCT.md#conventions
+- **Upstream:** harness/rules/formatting.javascript.md
 - **Why:** The project uses zero-dependency Node.js with CommonJS. Consistent style aids readability.
 - **Detection:** Check .cjs and .js files for: tab characters (should be spaces), double quotes (should be single), missing semicolons at end of statements, `var` usage (should be const/let).
 - **Fix:** Apply the correct style conventions.
 
 ### Rule 4: Shell Script Style
 - **What:** SCREAMING_SNAKE_CASE for variables, `[[ ]]` for conditionals (not `[ ]`), `$()` for command substitution (not backticks), JSON format for error output, `#!/usr/bin/env bash` shebang.
-- **Upstream:** harness/PRODUCT.md#conventions
+- **Upstream:** harness/rules/formatting.shell.md
 - **Why:** Modern bash conventions improve portability and readability. JSON error output enables structured parsing.
 - **Detection:** Check .sh files for: shebang line, backtick usage, single-bracket conditionals, non-JSON error output.
 - **Fix:** Update to match shell conventions.
 
 ### Rule 5: Output Language
 - **What:** All generated content must be in English. This includes agent prompts, skill definitions, harness documents, lint rules, and all artifacts produced during the workflow.
-- **Upstream:** harness/PRODUCT.md#conventions
+- **Upstream:** harness/rules/output-language.md
 - **Why:** English output ensures agent readability across all LLM models and enables consistent cross-referencing.
 - **Detection:** Scan generated files for non-ASCII character runs that suggest non-English content (Korean, Japanese, Chinese characters).
 - **Fix:** Translate affected content to English.

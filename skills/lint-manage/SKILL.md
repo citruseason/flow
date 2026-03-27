@@ -88,7 +88,7 @@ For each uncovered file group:
     → EXEMPT (no skill needed — config files, docs, etc.)
 ```
 
-**CORE Document Requirement:** Every rule MUST reference at least one CORE document via an `upstream:` field (e.g., `- **Upstream:** harness/PRODUCT.md#architecture`). When creating or updating rules, identify the relevant CORE document (`harness/PRODUCT.md`, `harness/SECURITY.md`, `harness/BACKEND.md`, `harness/FRONTEND.md`, etc.) and section that justifies the rule. Rules without an `upstream:` reference are incomplete and must not be finalized.
+**CORE Document Requirement:** Every rule MUST reference at least one CORE document via an `upstream:` field (e.g., `- **Upstream:** harness/PRODUCT.md#architecture`). When creating or updating rules, identify the relevant source document — CORE documents (`harness/ARCHITECTURE.md`, `harness/PIPELINE.md`, `harness/OBSERVABILITY.md`, `harness/SECURITY.md`), rule files (`harness/rules/*.md`), or `harness/PRODUCT.md` — and section that justifies the rule. Rules without an `upstream:` reference are incomplete and must not be finalized.
 
 **Exemptions (never need lint skills):**
 - Lock files and generated files (package-lock.json, build output)
