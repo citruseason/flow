@@ -2,8 +2,8 @@
 
 ## Overview
 
-Last analyzed: 2026-03-27
-Total items: 6
+Last analyzed: 2026-03-28
+Total items: 6 (5 open, 1 resolved)
 
 ## Items
 
@@ -41,6 +41,7 @@ Total items: 6
 - **Description:** The design-doc SKILL.md step 3 states "v2 = most recent prior, v1 = older" which contradicts the meeting SKILL.md, meeting-facilitator agent, and design-doc-writer agent which all state "v1 = most recent prior, v2 = older". The majority convention is v1 = most recent prior.
 - **Suggested fix:** Update `skills/design-doc/SKILL.md` step 3 to match the majority convention: "v1 = most recent prior, v2 = older".
 - **Estimated effort:** Small
+- **STATUS: RESOLVED** -- `skills/design-doc/SKILL.md` no longer specifies an explicit v1/v2 ordering; step 3 now reads "archive them to `history/` using FIFO rotation (max 2 versions)" without the inverted labels. Verified 2026-03-28.
 
 ### External Reference: Stale link in frame-template.html
 - **Severity:** LOW

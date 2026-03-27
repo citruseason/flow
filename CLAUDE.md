@@ -94,3 +94,37 @@ skills/meeting/scripts/stop-server.sh $SCREEN_DIR
 - `.claude-plugin/marketplace.json` → `plugins[0].version` 필드
 
 1.0.0 이전까지 패치 버전만 올린다 (0.0.1 → 0.0.2 → ...).
+
+<!-- harness:start -->
+## Harness
+
+**Flow** -- Complete development workflow plugin for Claude Code
+
+### Stack
+Markdown (prompts) / JavaScript-CJS (server) / Bash (scripts) / JSON (config)
+
+### Architecture
+Layered plugin -- Skills (orchestration) -> Agents (execution) -> Infrastructure (scripts)
+
+### CORE Documents
+| Document | Purpose |
+|----------|---------|
+| [PRODUCT.md](harness/PRODUCT.md) | Product definition, stack, architecture, conventions, observability |
+| [SECURITY.md](harness/SECURITY.md) | Security principles, input validation, process isolation |
+
+### Operational Docs
+| Document | Purpose |
+|----------|---------|
+| [quality-score.md](harness/quality-score.md) | Quality scoring rubric and domain scores |
+| [tech-debt.md](harness/tech-debt.md) | Tech debt inventory |
+| [kanban.json](harness/kanban.json) | Topic tracking |
+
+### References
+See `harness/references/` for dependency reference docs.
+
+### Lint Skills
+- **lint-architecture** -- Agent-skill separation, dependency direction, model assignment
+- **lint-code-convention** -- File naming, frontmatter format, JS/shell style, output language
+- **lint-plugin-structure** -- Manifest consistency, tool declarations, output contracts, schemas
+- **lint-workflow-integrity** -- Pipeline completeness, writer-reviewer pairing, history rotation
+<!-- harness:end -->
