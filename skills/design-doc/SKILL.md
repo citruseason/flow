@@ -41,7 +41,7 @@ Scan the PRD for unresolved items — open questions, `[TODO]`, `[TBD]`, `[OPEN]
 
 ### 3. Archive Existing Design Documents
 
-If any of `spec.md`, `blueprint.md`, `architecture.md`, `code-dev-plan.md` already exist in `harness/topics/<topic>/`, archive them to `history/` before overwriting:
+If any of `spec.md`, `blueprint.md`, `architecture.md`, `code-dev-plan.md`, `test-cases.md` already exist in `harness/topics/<topic>/`, archive them to `history/` before overwriting:
 
 1. If `history/<doc>.v2.md` exists, delete it
 2. If `history/<doc>.v1.md` exists, rename it to `history/<doc>.v2.md`
@@ -51,14 +51,15 @@ This maintains a maximum of 2 historical versions (v2 = most recent prior, v1 = 
 
 ### 4. Dispatch design-doc-writer Agent
 
-Dispatch the `design-doc-writer` agent to generate the 4 documents sequentially:
+Dispatch the `design-doc-writer` agent to generate the 5 documents sequentially:
 
 1. `spec.md` — User approves before proceeding
 2. `blueprint.md` — User approves before proceeding
 3. `architecture.md` — User approves before proceeding
 4. `code-dev-plan.md` — User approves before proceeding
+5. `test-cases.md` — User approves before proceeding
 
-Each document is written to `harness/topics/<topic>/` after approval.
+Each document is written to `harness/topics/<topic>/` after approval. `test-cases.md` is generated last because it references all four preceding documents (PRD criteria → spec interfaces → blueprint flows → code-dev-plan phases).
 
 ### 5. Dispatch design-doc-reviewer Agent
 
@@ -153,11 +154,13 @@ harness/topics/<topic>/
 ├── blueprint.md                    ← output
 ├── architecture.md                 ← output
 ├── code-dev-plan.md                ← output
+├── test-cases.md                   ← output (used by /implement for TDD)
 ├── kanban.json                     ← status tracking
 └── history/
     ├── prd.v1.md, prd.v2.md        ← PRD history (from /meeting)
     ├── spec.v1.md, spec.v2.md      ← spec history
     ├── blueprint.v1.md, blueprint.v2.md
     ├── architecture.v1.md, architecture.v2.md
-    └── code-dev-plan.v1.md, code-dev-plan.v2.md
+    ├── code-dev-plan.v1.md, code-dev-plan.v2.md
+    └── test-cases.v1.md, test-cases.v2.md
 ```

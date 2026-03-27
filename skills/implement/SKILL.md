@@ -29,6 +29,7 @@ Read all topic documents upfront:
 - `harness/topics/<topic>/spec.md` — Interface definitions, data models
 - `harness/topics/<topic>/blueprint.md` — Component relationships, data flow
 - `harness/topics/<topic>/architecture.md` — Layer structure, dependency rules
+- `harness/topics/<topic>/test-cases.md` — Pre-defined test scenarios for TDD
 
 ## Autonomous Execution Principle
 
@@ -105,7 +106,8 @@ Follow the SDD skill pattern (`skills/sdd/SKILL.md`):
 2. **Build worker prompt** using `worker-prompt.md` template:
    - Paste the Phase's full text from `code-dev-plan.md` (direction, location, approach, test strategy)
    - Include relevant context from topic documents: spec interfaces, blueprint data flows, architecture constraints
-   - Instruct the worker to follow TDD (`skills/tdd/SKILL.md`): write tests first, verify they fail, implement, verify they pass
+   - Include the relevant test cases from `test-cases.md` for this phase — the worker uses these as the TDD spec
+   - Instruct the worker to follow TDD (`skills/tdd/SKILL.md`): write the pre-defined test cases FIRST, verify they fail, implement until they pass, then add any additional edge case tests discovered during implementation
 3. **Dispatch worker** as `general-purpose` subagent
 4. **Handle worker status** per SDD rules (DONE/CONCERNS/NEEDS_CONTEXT/BLOCKED)
 5. **Dispatch compliance reviewer** using `compliance-reviewer-prompt.md`
@@ -147,6 +149,7 @@ Implementation + Lint complete:
 The controller's most important job is curating context for each worker. Workers should receive:
 
 - **Full phase text** from code-dev-plan (never summarized)
+- **Relevant test cases** from test-cases.md for this phase (the TDD starting point)
 - **Relevant spec/blueprint/architecture sections** (not entire documents)
 - **File contents** the worker will modify or depend on
 - **Interfaces** from prior phases (if current phase depends on them)
