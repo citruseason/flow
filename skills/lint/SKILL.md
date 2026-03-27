@@ -121,30 +121,70 @@ Apply these rules to determine the overall verdict:
 
 Doc-garden findings do NOT affect the verdict (they are informational).
 
-### 7. Act on Verdict
+### 7. Act on First-Pass Verdict
 
-#### PASS
-- Present the full report to the user
-- Update kanban.json: move lint step to `done`
-
-#### WARNING
-- Include warnings in the report
-- Present to user with highlighted warning items
-- Do NOT block -- continue execution if in autonomous mode
-- Update kanban.json: move lint step to `done` with warning note
+#### PASS or WARNING
+- Proceed to Step 8 (lint-manage)
 
 #### FAIL
 - Dispatch an SDD worker agent to fix the failing items
 - **The worker fixes CODE only** -- never harness documents or lint-* rules
-- After the fix, re-run /lint (recursive invocation)
+- After the fix, re-run steps 2-6 (not the full pipeline — just the verification)
 - Maximum 2 retry attempts
-- If still FAIL after 2 retries, escalate to the user with:
-  - Full report of all attempts
-  - Specific items that could not be resolved
-  - Suggested manual actions
-- Update kanban.json accordingly
+- If still FAIL after 2 retries, escalate to the user
+- Once PASS or WARNING, proceed to Step 8
 
-### 8. Update Kanban
+### 8. Invoke `/lint-manage` (Lint Skill Evolution)
+
+After the first-pass verification, invoke `/lint-manage` to evolve lint skills:
+- Pass the first-pass results as context
+- lint-manage analyzes code changes + verification results
+- Creates new lint-* skills where coverage gaps exist
+- Updates existing lint-* skill rules where patterns changed
+- Fully autonomous — no user confirmation
+
+If lint-manage made no changes (no gaps found, no rules updated), skip to Step 10.
+
+### 9. Invoke `/lint-validate` (Lint Skill Health Check)
+
+If lint-manage created or updated any skills, invoke `/lint-validate`:
+- Validates structure, rule freshness, detection commands
+- Auto-fixes issues found
+- Produces health report
+
+### 10. Second-Pass Verification (if lint skills changed)
+
+If Steps 8-9 created or modified any lint-* skills, re-run steps 3-6 to verify code against the evolved rules. This is the final verification — no further lint-manage cycles.
+
+### 11. Final Verdict and Report
+
+Compile the complete report including:
+- First-pass results
+- lint-manage changes (if any)
+- lint-validate health (if run)
+- Second-pass results (if run)
+- Overall verdict: PASS / WARNING / FAIL
+
+```markdown
+# Lint Report: {topic}
+
+## First Pass
+{initial verification results}
+
+## Lint Skill Evolution
+{lint-manage report — skills created/updated, or "No changes needed"}
+
+## Lint Skill Health
+{lint-validate report, or "Skipped — no skill changes"}
+
+## Second Pass
+{re-verification results, or "Skipped — no skill changes"}
+
+## Overall Verdict: {PASS | WARNING | FAIL}
+### Quality Score: {N}/100
+```
+
+### 12. Update Kanban
 
 Update the topic's `kanban.json`:
 - On PASS: move lint step to `done`
@@ -155,14 +195,14 @@ Update the topic's `kanban.json`:
 
 ### Autonomous Mode (called from /implement)
 
-- Run the entire flow without user interaction
-- Only escalate on unresolvable FAIL (after 2 retries)
-- On PASS or WARNING, report results at the end
+- Run the entire pipeline (verify → evolve → validate → re-verify) without user interaction
+- Only escalate on unresolvable FAIL (after 2 retries on first pass)
+- Report final results at the end
 
 ### Standalone Mode (`/lint <topic>`)
 
-- Run the same flow but present results interactively
-- Show the report to the user after completion
+- Run the same pipeline but present results interactively
+- Show the full report to the user after completion
 - On FAIL, ask the user whether to attempt auto-fix or review manually
 
 ## Important Constraints
@@ -170,6 +210,9 @@ Update the topic's `kanban.json`:
 - lint-requirements logic runs INLINE in this skill -- it is NOT a separate agent
 - lint-* skill discovery and execution is delegated to the lint-reviewer agent
 - Doc freshness validation is delegated to the doc-gardener agent
+- Lint skill evolution is delegated to `/lint-manage`
+- Lint skill health validation is delegated to `/lint-validate`
 - SDD worker agents fix CODE only, never harness docs or lint rules
-- Maximum 2 retry attempts on FAIL before user escalation
+- Maximum 2 retry attempts on first-pass FAIL before user escalation
+- Second pass is final — no further evolution cycles
 - Doc-garden results are informational and do not affect the PASS/WARNING/FAIL verdict

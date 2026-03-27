@@ -121,11 +121,12 @@ Run the Phase's verification criteria from `code-dev-plan.md`, then update kanba
 - Check if code changes affect lint-* skill rules → auto-update relevant `references/` files
 - If design inconsistency discovered → escalate to user, suggest returning to `/meeting` or `/design-doc`
 
-### Lint Auto-Trigger
+### Lint Pipeline Auto-Trigger
 
 After all implementation phases complete:
 1. Move `lint` step to `in_progress` in kanban
 2. Invoke `/lint <topic>` (autonomous, no user interaction)
+   - `/lint` internally runs: verify → lint-manage (evolve skills) → lint-validate (health check) → re-verify
 3. On lint PASS → report final results to user
 4. On lint FAIL → SDD worker fixes, re-lint (max 2 retries), then escalate
 

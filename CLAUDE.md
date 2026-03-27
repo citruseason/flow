@@ -39,13 +39,15 @@ Standalone skills:
 | doc-gardener | Sonnet | Documentation/rule freshness verification |
 | lint-reviewer | Sonnet | lint-* skill aggregation, quality score computation |
 
-### Skills (9)
+### Skills (11)
 
 - **skills/harness-init/** - Codebase analysis and harness knowledge base scaffolding
 - **skills/meeting/** - Meeting-driven requirements with visual companion
 - **skills/design-doc/** - PRD to design documents (Spec, Blueprint, Architecture, Code-Dev-Plan)
 - **skills/implement/** - Autonomous execution using SDD + TDD with kanban tracking
 - **skills/lint/** - Requirements verification + project lint-* skill invocation
+- **skills/lint-manage/** - Lint skill evolution (create/update rules based on code changes)
+- **skills/lint-validate/** - Lint skill health validation (structure, freshness, detection)
 - **skills/doc-garden/** - Harness documentation freshness validation
 - **skills/sdd/** - Subagent-driven development pattern (dispatch + review gates)
 - **skills/tdd/** - TDD methodology (RED → GREEN → REFACTOR)
