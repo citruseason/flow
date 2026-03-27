@@ -7,6 +7,10 @@
     "rules-extraction": {
       "phase": "done",
       "last_updated": "2026-03-28"
+    },
+    "realtime-kanban": {
+      "phase": "meeting",
+      "last_updated": "2026-03-28"
     }
   }
 }
