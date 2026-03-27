@@ -18,6 +18,8 @@ Core meeting/design methodology integrates patterns from [Harness Engineering](h
 
 Standalone skills:
 ```
+/lint-integrate        → add/update external skills as lint-* wrappers
+/core-update <topic>   → update CORE docs with realized decisions post-merge
 /doc-garden            → harness/ documentation freshness check
 /tdd                   → manual TDD guide (RED → GREEN → REFACTOR)
 /sdd                   → subagent-driven execution (independent of /implement)
@@ -39,7 +41,7 @@ Standalone skills:
 | doc-gardener | Sonnet | Documentation/rule freshness verification |
 | lint-reviewer | Sonnet | lint-* skill aggregation, quality score computation |
 
-### Skills (12)
+### Skills (14)
 
 - **skills/harness-init/** - Codebase analysis and harness knowledge base scaffolding
 - **skills/meeting/** - Meeting-driven requirements with visual companion
@@ -47,7 +49,9 @@ Standalone skills:
 - **skills/implement/** - Autonomous execution using SDD + TDD with kanban tracking
 - **skills/lint/** - Requirements verification + project lint-* skill invocation
 - **skills/lint-manage/** - Lint skill evolution (create/update rules based on code changes)
+- **skills/lint-integrate/** - External skill integration into lint workflow (add/update/list/remove)
 - **skills/lint-validate/** - Lint skill health validation (structure, freshness, detection)
+- **skills/core-update/** - Post-merge CORE document update with realized decisions
 - **skills/doc-garden/** - Harness documentation freshness validation
 - **skills/sdd/** - Subagent-driven development pattern (dispatch + review gates)
 - **skills/tdd/** - TDD methodology (RED → GREEN → REFACTOR)
