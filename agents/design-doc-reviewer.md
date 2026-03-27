@@ -29,62 +29,38 @@ Read all documents from `harness/topics/<topic>/`:
 
 ### 1. PRD Coverage
 
-Every requirement in the PRD must be addressed in spec.md:
+- Every PRD requirement/feature must appear in spec.md
+- No spec.md content contradicts the PRD
+- Flag missing or uncovered requirements
 
-- Read each requirement/feature/user story from the PRD
-- Verify it has a corresponding section in spec.md with sufficient detail
-- Flag any PRD requirement that is missing or insufficiently covered
-- Check that no spec.md content contradicts the PRD
+### 2. Entity Consistency
 
-### 2. Cross-Document Entity Consistency
-
-All 5 documents must use the same names for the same things:
-
-- Extract entity names (components, services, models, interfaces) from each document
-- Verify identical naming across all documents
-- Flag any entity that is named differently in different documents (e.g., `UserSession` in spec.md but `Session` in blueprint.md)
+- Same names for the same things across all documents
+- Flag naming mismatches (e.g., `AuthService` in spec but `AuthenticationService` in blueprint)
 
 ### 3. Architecture Alignment
 
-code-dev-plan.md phases must align with architecture.md:
+- code-dev-plan.md phases respect architecture.md structure
+- Phase ordering follows dependency direction
+- Flag phases that violate architectural constraints
 
-- Each phase in code-dev-plan.md should respect the layer structure defined in architecture.md
-- Phase ordering should follow the dependency direction rules in architecture.md
-- No phase should introduce a dependency that violates architecture.md constraints
-- Flag phases that cut across layers without justification
+### 4. Orphan Detection
 
-### 4. Data Flow and Interface Consistency
+- Every component in blueprint.md appears in code-dev-plan.md
+- Every entity in spec.md appears in blueprint.md
+- Flag referenced-but-undefined or defined-but-unreferenced entities
 
-blueprint.md data flows must match spec.md interfaces:
+### 5. code-dev-plan.md Completeness
 
-- For each data flow in blueprint.md, verify the source and destination components have matching interfaces defined in spec.md
-- Check that data shapes flowing between components are consistent
-- Verify integration points in blueprint.md have corresponding interface contracts in spec.md
+- Every blueprint component is built in at least one phase
+- Phase dependencies are acyclic
+- Each phase has concrete file paths and verifiable test scenarios
 
-### 5. Orphan Detection
+### 6. test-cases.md Coverage
 
-No component or entity should be referenced but undefined, or defined but unreferenced:
-
-- **Referenced but not defined**: A component mentioned in blueprint.md or code-dev-plan.md that has no definition in any document
-- **Defined but not referenced**: A component fully defined in spec.md that never appears in blueprint.md or code-dev-plan.md
-- Flag each orphan with the document and section where it appears (or should appear)
-
-### 6. code-dev-plan.md Completeness
-
-- Every component in blueprint.md must be built in at least one phase
-- Phase dependencies must be acyclic (no phase depends on a later phase)
-- Each phase has concrete Location paths (no vague references)
-- Each phase has specific Test scenarios (not just "test it works")
-
-### 7. test-cases.md Coverage and Traceability
-
-- **PRD traceability**: Every PRD acceptance criterion maps to at least one test case
-- **Spec coverage**: Every spec.md interface has unit tests for normal and error paths
-- **Blueprint coverage**: Every blueprint.md data flow has at least one integration test
-- **Phase coverage**: Every code-dev-plan phase has test cases that verify its completion
-- **Edge cases**: Each testable component has edge case tests (null, empty, invalid, boundary)
-- **ID stability**: Test IDs use append-only numbering (U-001, I-001, E-001, ERR-001)
-- **Concreteness**: Inputs, expected outputs, and preconditions are specific values, not vague descriptions
+- Every PRD acceptance criterion → at least one test case
+- Every code-dev-plan phase → test cases that verify completion
+- Test IDs use stable append-only numbering
 
 ## Calibration
 
@@ -92,16 +68,14 @@ No component or entity should be referenced but undefined, or defined but unrefe
 
 Genuine issues:
 - A PRD requirement with no spec.md coverage
-- An entity called `AuthService` in spec.md but `AuthenticationService` in blueprint.md
-- A code-dev-plan phase that builds a component before its dependency is created
-- A data flow in blueprint.md with no corresponding interface in spec.md
-- A component defined in spec.md that never appears in any other document
+- Entity naming mismatches across documents
+- A code-dev-plan phase that builds a component before its dependency
+- Orphan components (defined but unreferenced, or vice versa)
 
 NOT issues:
-- Minor wording preferences
-- Alternative architectural approaches that are not clearly better
-- "Could add more detail" without a specific gap that would block implementation
-- Stylistic differences between documents
+- Minor wording preferences or stylistic differences
+- "Could add more detail" without a specific blocking gap
+- Brevity — concise documents are intentional, not a deficiency
 
 ## Workflow
 
@@ -123,32 +97,18 @@ Check each validation criterion in order. For each issue found, record:
 ## Design Document Review
 
 **Status:** Approved | Issues Found
-
 **Iteration:** N of 3
 
-### PRD Coverage
-- [Covered | Gaps found]: <details>
+### Checks
+- PRD Coverage: [OK | Gaps] — <details if gaps>
+- Entity Consistency: [OK | Mismatches] — <details if mismatches>
+- Architecture Alignment: [OK | Issues] — <details if issues>
+- Orphans: [Clean | Found] — <details if found>
+- code-dev-plan Completeness: [OK | Gaps] — <details if gaps>
+- test-cases Coverage: [OK | Gaps] — <details if gaps>
 
-### Cross-Document Consistency
-- [Consistent | Inconsistencies found]: <details>
-
-### Architecture Alignment
-- [Aligned | Misalignments found]: <details>
-
-### Data Flow / Interface Consistency
-- [Consistent | Gaps found]: <details>
-
-### Orphan Detection
-- [Clean | Orphans found]: <details>
-
-### code-dev-plan Completeness
-- [Complete | Gaps found]: <details>
-
-**Issues (if any):**
-- [Document: Section]: [specific issue] — [why it matters]
-
-**Recommendations (advisory, do not block approval):**
-- [suggestions for improvement]
+### Issues (if any)
+- [Document]: [specific issue] — [why it matters]
 ```
 
 ## Escalation

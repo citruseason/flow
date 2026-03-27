@@ -25,66 +25,65 @@ Generate documents **sequentially**. Each document requires explicit user approv
 4. **`code-dev-plan.md`** — Development Roadmap
 5. **`test-cases.md`** — Comprehensive Test Case Definitions
 
-### 1. spec.md — Detailed Functional Specification
+### 1. spec.md — Functional Specification
 
-Content requirements:
-- **Feature descriptions**: Exhaustive breakdown of every feature and sub-feature from the PRD
-- **Interface definitions**: API contracts (endpoints, request/response shapes, status codes), component interfaces (props, events, callbacks), inter-service contracts
-- **Data models**: Schemas, types, enums, database entities with field-level descriptions and constraints
-- **Validation rules**: Input validation, business rule validation, state transition constraints
-- **Error cases**: Expected error scenarios and handling behavior for each interface
-- **Edge cases**: Boundary conditions, concurrent access scenarios, degraded-mode behavior
+A concise list of what the system does. No prose — just structured lists.
 
-### 2. blueprint.md — System Composition Diagram
+Content:
+- **Features**: Bulleted list of features and sub-features from the PRD. One line per feature.
+- **Interfaces**: API endpoints, component interfaces, contracts — listed with their signatures/shapes only.
+- **Data models**: Entity names, fields, and types in compact table or list format.
+- **Constraints**: Validation rules, error cases, edge cases — one line each.
 
-Content requirements:
-- **Component inventory**: Every component/module/service with its single responsibility
-- **Component relationships**: Which components depend on, call, or subscribe to which others (use ASCII diagrams or structured lists)
-- **Data flow**: How data moves between components — request paths, event flows, data transformation pipelines
-- **Integration points**: Where the system connects to external services, libraries, or existing codebase modules
-- **External dependencies**: Third-party services, APIs, databases, message queues with version requirements
-- **Boundary definitions**: What is inside the system vs. outside, and the contract at each boundary
+Keep it scannable. If a feature can be described in one line, use one line.
+
+### 2. blueprint.md — System Composition
+
+A concise view of what components exist and how they connect. Shows the "shape" of the system.
+
+Content:
+- **Components**: List of components/modules/services with one-line responsibility each.
+- **Hierarchy**: How components are organized — parent/child, layers, or groupings. Use indented lists or a simple ASCII tree.
+- **Connections**: Which components talk to which — a simple list of `A → B` relationships or a compact diagram.
+- **External boundaries**: What external systems/services are involved, listed with one-line descriptions.
+
+No verbose tables with Status/Location/Description columns. Just the structural blueprint.
 
 ### 3. architecture.md — Technical Decisions
 
-Content requirements:
-- **Technology stack selection**: Each technology choice with explicit rationale (why this over alternatives)
-- **Layer structure**: Application layers (presentation, business logic, data access, infrastructure) with clear boundaries
-- **Dependency direction rules**: Which layers can depend on which — strict rules preventing circular or upward dependencies
-- **Cross-cutting concerns**:
-  - Authentication/authorization strategy
-  - Logging and observability approach
-  - Error handling and propagation patterns
-  - Configuration management
-  - Testing strategy at each layer
-- **Design patterns**: Specific patterns chosen (repository, factory, observer, etc.) with rationale
-- **Constraints and trade-offs**: Explicit trade-offs made and their reasoning
+A concise summary of architectural form and key decisions. Describes "what shape it takes" — not exhaustive rationale.
+
+Content:
+- **Stack**: Technologies chosen, listed. No lengthy "alternatives considered" sections.
+- **Structure**: How the system is layered or organized — a brief description or diagram.
+- **Patterns**: Key design patterns used, listed with one-line rationale.
+- **Constraints**: Important rules (dependency direction, boundaries) — one line each.
+
+No "Alternatives considered" tables or multi-paragraph rationale blocks. State the decision and move on.
 
 ### 4. code-dev-plan.md — Development Roadmap
 
-This is a **direction document, NOT code**. It describes what to build in each phase, where, and how — but contains zero implementation code.
+A concise plan of what to build in what order. **Direction document, NOT code** — zero implementation code.
 
 Format each phase as:
 
 ```markdown
 ## Phase N: <name>
 
-- Direction: <what this phase accomplishes and the approach>
-- Location: <file and directory paths that will be created or modified>
-- Approach: <how to integrate with existing code, patterns to follow, dependencies to wire>
-- Test: <test scenarios — what to verify, edge cases to cover, integration points to test>
+- What: <one-line description of what this phase accomplishes>
+- Where: <file/directory paths>
+- How: <brief approach — one or two sentences max>
+- Verify: <key test scenarios — bulleted, one line each>
 ```
 
 Requirements:
-- Phases must be ordered by dependency (earlier phases are prerequisites for later ones)
-- Each phase should be independently testable
-- Phase granularity: each phase should represent a coherent, deliverable unit of work
-- Location paths must be specific (no "somewhere in src/")
-- Test scenarios must be concrete and verifiable
+- Phases ordered by dependency
+- Each phase = one coherent deliverable unit
+- Keep descriptions short — the implementation details belong in the code, not here
 
-### 5. test-cases.md — Comprehensive Test Case Definitions
+### 5. test-cases.md — Test Case Definitions
 
-Define every test scenario the implementation must satisfy. This document drives TDD during `/implement` — workers write these tests FIRST before implementing.
+Define test scenarios that drive TDD during `/implement`. Workers write these tests FIRST.
 
 Structure:
 
@@ -92,42 +91,26 @@ Structure:
 # Test Cases: <topic>
 
 ## Unit Tests
-
-### <Module/Component Name>
-| ID | Scenario | Input | Expected Output | Edge Case? |
-|----|----------|-------|-----------------|------------|
-| U-001 | <scenario description> | <input data/state> | <expected result> | No |
-| U-002 | <edge case description> | <boundary/null/invalid input> | <expected behavior> | Yes |
+| ID | Scenario | Input | Expected Output |
+|----|----------|-------|-----------------|
+| U-001 | <description> | <input> | <expected> |
 
 ## Integration Tests
-
-### <Integration Point / Flow>
-| ID | Scenario | Precondition | Steps | Expected Result |
-|----|----------|--------------|-------|-----------------|
-| I-001 | <flow description> | <setup state> | 1. ... 2. ... | <end state> |
+| ID | Scenario | Steps | Expected Result |
+|----|----------|-------|-----------------|
+| I-001 | <description> | <steps> | <expected> |
 
 ## E2E Tests
-
-### <User Journey>
-| ID | Scenario | User Action | Expected Outcome |
-|----|----------|-------------|------------------|
-| E-001 | <journey description> | <what user does> | <what user sees/gets> |
-
-## Error & Edge Cases
-
-| ID | Scenario | Condition | Expected Behavior |
-|----|----------|-----------|-------------------|
-| ERR-001 | <error scenario> | <trigger condition> | <graceful handling> |
+| ID | Scenario | Action | Expected Outcome |
+|----|----------|--------|------------------|
+| E-001 | <description> | <action> | <expected> |
 ```
 
 Requirements:
-- **Every PRD acceptance criterion** must map to at least one test case
-- **Every spec interface** must have unit tests for normal + error paths
-- **Every blueprint data flow** must have at least one integration test
-- **Every code-dev-plan phase** must have test cases that verify its completion
-- Include edge cases: null/undefined, empty, invalid types, boundary values, concurrent access, large data, special characters
-- Test IDs are stable — they don't change when test cases are added (append-only numbering)
-- This document is referenced directly by `/implement` workers during TDD
+- Every PRD acceptance criterion → at least one test case
+- Every code-dev-plan phase → test cases that verify completion
+- Include edge cases for each testable component
+- Test IDs are stable (append-only numbering)
 
 ## Output Location
 
@@ -178,15 +161,13 @@ When triggered by a PRD change (indicated by PRD history existing in `harness/to
 
 ## Cross-Document Consistency
 
-All 4 documents form a coherent whole. Enforce these consistency rules:
+All documents form a coherent whole:
 
-- **Entity naming**: The same entity must have the same name across all documents. If spec.md calls it `UserSession`, blueprint.md and architecture.md must also call it `UserSession`.
-- **Interface alignment**: Interfaces defined in spec.md must match the component boundaries in blueprint.md and the layer structure in architecture.md.
-- **Architecture conformance**: code-dev-plan.md phases must respect the layer structure and dependency direction defined in architecture.md.
-- **Data flow continuity**: Data flows in blueprint.md must be traceable through the interfaces in spec.md.
-- **No orphans**: Every component in blueprint.md must appear in at least one code-dev-plan.md phase. Every entity in spec.md must appear in blueprint.md.
+- **Same names everywhere**: If spec.md calls it `UserSession`, all other documents use `UserSession`.
+- **No orphans**: Every component in blueprint.md appears in code-dev-plan.md. Every entity in spec.md appears in blueprint.md.
+- **Architecture conformance**: code-dev-plan.md phases respect architecture.md structure.
 
-Before presenting each document for approval, verify it is consistent with all previously approved documents in the set.
+Before presenting each document for approval, verify consistency with previously approved documents.
 
 ## Kanban Updates
 
