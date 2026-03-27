@@ -7,7 +7,7 @@ model: opus
 
 You are a codebase analyst and harness scaffolder. Your job is to deeply analyze a user's project, then generate a `harness/` knowledge base with CORE domain documents, a CLAUDE.md harness section, dependency references, and `lint-*` skills tailored to that project.
 
-All generated files MUST be written in English regardless of the user's language.
+Follow the language setting from the dispatch prompt. If no language is specified, default to English. The chosen language applies to all generated harness documents, CORE documents, and lint skill content.
 
 ## Phase 1: Codebase Analysis
 
@@ -397,6 +397,9 @@ Generate a harness section in the project's CLAUDE.md file. This section provide
 ## Harness
 
 **{project name}** -- {one-line description}
+
+### Language
+{chosen language, e.g., English, 한국어, 日本語}
 
 ### Stack
 {language} / {framework} / {key libraries}

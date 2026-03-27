@@ -19,12 +19,13 @@ No arguments required. The skill operates on the current project root.
 
 You MUST create a task for each of these items and complete them in order:
 
-1. **Detect re-run** -- check if `harness/PRODUCT.md` exists at project root. If yes, check re-run type:
+1. **Set document language** -- ask the user what language they want generated documents written in. Example: "What language should generated documents be written in? (e.g., English, 한국어, 日本語)". The chosen language will be stored in the CLAUDE.md harness section so all agents follow it automatically.
+2. **Detect re-run** -- check if `harness/PRODUCT.md` exists at project root. If yes, check re-run type:
    - `harness/PRODUCT.md` exists -> CORE-era re-run (see Re-run Behavior below)
    - `harness/index.md`, `harness/golden-rules.md`, or `harness/observability.md` exist -> legacy harness (see Legacy Migration below)
-   - Neither exists -> fresh run, continue with step 2
-2. **Dispatch harness-initializer agent** -- dispatch the `harness-initializer` agent to perform full codebase analysis (project structure, tech stack, architecture patterns, code conventions, project characteristic detection).
-3. **Present analysis results** -- show the user a summary of what was detected:
+   - Neither exists -> fresh run, continue with step 3
+3. **Dispatch harness-initializer agent** -- dispatch the `harness-initializer` agent to perform full codebase analysis (project structure, tech stack, architecture patterns, code conventions, project characteristic detection). Include the chosen language in the dispatch prompt.
+4. **Present analysis results** -- show the user a summary of what was detected:
    - Tech stack (languages, frameworks, libraries)
    - Architecture pattern (layering, module organization)
    - Code conventions (naming, formatting, error handling)
@@ -33,8 +34,8 @@ You MUST create a task for each of these items and complete them in order:
    - Key dependencies for reference collection
    - Proposed lint skills (always: architecture + code-convention, conditional: framework-specific)
    - Ask: "Does this analysis look correct? Any adjustments before I generate the harness?"
-4. **User confirmation gate** -- wait for the user to approve or request adjustments. If adjustments requested, re-dispatch the agent with additional instructions.
-5. **Generate CORE documents** -- the agent creates all harness files:
+5. **User confirmation gate** -- wait for the user to approve or request adjustments. If adjustments requested, re-dispatch the agent with additional instructions.
+6. **Generate CORE documents** -- the agent creates all harness files:
    - `harness/PRODUCT.md` -- product definition, stack, conventions (always)
    - `harness/SECURITY.md` -- security principles and invariants (always)
    - `harness/DESIGN.md` -- design system and component patterns (conditional)
@@ -46,35 +47,35 @@ You MUST create a task for each of these items and complete them in order:
    - `harness/kanban.json` -- empty topics object
    - `harness/quality-score.md` -- quality scoring rubric
    - `harness/tech-debt.md` -- initial tech debt inventory
-6. **Generate CLAUDE.md harness section** -- create or update CLAUDE.md with the harness section:
+7. **Generate CLAUDE.md harness section** -- create or update CLAUDE.md with the harness section:
    - Use `<!-- harness:start -->` / `<!-- harness:end -->` markers
    - Include project description, CORE doc listing, operational docs, references pointer, lint skills
    - If CLAUDE.md exists, append section (or replace existing markers). Never modify content outside markers.
    - If CLAUDE.md does not exist, create it with the harness section.
    - Section must be 100 lines or fewer.
-7. **Collect dependency references** -- the agent analyzes dependency manifests and fetches references:
+8. **Collect dependency references** -- the agent analyzes dependency manifests and fetches references:
    - Parse package.json, pyproject.toml, Cargo.toml, go.mod, etc.
    - For each key dependency: try llms.txt URL first, fallback to generated reference
    - Store at `harness/references/{library-name}.md`
    - Maximum 15 reference files
-8. **Generate lint-* skills** -- the agent creates lint skills in `.claude/skills/`:
+9. **Generate lint-* skills** -- the agent creates lint skills in `.claude/skills/`:
    - `lint-architecture/` (always)
    - `lint-code-convention/` (always)
    - Framework-specific lint skills (conditional, based on detected stack)
-9. **Present generated results** -- show the user what was created:
+10. **Present generated results** -- show the user what was created:
     - List all generated CORE documents with brief descriptions
     - List generated references
     - Highlight key security rules and architecture constraints
     - Show which lint skills were generated and why
     - Show CLAUDE.md harness section preview
     - Ask: "Everything look good? I can adjust any of these before committing."
-10. **User approval gate** -- wait for the user to approve. If changes requested, apply them.
-11. **Git commit** -- stage and commit all generated files:
+11. **User approval gate** -- wait for the user to approve. If changes requested, apply them.
+12. **Git commit** -- stage and commit all generated files:
     ```bash
     git add harness/ .claude/skills/lint-*/ CLAUDE.md
     git commit -m "chore: initialize harness knowledge base and lint skills"
     ```
-12. **Suggest next step** -- after completion, suggest:
+13. **Suggest next step** -- after completion, suggest:
     > "Harness initialized. You can now start a design session with `/meeting \"topic-name\"` to begin working on your next feature."
 
 ## Re-run Behavior
