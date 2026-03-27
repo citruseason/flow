@@ -15,15 +15,15 @@ Before proceeding, scan the PRD for unresolved items — open questions, TBD mar
 
 ## Document Generation
 
-Generate documents **sequentially**. Each document requires explicit user approval before starting the next. Present the complete document to the user, wait for approval, then write it to disk and proceed to the next.
+Generate all 5 documents in one pass. Write each to disk as you complete it — **no per-document user approval**. The controller handles approval after all documents are generated and reviewed.
 
 ### Order of Generation
 
-1. **`spec.md`** — Detailed Functional Specification
-2. **`blueprint.md`** — System Composition Diagram
+1. **`spec.md`** — Functional Specification
+2. **`blueprint.md`** — System Composition
 3. **`architecture.md`** — Technical Decisions
 4. **`code-dev-plan.md`** — Development Roadmap
-5. **`test-cases.md`** — Comprehensive Test Case Definitions
+5. **`test-cases.md`** — Test Case Definitions
 
 ### 1. spec.md — Functional Specification
 
@@ -43,11 +43,10 @@ A concise view of what components exist and how they connect. Shows the "shape" 
 
 Content:
 - **Components**: List of components/modules/services with one-line responsibility each.
-- **Hierarchy**: How components are organized — parent/child, layers, or groupings. Use indented lists or a simple ASCII tree.
 - **Connections**: Which components talk to which — a simple list of `A → B` relationships or a compact diagram.
 - **External boundaries**: What external systems/services are involved, listed with one-line descriptions.
 
-No verbose tables with Status/Location/Description columns. Just the structural blueprint.
+No verbose tables with Status/Location/Description columns. No hierarchy or layer descriptions (that belongs in architecture.md).
 
 ### 3. architecture.md — Technical Decisions
 
@@ -55,7 +54,7 @@ A concise summary of architectural form and key decisions. Describes "what shape
 
 Content:
 - **Stack**: Technologies chosen, listed. No lengthy "alternatives considered" sections.
-- **Structure**: How the system is layered or organized — a brief description or diagram.
+- **Hierarchy**: How components are organized — layers, groupings, parent/child relationships. Use indented lists or a simple ASCII tree.
 - **Patterns**: Key design patterns used, listed with one-line rationale.
 - **Constraints**: Important rules (dependency direction, boundaries) — one line each.
 
@@ -146,8 +145,7 @@ When triggered by a PRD change (indicated by PRD history existing in `harness/to
 1. Diff the current PRD against `history/prd.v1.md` to identify what changed
 2. Analyze which of the 4 documents are affected by the PRD changes
 3. Only regenerate the affected documents (archive them first)
-4. Present the changes to the user, highlighting what changed and why
-5. Require user approval for each updated document
+4. Write all regenerated documents to disk
 
 ### Update Determination Matrix
 
@@ -167,13 +165,13 @@ All documents form a coherent whole:
 - **No orphans**: Every component in blueprint.md appears in code-dev-plan.md. Every entity in spec.md appears in blueprint.md.
 - **Architecture conformance**: code-dev-plan.md phases respect architecture.md structure.
 
-Before presenting each document for approval, verify consistency with previously approved documents.
+Before writing each document, verify consistency with previously written documents in the set.
 
 ## Kanban Updates
 
-After each document is approved and written, update the topic's `harness/topics/<topic>/kanban.json`:
+After all documents are written, update the topic's `harness/topics/<topic>/kanban.json`:
 
-- Move the corresponding step from `backlog` or `in_progress` to `done`
+- Move each step from `backlog` or `in_progress` to `done`
 - Valid step names: `spec`, `blueprint`, `architecture`, `code-dev-plan`, `test-cases`
 
 ## What NOT To Do

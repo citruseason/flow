@@ -25,7 +25,7 @@ A topic name is required. The skill reads the PRD from the topic directory.
 
 ## Checklist
 
-Execute these tasks in order:
+Execute these steps in order. **No per-document user approval** — generate all documents, review, then present the complete set for approval at the end.
 
 ### 1. Read Topic PRD
 
@@ -33,54 +33,44 @@ Read `harness/topics/<topic>/prd.md`. If the file does not exist, inform the use
 
 ### 2. Check for Unresolved Items
 
-Scan the PRD for unresolved items — open questions, `[TODO]`, `[TBD]`, `[OPEN]`, or sections explicitly marked as unresolved. If any exist:
-
-- Display the unresolved items to the user
-- Warn that proceeding with unresolved items may produce incomplete design documents
-- Ask whether to proceed or return to `/meeting` to resolve them
+Scan the PRD for unresolved items — `[TODO]`, `[TBD]`, `[OPEN]`, or sections explicitly marked as unresolved. If any exist, display them and ask whether to proceed or return to `/meeting`.
 
 ### 3. Archive Existing Design Documents
 
-If any of `spec.md`, `blueprint.md`, `architecture.md`, `code-dev-plan.md`, `test-cases.md` already exist in `harness/topics/<topic>/`, archive them to `history/` before overwriting:
+If any design documents already exist in `harness/topics/<topic>/`, archive them to `history/` using FIFO rotation (max 2 versions).
 
-1. If `history/<doc>.v2.md` exists, delete it
-2. If `history/<doc>.v1.md` exists, rename it to `history/<doc>.v2.md`
-3. Copy current `<doc>.md` to `history/<doc>.v1.md`
+### 4. Generate Documents (subagent)
 
-This maintains a maximum of 2 historical versions (v2 = most recent prior, v1 = older).
+Dispatch the `design-doc-writer` as a subagent using the Agent tool:
 
-### 4. Dispatch design-doc-writer Agent
+- **Prompt**: Include the full PRD content directly in the prompt — do not make the subagent read it
+- **Task**: Generate all 5 documents (spec.md, blueprint.md, architecture.md, code-dev-plan.md, test-cases.md) and write them to `harness/topics/<topic>/`
+- **Model**: opus
 
-Dispatch the `design-doc-writer` agent to generate the 5 documents sequentially:
+The subagent generates all documents in one pass without stopping for approval.
 
-1. `spec.md` — User approves before proceeding
-2. `blueprint.md` — User approves before proceeding
-3. `architecture.md` — User approves before proceeding
-4. `code-dev-plan.md` — User approves before proceeding
-5. `test-cases.md` — User approves before proceeding
+### 5. Review (subagent)
 
-Each document is written to `harness/topics/<topic>/` after approval. `test-cases.md` is generated last because it references all four preceding documents (PRD criteria → spec interfaces → blueprint flows → code-dev-plan phases).
+Dispatch the `design-doc-reviewer` as a subagent using the Agent tool:
 
-### 5. Dispatch design-doc-reviewer Agent
+- **Prompt**: Include the topic path; the reviewer reads all documents from disk
+- **Task**: Validate cross-document consistency and PRD coverage
+- **Model**: sonnet
 
-Dispatch the `design-doc-reviewer` agent to validate cross-document consistency and PRD coverage:
-
-- Maximum 3 review iterations
-- If issues are found, relay them to design-doc-writer for correction
-- After corrections, re-run the reviewer
-- If issues persist after 3 iterations, escalate to the user
+Review loop (max 3 iterations):
+1. If issues found → dispatch writer subagent to fix specific issues
+2. Re-dispatch reviewer subagent
+3. If issues persist after 3 iterations → escalate to user
 
 ### 6. User Final Review
 
-Present the complete set of approved and reviewed documents to the user for final sign-off.
+Present the complete set of documents to the user for sign-off. This is the **only** approval gate.
 
 ### 7. Update Kanban
 
 Update `harness/topics/<topic>/kanban.json` to reflect the completed design-doc step.
 
 ### 8. Suggest Next Step
-
-After all documents are approved:
 
 ```
 Design documents complete. Next step: /implement <topic>
@@ -109,9 +99,8 @@ When a PRD has been updated (detected by the existence of `harness/topics/<topic
 
 2. Archive only the affected documents to `history/` (FIFO rotation)
 3. Regenerate only the affected documents
-4. Present changes to the user, highlighting what changed and why
-5. User approves each updated document
-6. Run design-doc-reviewer on the full set (all 4 documents must still be consistent)
+4. Run design-doc-reviewer on the full set (all documents must still be consistent)
+5. Present the complete updated set to the user for approval
 
 ## Organic Workflow Principle
 
