@@ -49,7 +49,7 @@
    - Risk: Low
 
 6. **Create meeting skill** (File: `skills/meeting/SKILL.md`)
-   - Action: 스킬 프롬프트 작성. 신규 실행 흐름(토픽 디렉터리 생성 → meeting-facilitator 디스패치 → Meeting Log 저장 → CPS/PRD 생성 → meeting-reviewer 디스패치 → 사용자 리뷰 → kanban 업데이트 → /design-doc 안내)과 후속 실행 흐름(기존 문서 읽기 → 미확인 사항 검토 → 대화 → history/ 보관 → CPS/PRD 업데이트 → 리뷰) 정의. Meeting Log 형식 템플릿(논의 사항, 결정 사항, 미확인 사항, 해소된 미확인 사항) 포함. 루트 kanban.json 업데이트 로직 포함
+   - Action: 스킬 프롬프트 작성. 신규 실행 흐름(토픽 디렉터리 생성 → meeting-facilitator 디스패치 → Meeting Log 저장 → CPS/PRD 생성 → meeting-reviewer 디스패치 → 사용자 리뷰 → kanban 업데이트 → /design-doc 안내)과 후속 실행 흐름(기존 문서 읽기 → 미확인 사항 검토 → 대화 → history/ 보관 → CPS/PRD 업데이트 → 리뷰) 정의. Meeting Log 형식 템플릿(논의 사항, 결정 사항, 미확인 사항, 해소된 미확인 사항) 포함. kanban.json 업데이트 시 스펙의 정규 스키마 참조 (spec lines 112-142: topic, phase, last_updated, meetings, steps.done/in_progress/backlog). 루트 kanban.json도 동기 업데이트
    - Why: 기존 /spec을 대체하는 핵심 스킬
    - Dependencies: Steps 4, 5 (에이전트가 먼저 있어야 함)
    - Risk: Medium
@@ -71,7 +71,7 @@
    - Risk: Low
 
 9. **Create design-doc skill** (File: `skills/design-doc/SKILL.md`)
-   - Action: 스킬 프롬프트 작성. 실행 흐름(PRD 읽기 → 미확인 사항 경고 → 기존 문서 history/ 보관 → design-doc-writer 디스패치 → design-doc-reviewer 검증 → 사용자 리뷰 → kanban 업데이트 → /implement 안내). PRD 변경 시 연동 흐름(history/ diff → 영향 문서 식별 → 업데이트 제안). kanban 업데이트 로직 포함
+   - Action: 스킬 프롬프트 작성. 실행 흐름(PRD 읽기 → 미확인 사항 경고 → 기존 문서 history/ 보관 → design-doc-writer 디스패치 → design-doc-reviewer 검증 → 사용자 리뷰 → kanban 업데이트 → /implement 안내). PRD 변경 시 연동 흐름(history/ diff → design-doc-writer가 영향 문서 식별 → 업데이트 제안). kanban.json 업데이트 시 스펙의 정규 스키마 참조 (spec lines 112-142)
    - Why: 기존 /plan을 대체하는 스킬
    - Dependencies: Steps 7, 8
    - Risk: Low
@@ -93,7 +93,7 @@
     - Risk: Low
 
 12. **Create lint skill** (File: `skills/lint/SKILL.md`)
-    - Action: 스킬 프롬프트 작성. 실행 흐름(토픽 PRD/spec 읽기 → lint-reviewer 디스패치(lint-requirements + lint-* 호출) → doc-gardener 디스패치 → 통합 리포트 → PASS/WARNING/FAIL 분기). FAIL 시 SDD worker로 코드 수정 → 재실행(최대 2회) → 에스컬레이션. kanban 업데이트. 자율 실행 원칙(implement에서 자동 호출 시 사용자 개입 없음) 명시
+    - Action: 스킬 프롬프트 작성. 실행 흐름: ① /lint 스킬이 직접 lint-requirements 로직 실행(PRD/spec 대비 구현 확인 — 별도 에이전트 없이 스킬 프롬프트 내에서 처리) → ② lint-reviewer 에이전트 디스패치(lint-* 스킬 탐색/호출/통합 + quality-score 산출) → ③ doc-gardener 에이전트 디스패치 → 통합 리포트 → PASS/WARNING/FAIL 분기. FAIL 시 SDD worker로 코드 수정 → 재실행(최대 2회) → 에스컬레이션. kanban 업데이트. 자율 실행 원칙(implement에서 자동 호출 시 사용자 개입 없음) 명시
     - Why: 기존 /code-review를 대체하는 스킬
     - Dependencies: Steps 10, 11
     - Risk: Medium
@@ -109,13 +109,15 @@
 이 Phase 완료 후 검증: plugin.json에 새 에이전트만 등록, 기존 에이전트/스킬 파일 삭제 확인, hooks 메시지 업데이트 확인, CLAUDE.md 업데이트 확인
 
 14. **Modify implement skill for harness integration** (File: `skills/implement/SKILL.md`)
-    - Action: 기존 SKILL.md 수정. .progress.md 참조를 kanban.json으로 교체. docs/plans/ 참조를 harness/topics/<topic>/ 참조로 변경. history/ diff 기반 변경 감지 스텝 추가(history 있으면 diff → 변경 phase만 재작업, 없으면 전체 실행). phase 완료 시 lint-* references/ 영향 분석 → 자동 업데이트 로직 추가. 전체 phase 완료 시 /lint 자동 실행. 자율 실행 원칙(사용자 개입 없이 lint까지 진행, 에스컬레이션 시에만 보고) 명시. SDD + TDD 패턴과 2단계 리뷰 게이트는 유지
+    - Action: 기존 SKILL.md 수정. .progress.md 참조를 kanban.json으로 교체. docs/plans/ 참조를 harness/topics/<topic>/ 참조로 변경. history/ diff 기반 변경 감지 스텝 추가(history 있으면 diff → 변경 phase만 재작업, 없으면 전체 실행). phase 완료 시 lint-* references/ 영향 분석 → 자동 업데이트 로직 추가. 전체 phase 완료 시 /lint 자동 실행. 자율 실행 원칙(사용자 개입 없이 lint까지 진행, 에스컬레이션 시에만 보고) 명시. SDD + TDD 패턴과 2단계 리뷰 게이트는 유지. 기존 Worktree Mode는 제거 — 새 워크플로에서는 토픽 kanban.json이 진행 추적을 담당하므로 .progress.md 기반 worktree 분기 로직이 불필요. /using-worktree 스킬은 독립적으로 유지되므로 사용자가 필요 시 수동으로 조합 가능
     - Why: 하네스 토픽/칸반 시스템과 연동
     - Dependencies: Phase 4 완료 (lint 스킬이 있어야 자동 호출 가능)
     - Risk: High — 가장 많은 기존 로직 변경, 기존 SDD/TDD/리뷰 패턴과의 호환 필요
 
-15. **Delete old skills** (Files: `skills/spec/`, `skills/plan/`, `skills/code-review/`, `skills/amend/`)
-    - Action: 4개 스킬 디렉터리 전체 삭제. spec/의 visual-companion.md 및 scripts/는 /meeting에서 재활용 가능하므로 meeting/ 하위로 이동 여부를 사용자에게 확인 후 처리
+15. **Move visual-companion assets and delete old skills**
+    - Action-a: spec/의 visual-companion.md 및 scripts/를 meeting/ 하위로 이동할지 사용자에게 확인. 승인 시 `skills/meeting/visual-companion.md`, `skills/meeting/scripts/`로 복사
+    - Action-b: 4개 스킬 디렉터리 전체 삭제 (`skills/spec/`, `skills/plan/`, `skills/code-review/`, `skills/amend/`)
+    - Note: `skills/update-plugin/`은 유지 (하네스 변경과 무관한 플러그인 관리 스킬)
     - Why: 새 스킬로 대체됨
     - Dependencies: Steps 6, 9, 12 (대체 스킬이 모두 준비된 후)
     - Risk: Medium — visual-companion 자산 이동 판단 필요
@@ -127,7 +129,7 @@
     - Risk: Low
 
 17. **Update plugin.json — final agent/skill list** (File: `.claude-plugin/plugin.json`)
-    - Action: agents 배열을 새 에이전트 7개(harness-initializer, meeting-facilitator, meeting-reviewer, design-doc-writer, design-doc-reviewer, doc-gardener, lint-reviewer)로 교체. description 업데이트. version 범프 (0.0.6). marketplace.json도 동일하게 version 업데이트
+    - Action: agents 배열을 새 에이전트 7개(harness-initializer, meeting-facilitator, meeting-reviewer, design-doc-writer, design-doc-reviewer, doc-gardener, lint-reviewer)로 교체. description을 새 워크플로 반영으로 업데이트 (예: "Complete development workflow — harness setup, meeting-driven requirements, design docs, implementation, and lint review"). keywords 배열도 업데이트 ("harness", "meeting", "design-doc", "lint" 등). version 범프 (0.0.6). marketplace.json도 동일하게 version, description 업데이트
     - Why: 플러그인 매니페스트를 새 구조에 맞춤
     - Dependencies: Steps 15, 16
     - Risk: Low
@@ -157,7 +159,7 @@
 - **Prompt validation**: 각 SKILL.md와 에이전트 .md가 올바른 frontmatter(name, description, tools, model)를 포함하는지 확인
 - **Integration validation**: plugin.json의 agents 배열이 실제 파일과 매칭하는지, skills/ 디렉터리 구조가 올바른지 확인
 - **Workflow validation**: 각 Phase 완료 후 해당 스킬의 기본 실행 흐름을 수동 테스트
-- **Regression check**: /sdd, /tdd, /using-worktree 가 기존대로 동작하는지 확인
+- **Regression check**: /sdd, /tdd, /using-worktree, /update-plugin 이 기존대로 동작하는지 확인
 
 ## Risks & Mitigations
 
