@@ -180,4 +180,4 @@ All lint skills must have:
 - Append-only for rules — never delete rules that still work
 - Only create lint skills for patterns that appear in 3+ files
 - Exemption list is strict — don't create skills for config/docs/fixtures
-- All generated content in English (agent readability)
+- All generated content follows the language setting in the project's CLAUDE.md
