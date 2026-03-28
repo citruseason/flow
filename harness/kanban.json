@@ -11,6 +11,10 @@
     "realtime-kanban": {
       "phase": "done",
       "last_updated": "2026-03-28"
+    },
+    "hooks-integration": {
+      "phase": "meeting",
+      "last_updated": "2026-03-28"
     }
   }
 }
