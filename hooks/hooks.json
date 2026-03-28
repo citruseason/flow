@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "hooks/scripts/session-start.sh",
+            "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/session-start.sh\"",
             "timeout": 5000
           }
         ],
@@ -21,7 +21,7 @@
           {
             "type": "command",
             "if": "Bash(git merge *)",
-            "command": "hooks/scripts/post-merge.sh",
+            "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/post-merge.sh\"",
             "timeout": 5000
           }
         ],
@@ -33,7 +33,7 @@
           {
             "type": "command",
             "if": "Bash(git pull *)",
-            "command": "hooks/scripts/post-merge.sh",
+            "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/post-merge.sh\"",
             "timeout": 5000
           }
         ],
@@ -46,7 +46,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "hooks/scripts/stop-summary.sh",
+            "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/stop-summary.sh\"",
             "timeout": 3000
           }
         ],
@@ -59,7 +59,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "hooks/scripts/subagent-kanban.sh",
+            "command": "bash \"$CLAUDE_PLUGIN_ROOT/hooks/scripts/subagent-kanban.sh\"",
             "timeout": 5000
           }
         ],
