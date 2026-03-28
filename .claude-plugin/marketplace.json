@@ -8,7 +8,7 @@
     {
       "name": "flow",
       "description": "Complete development workflow plugin — harness setup, meeting-driven requirements, design docs, implementation, and lint review. Structured ideation to autonomous implementation.",
-      "version": "0.0.13",
+      "version": "0.0.14",
       "source": "./"
     }
   ]
