@@ -7,10 +7,63 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '[Flow] Plugin loaded. Use /harness-init to set up your project, then /meeting to start.'"
+            "command": "hooks/scripts/session-start.sh",
+            "timeout": 5000
           }
         ],
-        "description": "Notify user that Flow plugin is available"
+        "description": "Reinject context on resume/compact, welcome on startup"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git merge *)",
+            "command": "hooks/scripts/post-merge.sh",
+            "timeout": 5000
+          }
+        ],
+        "description": "Detect git merge and trigger /core-update"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git pull *)",
+            "command": "hooks/scripts/post-merge.sh",
+            "timeout": 5000
+          }
+        ],
+        "description": "Detect git pull (remote merge) and trigger /core-update"
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "hooks/scripts/stop-summary.sh",
+            "timeout": 3000
+          }
+        ],
+        "description": "Output kanban progress summary for active topics"
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "hooks/scripts/subagent-kanban.sh",
+            "timeout": 5000
+          }
+        ],
+        "description": "Auto-update kanban.json step transitions during implement phase"
       }
     ]
   }

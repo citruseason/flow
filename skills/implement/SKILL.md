@@ -91,11 +91,10 @@ On first `/implement` execution for a topic, populate kanban steps from `code-de
 
 ### Updates
 
-- Move current step to `in_progress` when starting
-- Move to `done` when phase completes
-- Update `phase` to `"implement"` and `last_updated` to current date
-- Also update root `harness/kanban.json` with topic phase
-- Commit kanban changes: `git add harness/ && git commit -m "chore: update kanban"`
+- Update `phase` to `"implement"` and `last_updated` to current date on first run
+- Also update root `harness/kanban.json` with topic phase on first run
+- **Step transitions are handled automatically by the SubagentStop hook** — when a subagent completes, the hook moves `in_progress` → `done` and next `backlog` → `in_progress` in kanban.json. No manual kanban step updates needed per phase.
+- Commit kanban changes periodically: `git add harness/ && git commit -m "chore: update kanban"`
 
 ---
 
@@ -127,7 +126,7 @@ Follow the SDD skill pattern (`skills/sdd/SKILL.md`):
 4. **Handle worker status** per SDD rules (DONE/CONCERNS/NEEDS_CONTEXT/BLOCKED)
 5. **Dispatch compliance reviewer** using `compliance-reviewer-prompt.md`
 6. **Dispatch quality reviewer** using `quality-reviewer-prompt.md` — only after compliance passes
-7. **Update kanban** (move step to done, next to in_progress)
+7. **Kanban auto-updated** — SubagentStop hook handles step transitions automatically
 8. **Mark step complete** via TaskUpdate
 
 **At Phase boundaries:**
