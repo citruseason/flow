@@ -1,6 +1,6 @@
 {
   "topic": "hooks-integration",
-  "phase": "meeting",
+  "phase": "implement",
   "last_updated": "2026-03-28",
   "meetings": [
     {"date": "2026-03-28", "file": "meetings/2026-03-28-session-1.md"}
@@ -9,11 +9,11 @@
     "done": [
       {"id": "meeting", "name": "Meeting"},
       {"id": "cps", "name": "CPS"},
-      {"id": "prd", "name": "PRD"}
+      {"id": "prd", "name": "PRD"},
+      {"id": "design-doc", "name": "Design Doc"}
     ],
     "in_progress": [],
     "backlog": [
-      {"id": "design-doc", "name": "Design Doc"},
       {"id": "implement", "name": "Implement"},
       {"id": "lint", "name": "Lint"}
     ]
